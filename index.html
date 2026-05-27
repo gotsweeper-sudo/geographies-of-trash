@@ -1180,9 +1180,10 @@ function igShortcode(piece) {
   return m ? m[1] : null;
 }
 
-function igThumbUrl(piece) {
-  const sc = igShortcode(piece);
-  return sc ? `https://www.instagram.com/p/${sc}/media/?size=l` : null;
+function imgUrl(piece) {
+  const imageUrl = piece.imageURL || piece.image_url || '';
+  if (!imageUrl) return null;
+  return `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
 }
 
 function formatDate(raw) {
