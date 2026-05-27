@@ -1094,7 +1094,7 @@ body {
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwxbka02cURLBVoFpCU9ci0CcjkA9pOdTUTAGopwSd_tUJCr-vd-MsJDwCScx5DDbQW/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIQswkc3tuyk8K3IsBmOpsMRnkB_19YnXyBTDlC0bvTuOhmIff2BqbkUqDYRPsJEu7/exec';
 const PAGE_SIZE = 48;
 const KM_TO_MILES = 0.621371;
 
@@ -1172,15 +1172,7 @@ function renderArchivePage() {
 
 function loadMore() { renderArchivePage(); }
 
-function igShortcode(piece) {
-  // Prefer explicit shortcode field, fall back to extracting from post URL
-  if (piece.igShortcode || piece.IG_Shortcode) return piece.igShortcode || piece.IG_Shortcode;
-  const url = piece.postURL || piece.post_url || piece.postUrl || '';
-  const m = url.match(/instagram\.com\/p\/([A-Za-z0-9_-]+)/);
-  return m ? m[1] : null;
-}
-
-function imgUrl(piece) {
+function igThumbUrl(piece) {
   const imageUrl = piece.imageURL || piece.image_url || '';
   if (!imageUrl) return null;
   return `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
@@ -1202,7 +1194,7 @@ function makePieceCard(piece, clickable = true) {
   card.className = 'piece-card';
   if (clickable) card.onclick = () => openModal(piece);
   card.innerHTML = thumb
-    ? `<img class="piece-img" src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.querySelector('.piece-img-placeholder') && (this.nextElementSibling.querySelector('.piece-img-placeholder').style.display='flex')">
+    ? `<img class="piece-img" src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none'">
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`
     : `<div class="piece-img-placeholder">—</div>
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`;
@@ -1369,8 +1361,7 @@ function renderSearchResults(matches, container, append = false) {
       postDate: meta.post_date || '',
       notes: meta.description || '',
       imageURL: meta.image_url || '',
-      postURL: meta.post_url || '',
-      igShortcode: meta.ig_shortcode || ''
+      postURL: meta.post_url || ''
     });
     const score = document.createElement('div');
     score.style.cssText = 'font-size:9px;color:var(--gray4);letter-spacing:0.1em;padding:0 12px 8px;';
