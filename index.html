@@ -1095,7 +1095,6 @@ body {
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwxbka02cURLBVoFpCU9ci0CcjkA9pOdTUTAGopwSd_tUJCr-vd-MsJDwCScx5DDbQW/exec';
-const PROXY_BASE = 'https://got-review.vercel.app';
 const PAGE_SIZE = 48;
 const KM_TO_MILES = 0.621371;
 
@@ -1173,16 +1172,36 @@ function renderArchivePage() {
 
 function loadMore() { renderArchivePage(); }
 
+function igShortcode(piece) {
+  // Prefer explicit shortcode field, fall back to extracting from post URL
+  if (piece.igShortcode || piece.IG_Shortcode) return piece.igShortcode || piece.IG_Shortcode;
+  const url = piece.postURL || piece.post_url || piece.postUrl || '';
+  const m = url.match(/instagram\.com\/p\/([A-Za-z0-9_-]+)/);
+  return m ? m[1] : null;
+}
+
+function igThumbUrl(piece) {
+  const sc = igShortcode(piece);
+  return sc ? `https://www.instagram.com/p/${sc}/media/?size=l` : null;
+}
+
+function formatDate(raw) {
+  if (!raw) return '';
+  const d = new Date(raw);
+  if (isNaN(d)) return raw;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+}
+
 function makePieceCard(piece, clickable = true) {
   const id = piece.pieceID || piece.Piece_ID || '';
-  const date = piece.postDate || piece.post_date || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
   const notes = piece.notes || piece.Notes || piece.notes2 || '';
-  const imageUrl = piece.imageURL || piece.image_url || '';
+  const thumb = igThumbUrl(piece);
   const card = document.createElement('div');
   card.className = 'piece-card';
   if (clickable) card.onclick = () => openModal(piece);
-  card.innerHTML = imageUrl
-    ? `<img class="piece-img" src="${PROXY_BASE}/api/proxy?url=${encodeURIComponent(imageUrl)}" alt="${id}" loading="lazy" onerror="this.parentNode.querySelector('.piece-img-placeholder') && this.style.display='none'">
+  card.innerHTML = thumb
+    ? `<img class="piece-img" src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.querySelector('.piece-img-placeholder') && (this.nextElementSibling.querySelector('.piece-img-placeholder').style.display='flex')">
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`
     : `<div class="piece-img-placeholder">—</div>
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`;
@@ -1191,13 +1210,13 @@ function makePieceCard(piece, clickable = true) {
 
 function openModal(piece) {
   const id = piece.pieceID || '';
-  const date = piece.postDate || piece.post_date || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
   const notes = piece.notes || piece.Notes || piece.notes2 || '';
-  const imageUrl = piece.imageURL || piece.image_url || '';
+  const thumb = igThumbUrl(piece);
   const postUrl = piece.postURL || piece.post_url || '';
   const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
-  document.getElementById('modalImg').src = imageUrl ? `${PROXY_BASE}/api/proxy?url=${encodeURIComponent(imageUrl)}` : '';
-  document.getElementById('modalImg').style.display = imageUrl ? 'block' : 'none';
+  document.getElementById('modalImg').src = thumb || '';
+  document.getElementById('modalImg').style.display = thumb ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
   document.getElementById('modalDesc').textContent = notes || 'No description available.';
@@ -1349,7 +1368,8 @@ function renderSearchResults(matches, container, append = false) {
       postDate: meta.post_date || '',
       notes: meta.description || '',
       imageURL: meta.image_url || '',
-      postURL: meta.post_url || ''
+      postURL: meta.post_url || '',
+      igShortcode: meta.ig_shortcode || ''
     });
     const score = document.createElement('div');
     score.style.cssText = 'font-size:9px;color:var(--gray4);letter-spacing:0.1em;padding:0 12px 8px;';
