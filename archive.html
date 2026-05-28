@@ -168,7 +168,7 @@ function makeCard(piece) {
 function openModal(piece) {
   const id = piece.pieceID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.notes || piece.Notes || piece.notes2 || '';
+  const notes = piece.caption || piece.Caption || piece.notes || piece.Notes || piece.notes2 || '';
   const thumb = igThumbUrl(piece);
   const postUrl = piece.postURL || piece.post_url || '';
   const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
