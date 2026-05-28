@@ -158,6 +158,7 @@ function loadMore() { renderPage(); }
 function makeCard(piece) {
   const id = piece.pieceID || piece.Piece_ID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
+  const notes = piece.notes || piece.notes2 || piece.caption || '';
   const thumb = igThumbUrl(piece);
   const card = document.createElement('div');
   card.className = 'piece-card';
@@ -173,7 +174,7 @@ function makeCard(piece) {
 function openModal(piece) {
   const id = piece.pieceID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.caption || piece.notes || piece.notes2 || '';
+  const notes = piece.notes || piece.notes2 || piece.caption || '';
   const thumb = igThumbUrl(piece);
   const postUrl = piece.postURL || piece.post_url || '';
   const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
