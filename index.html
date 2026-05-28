@@ -1102,6 +1102,13 @@ const KM_TO_MILES = 0.621371;
 let allPieces = [], filteredPieces = [], displayedCount = 0;
 let uploadedImageFile = null;
 
+function formatDate(raw) {
+  if (!raw) return '';
+  const d = new Date(raw);
+  if (isNaN(d)) return raw;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+}
+
 function countUp(el, target, duration = 1800) {
   const start = Date.now();
   const step = () => {
@@ -1116,7 +1123,6 @@ function countUp(el, target, duration = 1800) {
 
 window.addEventListener('load', () => {
   setTimeout(() => {
-    countUp(document.getElementById('stat-pieces'), 3001);
     countUp(document.getElementById('stat-nfts'), 1141);
     countUp(document.getElementById('stat-miles'), Math.round(49526 * KM_TO_MILES));
   }, 400);
@@ -1157,6 +1163,8 @@ async function loadArchive() {
     allPieces.sort((a, b) => new Date(b.postDate || b.post_date || 0) - new Date(a.postDate || a.post_date || 0));
     filteredPieces = allPieces;
     document.getElementById('archiveLoader').remove();
+    document.getElementById('archiveSectionTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
+    document.getElementById('stat-pieces').textContent = allPieces.length.toLocaleString();
     renderArchivePage();
   } catch(e) {
     document.getElementById('archiveLoader').textContent = 'Failed to load archive.';
@@ -1169,7 +1177,6 @@ function renderArchivePage() {
     grid.appendChild(makePieceCard(piece));
   });
   displayedCount += Math.min(PAGE_SIZE, filteredPieces.length - displayedCount);
-  // Always show archive link once pieces are loaded
   if (allPieces.length > 0) {
     document.getElementById('loadMoreBtn').style.display = 'inline-block';
   }
@@ -1179,14 +1186,14 @@ function loadMore() { renderArchivePage(); }
 
 function makePieceCard(piece, clickable = true) {
   const id = piece.pieceID || piece.Piece_ID || '';
-  const date = piece.postDate || piece.post_date || '';
-  const notes = piece.notes || piece.Notes || piece.notes2 || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
+  const notes = piece.caption || piece.notes || piece.Notes || piece.notes2 || '';
   const imageUrl = piece.imageURL || piece.image_url || '';
   const card = document.createElement('div');
   card.className = 'piece-card';
   if (clickable) card.onclick = () => openModal(piece);
   card.innerHTML = imageUrl
-    ? `<img class="piece-img" src="${PROXY_BASE}/api/proxy?url=${encodeURIComponent(imageUrl)}" alt="${id}" loading="lazy" onerror="this.parentNode.querySelector('.piece-img-placeholder') && this.style.display='none'">
+    ? `<img class="piece-img" src="${imageUrl.includes('drive.google.com') ? imageUrl.replace('uc?export=view&id=', 'thumbnail?id=') : PROXY_BASE + '/api/proxy?url=' + encodeURIComponent(imageUrl)}" alt="${id}" loading="lazy" onerror="this.style.display='none'">
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`
     : `<div class="piece-img-placeholder">—</div>
        <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div>${notes ? `<div class="piece-desc">${notes.slice(0,100)}</div>` : ''}</div>`;
@@ -1195,13 +1202,18 @@ function makePieceCard(piece, clickable = true) {
 
 function openModal(piece) {
   const id = piece.pieceID || '';
-  const date = piece.postDate || piece.post_date || '';
-  const notes = piece.notes || piece.Notes || piece.notes2 || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
+  const notes = piece.caption || piece.notes || piece.Notes || piece.notes2 || '';
   const imageUrl = piece.imageURL || piece.image_url || '';
   const postUrl = piece.postURL || piece.post_url || '';
   const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
-  document.getElementById('modalImg').src = imageUrl ? `${PROXY_BASE}/api/proxy?url=${encodeURIComponent(imageUrl)}` : '';
-  document.getElementById('modalImg').style.display = imageUrl ? 'block' : 'none';
+  const imgSrc = imageUrl
+    ? (imageUrl.includes('drive.google.com')
+        ? imageUrl.replace('uc?export=view&id=', 'thumbnail?id=')
+        : `${PROXY_BASE}/api/proxy?url=${encodeURIComponent(imageUrl)}`)
+    : '';
+  document.getElementById('modalImg').src = imgSrc;
+  document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
   document.getElementById('modalDesc').textContent = notes || 'No description available.';
@@ -1351,7 +1363,7 @@ function renderSearchResults(matches, container, append = false) {
     const card = makePieceCard({
       pieceID: meta.piece_id || match.id,
       postDate: meta.post_date || '',
-      notes: meta.description || '',
+      caption: meta.description || '',
       imageURL: meta.image_url || '',
       postURL: meta.post_url || ''
     });
