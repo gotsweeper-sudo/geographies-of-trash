@@ -112,6 +112,7 @@ let allPieces = [], displayedCount = 0;
 function igThumbUrl(piece) {
   const imageUrl = piece.imageURL || piece.image_url || '';
   if (!imageUrl) return null;
+  if (imageUrl.includes('drive.google.com')) return imageUrl;
   return `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
 }
 
