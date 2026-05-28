@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Archive — Geographies of Trash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808; --white: #ffffff; --gray1: #111111; --gray2: #1a1a1a;
+  --gray3: #2a2a2a; --gray4: #555555; --gray5: #888888; --gray6: #aaaaaa;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 14px; line-height: 1.6; overflow-x: hidden; }
+
+#site-header { position: sticky; top: 0; z-index: 100; background: var(--black); border-bottom: 1px solid var(--gray3); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; gap: 16px; max-width: 1200px; margin: 0 auto; }
+.logo-wrap { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
+.logo-svg { width: 40px; height: 40px; }
+.site-title { font-family: 'Oswald', sans-serif; font-size: clamp(14px, 2.5vw, 22px); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); text-align: center; flex: 1; line-height: 1.1; }
+.site-title span { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.5em; letter-spacing: 0.2em; color: var(--gray5); font-weight: 400; margin-top: 3px; }
+.back-link { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray4); text-decoration: none; transition: color 0.15s; flex-shrink: 0; }
+.back-link:hover { color: var(--white); }
+
+.section-wrap { max-width: 1400px; margin: 0 auto; padding: 56px 32px 72px; }
+.section-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gray4); text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-family: 'Oswald', sans-serif; font-size: clamp(32px, 5vw, 56px); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); margin-bottom: 8px; line-height: 1; }
+.archive-meta { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--gray4); margin-bottom: 40px; }
+
+.piece-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; background: var(--gray2); }
+.piece-card { background: var(--black); cursor: pointer; transition: background 0.15s; overflow: hidden; }
+.piece-card:hover { background: var(--gray1); }
+.piece-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray1); display: block; }
+.piece-img-placeholder { width: 100%; aspect-ratio: 1; background: var(--gray1); display: flex; align-items: center; justify-content: center; color: var(--gray3); font-size: 10px; }
+.piece-info { padding: 8px 10px 10px; }
+.piece-id { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600; color: var(--white); letter-spacing: 0.04em; }
+.piece-date { font-size: 9px; color: var(--gray4); margin-top: 2px; letter-spacing: 0.05em; }
+
+.load-more-wrap { text-align: center; margin-top: 48px; }
+.btn { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 11px 28px; border: 1px solid var(--gray3); color: var(--gray5); background: transparent; cursor: pointer; text-decoration: none; transition: all 0.15s; display: inline-block; }
+.btn:hover { border-color: var(--white); color: var(--white); }
+.btn-primary { border-color: var(--white); color: var(--white); }
+.btn-primary:hover { background: var(--white); color: var(--black); }
+
+.loading-msg { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--gray4); letter-spacing: 0.15em; padding: 48px 0; text-align: center; }
+
+/* Modal */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 200; overflow-y: auto; padding: 40px 24px; }
+.modal-backdrop.open { display: flex; align-items: flex-start; justify-content: center; }
+.modal { background: var(--black); border: 1px solid var(--gray3); max-width: 640px; width: 100%; padding: 0; position: relative; margin-top: 20px; }
+.modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--gray4); font-size: 18px; cursor: pointer; line-height: 1; font-family: monospace; z-index: 1; transition: color 0.15s; }
+.modal-close:hover { color: var(--white); }
+.modal-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray1); display: block; }
+.modal-body { padding: 24px 28px 28px; }
+.modal-id { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; margin-bottom: 4px; }
+.modal-date { font-size: 10px; color: var(--gray4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
+.modal-desc { font-size: 12px; color: var(--gray5); line-height: 1.85; margin-bottom: 24px; }
+.modal-links { display: flex; gap: 12px; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .section-wrap { padding: 40px 16px 56px; }
+  .header-inner { padding: 14px 20px; }
+  .piece-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="header-inner">
+    <a href="/" class="back-link">← Back</a>
+    <div class="site-title">
+      Geographies of Trash
+      <span>Full Archive</span>
+    </div>
+    <div style="width:60px"></div>
+  </div>
+</header>
+
+<div class="section-wrap">
+  <div class="section-label">Archive</div>
+  <div class="section-title" id="archiveTitle">All Pieces</div>
+  <div class="archive-meta" id="archiveMeta">Loading...</div>
+  <div class="piece-grid" id="pieceGrid">
+    <div class="loading-msg" id="archiveLoader" style="grid-column:1/-1">Loading archive...</div>
+  </div>
+  <div class="load-more-wrap">
+    <button class="btn btn-primary" id="loadMoreBtn" onclick="loadMore()" style="display:none">Load More</button>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="pieceModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <img class="modal-img" id="modalImg" src="" alt="">
+    <div class="modal-body">
+      <div class="modal-id" id="modalId"></div>
+      <div class="modal-date" id="modalDate"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-links" id="modalLinks"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIQswkc3tuyk8K3IsBmOpsMRnkB_19YnXyBTDlC0bvTuOhmIff2BqbkUqDYRPsJEu7/exec';
+const PAGE_SIZE = 48;
+let allPieces = [], displayedCount = 0;
+
+function igThumbUrl(piece) {
+  const imageUrl = piece.imageURL || piece.image_url || '';
+  if (!imageUrl) return null;
+  return `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
+}
+
+function formatDate(raw) {
+  if (!raw) return '';
+  const d = new Date(raw);
+  if (isNaN(d)) return raw;
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+}
+
+window.addEventListener('load', loadArchive);
+
+async function loadArchive() {
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getAllConfirmed`);
+    const data = await res.json();
+    allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
+    allPieces.sort((a, b) => new Date(b.postDate || b.post_date || 0) - new Date(a.postDate || a.post_date || 0));
+    document.getElementById('archiveLoader').remove();
+    document.getElementById('archiveTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
+    document.getElementById('archiveMeta').textContent = 'Newest first · Click any piece to view details';
+    renderPage();
+  } catch(e) {
+    document.getElementById('archiveLoader').textContent = 'Failed to load archive.';
+  }
+}
+
+function renderPage() {
+  const grid = document.getElementById('pieceGrid');
+  allPieces.slice(displayedCount, displayedCount + PAGE_SIZE).forEach(piece => {
+    grid.appendChild(makeCard(piece));
+  });
+  displayedCount += Math.min(PAGE_SIZE, allPieces.length - displayedCount);
+  document.getElementById('loadMoreBtn').style.display = displayedCount < allPieces.length ? 'inline-block' : 'none';
+}
+
+function loadMore() { renderPage(); }
+
+function makeCard(piece) {
+  const id = piece.pieceID || piece.Piece_ID || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
+  const thumb = igThumbUrl(piece);
+  const card = document.createElement('div');
+  card.className = 'piece-card';
+  card.onclick = () => openModal(piece);
+  card.innerHTML = thumb
+    ? `<img class="piece-img" src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none'">
+       <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div></div>`
+    : `<div class="piece-img-placeholder">—</div>
+       <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div></div>`;
+  return card;
+}
+
+function openModal(piece) {
+  const id = piece.pieceID || '';
+  const date = formatDate(piece.postDate || piece.post_date || '');
+  const notes = piece.notes || piece.Notes || piece.notes2 || '';
+  const thumb = igThumbUrl(piece);
+  const postUrl = piece.postURL || piece.post_url || '';
+  const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
+  document.getElementById('modalImg').src = thumb || '';
+  document.getElementById('modalImg').style.display = thumb ? 'block' : 'none';
+  document.getElementById('modalId').textContent = id;
+  document.getElementById('modalDate').textContent = date;
+  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+  const links = document.getElementById('modalLinks');
+  links.innerHTML = '';
+  if (postUrl) links.innerHTML += `<a href="${postUrl}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>`;
+  if (stravaUrl) links.innerHTML += `<a href="${stravaUrl}" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>`;
+  document.getElementById('pieceModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('pieceModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('pieceModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+</body>
+</html>
