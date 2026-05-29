@@ -823,10 +823,10 @@ body {
   <div class="nav-inner">
     <a href="#archive" class="nav-link" data-section="archive">Archive</a>
     <a href="#search" class="nav-link" data-section="search">Search</a>
-    <a href="#about" class="nav-link" data-section="about">About</a>
+    <a href="#data" class="nav-link" data-section="about">Data</a>
     <a href="#press" class="nav-link" data-section="press">Trash Talk</a>
-    <a href="#triumphs" class="nav-link" data-section="triumphs">Trash Triumphs</a>
-    <a href="#nft" class="nav-link" data-section="nft">NFT</a>
+    <a href="#thereceipts" class="nav-link" data-section="triumphs">The Receipts</a>
+    <a href="#digitalprovenance" class="nav-link" data-section="nft">Digital Provenance</a>
   </div>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
   <div class="nav-mobile-menu" id="mobileMenu">
@@ -856,7 +856,7 @@ body {
 <div id="archive">
   <div class="section-wrap">
     <div class="section-label">Archive</div>
-    <div class="section-title">3,001 Pieces</div>
+    <div class="section-title" id="archiveSectionTitle">3,001 Pieces</div>
     <div class="piece-grid" id="pieceGrid">
       <div class="loading-msg" id="archiveLoader" style="grid-column:1/-1">Loading archive...</div>
     </div>
@@ -1203,10 +1203,10 @@ function makePieceCard(piece, clickable = true) {
 function openModal(piece) {
   const id = piece.pieceID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.caption || piece.notes || piece.Notes || piece.notes2 || '';
+  const notes = piece.notes || piece.notes2 || piece.caption || '';
   const imageUrl = piece.imageURL || piece.image_url || '';
   const postUrl = piece.postURL || piece.post_url || '';
-  const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
+  const stravaUrl = (piece.stravaURL || piece.strava_url || '').split('|')[0].trim();
   const imgSrc = imageUrl
     ? (imageUrl.includes('drive.google.com')
         ? imageUrl.replace('uc?export=view&id=', 'thumbnail?id=')
@@ -1216,7 +1216,8 @@ function openModal(piece) {
   document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
-  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+  const cleanNotes = (notes || 'No description available.').replace(/\*\*(.*?)\*\*/g, '$1').replace(/\| /g, '\n\n');
+document.getElementById('modalDesc').textContent = cleanNotes;
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';
   if (postUrl) links.innerHTML += `<a href="${postUrl}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>`;
