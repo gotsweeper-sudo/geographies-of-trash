@@ -832,10 +832,10 @@ body {
   <div class="nav-mobile-menu" id="mobileMenu">
     <a href="#archive" class="nav-link" onclick="closeMenu()">Archive</a>
     <a href="#search" class="nav-link" onclick="closeMenu()">Search</a>
-    <a href="#about" class="nav-link" onclick="closeMenu()">About</a>
+    <a href="#about" class="nav-link" onclick="closeMenu()">Data</a>
     <a href="#press" class="nav-link" onclick="closeMenu()">Trash Talk</a>
-    <a href="#triumphs" class="nav-link" onclick="closeMenu()">Trash Triumphs</a>
-    <a href="#nft" class="nav-link" onclick="closeMenu()">NFT</a>
+    <a href="#triumphs" class="nav-link" onclick="closeMenu()">The Receipts</a>
+    <a href="#nft" class="nav-link" onclick="closeMenu()">Digital Provenance</a>
   </div>
 </nav>
 
@@ -1187,7 +1187,7 @@ function loadMore() { renderArchivePage(); }
 function makePieceCard(piece, clickable = true) {
   const id = piece.pieceID || piece.Piece_ID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.caption || piece.notes || piece.Notes || piece.notes2 || '';
+  const notes = piece.notes || piece.notes2 || piece.caption || '';
   const imageUrl = piece.imageURL || piece.image_url || '';
   const card = document.createElement('div');
   card.className = 'piece-card';
