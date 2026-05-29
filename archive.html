@@ -182,7 +182,7 @@ function openModal(piece) {
   document.getElementById('modalImg').style.display = thumb ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
-  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+  document.getElementById('modalDesc').innerHTML = notes    ? `<div style="font-size:9px;letter-spacing:0.2em;color:var(--gray4);text-transform:uppercase;margin-bottom:8px;">AI Description</div>${notes}`    : 'No description available.';
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';
   if (postUrl) links.innerHTML += `<a href="${postUrl}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>`;
