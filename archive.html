@@ -17,8 +17,7 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 
 #site-header { position: sticky; top: 0; z-index: 100; background: var(--black); border-bottom: 1px solid var(--gray3); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; gap: 16px; max-width: 1200px; margin: 0 auto; }
-.logo-wrap { display: flex; align-items: center; gap: 12px; flex-shrink: 0; text-decoration: none; }
-.logo-svg { width: 40px; height: 40px; }
+.logo-mark { width: 40px; height: 40px; border: 2px solid var(--white); display: flex; align-items: center; justify-content: center; font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700; color: var(--white); flex-shrink: 0; text-decoration: none; }
 .site-title { font-family: 'Oswald', sans-serif; font-size: clamp(14px, 2.5vw, 22px); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--white); text-align: center; flex: 1; line-height: 1.1; }
 .site-title span { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.5em; letter-spacing: 0.2em; color: var(--gray5); font-weight: 400; margin-top: 3px; }
 .back-link { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray4); text-decoration: none; transition: color 0.15s; flex-shrink: 0; }
@@ -46,7 +45,6 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 
 .loading-msg { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--gray4); letter-spacing: 0.15em; padding: 48px 0; text-align: center; }
 
-/* Modal */
 .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 200; overflow-y: auto; padding: 40px 24px; }
 .modal-backdrop.open { display: flex; align-items: flex-start; justify-content: center; }
 .modal { background: var(--black); border: 1px solid var(--gray3); max-width: 640px; width: 100%; padding: 0; position: relative; margin-top: 20px; }
@@ -55,8 +53,9 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 .modal-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray1); display: block; }
 .modal-body { padding: 24px 28px 28px; }
 .modal-id { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; margin-bottom: 4px; }
-.modal-date { font-size: 10px; color: var(--gray4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px; }
-.modal-desc { font-size: 12px; color: var(--gray5); line-height: 1.85; margin-bottom: 24px; }
+.modal-date { font-size: 10px; color: var(--gray4); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+.modal-desc-label { font-size: 9px; letter-spacing: 0.25em; color: var(--gray4); text-transform: uppercase; margin-bottom: 8px; }
+.modal-desc { font-size: 12px; color: var(--gray5); line-height: 1.85; margin-bottom: 24px; white-space: pre-wrap; }
 .modal-links { display: flex; gap: 12px; flex-wrap: wrap; }
 
 @media (max-width: 640px) {
@@ -98,6 +97,7 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
     <div class="modal-body">
       <div class="modal-id" id="modalId"></div>
       <div class="modal-date" id="modalDate"></div>
+      <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-links" id="modalLinks"></div>
     </div>
@@ -105,19 +105,19 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 </div>
 
 <script>
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIQswkc3tuyk8K3IsBmOpsMRnkB_19YnXyBTDlC0bvTuOhmIff2BqbkUqDYRPsJEu7/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfyuPvQOoGQfRMFmD0pbd7MoW8Tte3pnr2iMqxmFNvNl4UBZMpgnvIcyM-w7b50rYd/exec';
 const PAGE_SIZE = 48;
 let allPieces = [], displayedCount = 0;
 
-function igThumbUrl(piece) {
-  const imageUrl = piece.imageURL || piece.image_url || '';
+function getDriveImgSrc(imageUrl, size) {
   if (!imageUrl) return null;
   if (imageUrl.includes('drive.google.com')) {
-  const match = imageUrl.match(/id=([^&]+)/);
-  if (match) return `https://lh3.googleusercontent.com/d/${match[1]}`;
-  return imageUrl;
-}
-  return `/api/proxy?url=${encodeURIComponent(imageUrl)}`;
+    const idMatch = imageUrl.match(/[?&]id=([^&]+)/);
+    if (idMatch) {
+      return 'https://drive.google.com/thumbnail?id=' + idMatch[1] + '&sz=' + (size || 'w400');
+    }
+  }
+  return '/api/proxy?url=' + encodeURIComponent(imageUrl);
 }
 
 function formatDate(raw) {
@@ -127,11 +127,21 @@ function formatDate(raw) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
+function stripMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*(.*?)\*/g, '$1')
+    .replace(/\| /g, '\n\n')
+    .replace(/\|/g, '')
+    .trim();
+}
+
 window.addEventListener('load', loadArchive);
 
 async function loadArchive() {
   try {
-    const res = await fetch(`${APPS_SCRIPT_URL}?action=getAllConfirmed`);
+    const res = await fetch(APPS_SCRIPT_URL + '?action=getAllConfirmed');
     const data = await res.json();
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
     allPieces.sort((a, b) => new Date(b.postDate || b.post_date || 0) - new Date(a.postDate || a.post_date || 0));
@@ -158,35 +168,38 @@ function loadMore() { renderPage(); }
 function makeCard(piece) {
   const id = piece.pieceID || piece.Piece_ID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.notes || piece.notes2 || piece.caption || '';
-  const thumb = igThumbUrl(piece);
+  const thumb = getDriveImgSrc(piece.imageURL || piece.image_url || '', 'w400');
   const card = document.createElement('div');
   card.className = 'piece-card';
-  card.onclick = () => openModal(piece);
+  card.onclick = function() { openModal(piece); };
   card.innerHTML = thumb
-    ? `<img class="piece-img" src="${thumb}" alt="${id}" loading="lazy" onerror="this.style.display='none'">
-       <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div></div>`
-    : `<div class="piece-img-placeholder">—</div>
-       <div class="piece-info"><div class="piece-id">${id}</div><div class="piece-date">${date}</div></div>`;
+    ? '<img class="piece-img" src="' + thumb + '" alt="' + id + '" loading="lazy" onerror="this.style.display=\'none\'">' +
+      '<div class="piece-info"><div class="piece-id">' + id + '</div><div class="piece-date">' + date + '</div></div>'
+    : '<div class="piece-img-placeholder">—</div>' +
+      '<div class="piece-info"><div class="piece-id">' + id + '</div><div class="piece-date">' + date + '</div></div>';
   return card;
 }
 
 function openModal(piece) {
   const id = piece.pieceID || '';
   const date = formatDate(piece.postDate || piece.post_date || '');
-  const notes = piece.notes || piece.notes2 || piece.caption || '';
-  const thumb = igThumbUrl(piece);
+  const notes = stripMarkdown(piece.notes || piece.notes2 || piece.caption || '');
+  const imgSrc = getDriveImgSrc(piece.imageURL || piece.image_url || '', 'w800');
   const postUrl = piece.postURL || piece.post_url || '';
-  const stravaUrl = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
-  document.getElementById('modalImg').src = thumb || '';
-  document.getElementById('modalImg').style.display = thumb ? 'block' : 'none';
+  const stravaRaw = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
+  const stravaUrl = stravaRaw.split('|')[0].trim();
+
+  document.getElementById('modalImg').src = imgSrc || '';
+  document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
-  document.getElementById('modalDesc').innerHTML = notes    ? `<div style="font-size:9px;letter-spacing:0.2em;color:var(--gray4);text-transform:uppercase;margin-bottom:8px;">AI Description</div>${notes}`    : 'No description available.';
+  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';
-  if (postUrl) links.innerHTML += `<a href="${postUrl}" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>`;
-  if (stravaUrl) links.innerHTML += `<a href="${stravaUrl}" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>`;
+  if (postUrl) links.innerHTML += '<a href="' + postUrl + '" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>';
+  if (stravaUrl) links.innerHTML += '<a href="' + stravaUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>';
+
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
