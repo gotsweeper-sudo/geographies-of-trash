@@ -188,6 +188,7 @@ function openModal(piece) {
   const postUrl = piece.postURL || piece.post_url || '';
   const stravaRaw = piece.stravaURL || piece.strava_url || piece.Strava_Ride_URL || '';
   const stravaUrl = stravaRaw.split('|')[0].trim();
+  const nftUrl = piece.nftURL || piece.nft_url || piece.NFT_URL || '';
 
   document.getElementById('modalImg').src = imgSrc || '';
   document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
@@ -199,6 +200,7 @@ function openModal(piece) {
   links.innerHTML = '';
   if (postUrl) links.innerHTML += '<a href="' + postUrl + '" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>';
   if (stravaUrl) links.innerHTML += '<a href="' + stravaUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>';
+  if (nftUrl) links.innerHTML += '<a href="' + nftUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">View NFT →</a>';
 
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
