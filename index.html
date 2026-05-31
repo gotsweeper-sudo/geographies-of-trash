@@ -446,6 +446,29 @@ body {
   background: var(--gray2);
 }
 @media (max-width: 640px) { .clusterRow { grid-template-columns: repeat(2, 1fr); } }
+.hood-strip {
+  margin: 6px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--gray2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+.hood-strip .hood-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gray4);
+  text-transform: uppercase;
+}
+.hood-strip .hood-list {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--gray6);
+  text-transform: uppercase;
+}
 .about-stat {
   background: var(--black);
   padding: 24px 20px;
@@ -829,7 +852,7 @@ body {
       <div class="clusterRow">
         <div class="about-stat"><span class="about-stat-num" id="aboutPieces" data-count="2999">0</span><span class="about-stat-label">Confirmed Pieces</span></div>
         <div class="about-stat"><span class="about-stat-num" data-count="520">0</span><span class="about-stat-label">Object Types</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="133">0</span><span class="about-stat-label">Neighborhoods</span></div>
+        <div class="about-stat"><span class="about-stat-num">25+</span><span class="about-stat-label">Neighborhoods</span></div>
         <div class="about-stat"><span class="about-stat-num" data-count="2020">0</span><span class="about-stat-label">Documenting Since</span></div>
       </div>
     </div>
@@ -850,6 +873,10 @@ body {
         <div class="about-stat"><span class="about-stat-num" data-count="2179">0</span><span class="about-stat-label">Community Members</span></div>
         <div class="about-stat"><span class="about-stat-num" data-count="12">0</span><span class="about-stat-label">Tons CO₂ Avoided (est.)</span></div>
       </div>
+    </div>
+    <div class="hood-strip">
+      <span class="hood-label">Most-documented neighborhoods</span>
+      <span class="hood-list">Miami Beach · Brickell · Downtown Miami · Coral Gables · Little Havana · Wynwood</span>
     </div>
     <blockquote class="esg-quote">
       "Discarded materials become aesthetic objects that challenge conventional perceptions of waste and value."
