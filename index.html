@@ -11,11 +11,14 @@
   --black: #080808;
   --white: #ffffff;
   --gray1: #111111;
-  --gray2: #1a1a1a;
-  --gray3: #2a2a2a;
-  --gray4: #555555;
-  --gray5: #888888;
-  --gray6: #aaaaaa;
+  --gray2: #242424;
+  --gray3: #3a3a3a;
+  --gray4: #8f8f8f;
+  --gray5: #b2b2b2;
+  --gray6: #d2d2d2;
+  --gold: #e0b23a;
+  --gold-dim: #b98f23;
+  --coral: #ff6b5e;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -130,8 +133,8 @@ body {
   display: inline-block;
 }
 .nav-link:hover, .nav-link.active {
-  color: var(--white);
-  border-bottom-color: var(--white);
+  color: var(--gold);
+  border-bottom-color: var(--gold);
 }
 .nav-hamburger {
   display: none;
@@ -140,7 +143,7 @@ body {
   color: var(--white);
   cursor: pointer;
   padding: 14px 32px;
-  margin-left: auto;
+  margin-right: auto;
   font-size: 20px;
   line-height: 1;
   font-family: monospace;
@@ -179,7 +182,7 @@ body {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.3em;
-  color: var(--gray4);
+  color: var(--coral);
   text-transform: uppercase;
   margin-bottom: 12px;
 }
@@ -194,10 +197,31 @@ body {
   line-height: 1;
 }
 #hero {
-  padding: 96px 32px 80px;
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 96px 32px 72px;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
 }
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(8,8,8,0.40) 0%, rgba(8,8,8,0.62) 55%, rgba(8,8,8,0.92) 100%);
+  z-index: 1;
+}
+.hero-content { position: relative; z-index: 2; }
 .hero-title {
   font-family: 'Oswald', sans-serif;
   font-size: clamp(48px, 9vw, 112px);
@@ -241,11 +265,11 @@ body {
   color: var(--white);
 }
 .btn-primary {
-  border-color: var(--white);
-  color: var(--white);
+  border-color: var(--gold);
+  color: var(--gold);
 }
 .btn-primary:hover {
-  background: var(--white);
+  background: var(--gold);
   color: var(--black);
 }
 .piece-grid {
@@ -253,6 +277,10 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1px;
   background: var(--gray2);
+}
+.preview-grid {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 760px;
 }
 .piece-card {
   background: var(--black);
@@ -330,8 +358,8 @@ body {
   transition: all 0.15s;
 }
 .search-mode-btn.active {
-  color: var(--white);
-  border-bottom-color: var(--white);
+  color: var(--gold);
+  border-bottom-color: var(--gold);
 }
 .search-mode-btn:hover { color: var(--white); }
 .nft-toggle {
@@ -347,7 +375,7 @@ body {
   cursor: pointer;
   padding-bottom: 10px;
 }
-.nft-toggle input { width: 14px; height: 14px; accent-color: #fff; cursor: pointer; }
+.nft-toggle input { width: 14px; height: 14px; accent-color: var(--gold); cursor: pointer; }
 .nft-toggle:hover { color: var(--white); }
 .search-panel { display: none; padding-top: 28px; }
 .search-panel.active { display: block; }
@@ -403,7 +431,7 @@ body {
 .search-results-label {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
-  color: var(--gray4);
+  color: var(--coral);
   letter-spacing: 0.25em;
   text-transform: uppercase;
   margin-bottom: 20px;
@@ -602,7 +630,7 @@ body {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.25em;
-  color: var(--gray4);
+  color: var(--coral);
   text-transform: uppercase;
   margin-bottom: 16px;
 }
@@ -668,7 +696,7 @@ body {
   text-decoration: none;
   transition: color 0.15s;
 }
-.footer-ig:hover { color: var(--white); }
+.footer-ig:hover { color: var(--gold); }
 .modal-backdrop {
   display: none;
   position: fixed;
@@ -757,9 +785,35 @@ body {
   #hero { padding: 64px 20px 56px; }
   #site-footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
 }
+.hero-eye { position: absolute; top: 22px; left: 32px; width: 78px; height: 78px; color: var(--gold); z-index: 3; opacity: 0.92; }
+@media (max-width: 640px) { .hero-eye { width: 56px; height: 56px; top: 18px; left: 20px; } }
+.nav-mobile-menu .nav-link { display: flex; align-items: center; }
+.menu-eye { width: 15px; height: 15px; color: var(--gold); margin-right: 11px; flex-shrink: 0; }
+.modal-correct { margin-top: 20px; border-top: 1px solid var(--gray3); padding-top: 16px; }
+.correct-toggle { background: none; border: none; color: var(--gray5); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; text-decoration: underline; }
+.correct-toggle:hover { color: var(--coral); }
+.correct-form { margin-top: 14px; }
+.correct-form textarea { width: 100%; min-height: 70px; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 10px; outline: none; resize: vertical; }
+.correct-form input { width: 100%; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 8px 10px; margin-top: 8px; outline: none; }
+.correct-form .btn-primary { margin-top: 10px; font-size: 11px; padding: 9px 18px; }
+.correct-msg { font-size: 11px; color: var(--coral); margin-top: 10px; letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="aholEye" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="55" fill="none" stroke="currentColor" stroke-width="5"/>
+  <path d="M24 60 Q60 20 96 60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M31 60 Q60 28 89 60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M38 60 Q60 36 82 60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M45 60 Q60 44 75 60" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round"/>
+  <path d="M30 61 Q60 80 90 61" fill="none" stroke="currentColor" stroke-width="5"/>
+  <ellipse cx="60" cy="59" rx="11" ry="7" fill="currentColor"/>
+  <g stroke="currentColor" stroke-width="4" stroke-linecap="round">
+    <line x1="43" y1="67" x2="43" y2="90"/><line x1="51.5" y1="69" x2="51.5" y2="94"/>
+    <line x1="60" y1="70" x2="60" y2="95"/><line x1="68.5" y1="69" x2="68.5" y2="94"/>
+    <line x1="77" y1="67" x2="77" y2="90"/>
+  </g>
+</symbol></svg>
 <header id="site-header">
   <div class="header-inner">
     <div class="logo-wrap">
@@ -784,18 +838,26 @@ body {
     <a href="#press" class="nav-link" data-section="press">Trash Talk</a>
     <a href="#triumphs" class="nav-link" data-section="triumphs">The Receipts</a>
     <a href="#nft" class="nav-link" data-section="nft">Digital Provenance</a>
+    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener">Discord</a>
   </div>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
   <div class="nav-mobile-menu" id="mobileMenu">
-    <a href="archive.html" class="nav-link" onclick="closeMenu()">Archive</a>
-    <a href="#search" class="nav-link" onclick="closeMenu()">Search</a>
-    <a href="#about" class="nav-link" onclick="closeMenu()">Data</a>
-    <a href="#press" class="nav-link" onclick="closeMenu()">Trash Talk</a>
-    <a href="#triumphs" class="nav-link" onclick="closeMenu()">The Receipts</a>
-    <a href="#nft" class="nav-link" onclick="closeMenu()">Digital Provenance</a>
+    <a href="archive.html" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Archive</a>
+    <a href="#search" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Search</a>
+    <a href="#about" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Data</a>
+    <a href="#press" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Trash Talk</a>
+    <a href="#triumphs" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>The Receipts</a>
+    <a href="#nft" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Digital Provenance</a>
+    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Discord</a>
   </div>
 </nav>
 <div id="hero">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto">
+    <source src="hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <svg class="hero-eye"><use href="#aholEye"/></svg>
+  <div class="hero-content">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
   <p class="hero-sub">Geographies of Trash is an ongoing public art practice by Miami artist Ahol Sniffs Glue in which discarded objects are transformed into artworks and returned to the street. Through cycling across Miami, the work becomes a practice of attention — shifting from routine to awareness, from what is overlooked to what is seen. Documented across more than 3,000 interventions, the project maps the geographies of urban neglect through creative reuse, generating a living provenance archive of found objects, GPS-logged rides, and on-chain records. Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia — recognized by six municipal governments and studied as a model for community-engaged environmental education.</p>
@@ -803,13 +865,14 @@ body {
     <a href="archive.html" class="btn btn-primary">Browse Archive</a>
     <a href="#search" class="btn">Search Pieces</a>
   </div>
+  </div>
 </div>
 <hr class="section-divider">
 <div id="archive">
   <div class="section-wrap">
     <div class="section-label">Archive</div>
     <div class="section-title" id="archiveSectionTitle">Loading...</div>
-    <div class="piece-grid" id="pieceGrid">
+    <div class="piece-grid preview-grid" id="pieceGrid">
       <div class="loading-msg" id="archiveLoader" style="grid-column:1/-1">Loading archive...</div>
     </div>
     <div class="load-more-wrap">
@@ -1004,6 +1067,12 @@ body {
         <div class="nft-desc">A curated selection of GOT pieces with fully on-chain metadata and image storage. The permanent, trustless record of the archive.</div>
         <div class="nft-link">View on OpenSea →</div>
       </a>
+      <a class="nft-card" href="community.html">
+        <div class="nft-label">The Gang — Community</div>
+        <div class="nft-title">Biscayne World</div>
+        <div class="nft-desc" style="margin-top:8px;">The cyber trapperz, the oath &amp; the Ten Crack Commandments, status badges, and how to take part — find pieces, super-spread, earn your place. You don't have to be in Miami. Join the Discord.</div>
+        <div class="nft-link">Enter the community →</div>
+      </a>
     </div>
   </div>
 </div>
@@ -1011,8 +1080,9 @@ body {
 <footer id="site-footer">
   <div class="footer-left">Geographies of Trash — Miami, FL</div>
   <div class="footer-right">
-    <a href="https://www.instagram.com/aholsniffsglue" class="footer-ig" target="_blank">@ahol #miamifulltime</a>
-    &nbsp;·&nbsp; Archive managed by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank">@youngwildpanda</a>
+    <a href="https://discord.gg/biscayneworld" class="footer-ig" target="_blank" rel="noopener">Discord</a>
+    &nbsp;·&nbsp; <a href="https://www.instagram.com/aholsniffsglue" class="footer-ig" target="_blank" rel="noopener">@aholsniffsglue</a>
+    &nbsp;·&nbsp; Archive by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank" rel="noopener">@youngwildpanda</a>
   </div>
 </footer>
 <div class="modal-backdrop" id="pieceModal">
@@ -1025,15 +1095,25 @@ body {
       <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-links" id="modalLinks"></div>
+      <div class="modal-correct">
+        <button class="correct-toggle" onclick="toggleCorrect()">Suggest a correction</button>
+        <div class="correct-form" id="correctForm" style="display:none;">
+          <textarea id="correctText" placeholder="What should this piece's description say?"></textarea>
+          <input id="correctFrom" placeholder="Your name or @handle (optional)">
+          <button class="btn btn-primary" onclick="sendCorrection()">Submit</button>
+          <div class="correct-msg" id="correctMsg"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfyuPvQOoGQfRMFmD0pbd7MoW8Tte3pnr2iMqxmFNvNl4UBZMpgnvIcyM-w7b50rYd/exec';
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 3;
 const KM_TO_MILES = 0.621371;
 let allPieces = [], filteredPieces = [], displayedCount = 0;
 let uploadedImageFile = null;
+let currentPieceId = '';
 function getDriveImgSrc(imageUrl, size) {
   if (!imageUrl) return '';
   // Extract Drive file ID and use thumbnail API — works on mobile without login
@@ -1106,7 +1186,7 @@ async function loadArchive() {
     const res = await fetch(APPS_SCRIPT_URL + '?action=getAllConfirmed');
     const data = await res.json();
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
-    allPieces.sort((a, b) => new Date(b.postDate || 0) - new Date(a.postDate || 0));
+    allPieces.sort((a, b) => (parseInt(String(b.pieceID || '').replace('GOT_', '')) || 0) - (parseInt(String(a.pieceID || '').replace('GOT_', '')) || 0));
     filteredPieces = allPieces;
     const loader = document.getElementById('archiveLoader');
     if (loader) loader.remove();
@@ -1149,6 +1229,7 @@ function makePieceCard(piece, clickable) {
 }
 function openModal(piece) {
   const id = piece.pieceID || '';
+  currentPieceId = id;
   const date = formatDate(piece.postDate || '');
   const notes = stripMarkdown(piece.notes || piece.notes2 || piece.caption || '');
   const imageUrl = piece.imageURL || '';
@@ -1167,8 +1248,28 @@ function openModal(piece) {
   if (postUrl) links.innerHTML += '<a href="' + postUrl + '" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>';
   if (stravaUrl) links.innerHTML += '<a href="' + stravaUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>';
   if (nftUrl) links.innerHTML += '<a href="' + nftUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">View NFT →</a>';
+  const cf = document.getElementById('correctForm'); if (cf) cf.style.display = 'none';
+  const cm = document.getElementById('correctMsg'); if (cm) cm.textContent = '';
+  const ct = document.getElementById('correctText'); if (ct) ct.value = '';
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+function toggleCorrect() {
+  const f = document.getElementById('correctForm');
+  f.style.display = (f.style.display === 'none' || !f.style.display) ? 'block' : 'none';
+}
+async function sendCorrection() {
+  const text = document.getElementById('correctText').value.trim();
+  const msg = document.getElementById('correctMsg');
+  if (!text) { msg.textContent = 'Please enter your suggestion.'; return; }
+  const from = document.getElementById('correctFrom').value.trim();
+  msg.textContent = 'Submitting...';
+  try {
+    await fetch(APPS_SCRIPT_URL + '?action=submitCorrection&pieceID=' + encodeURIComponent(currentPieceId) + '&text=' + encodeURIComponent(text) + '&from=' + encodeURIComponent(from));
+    msg.textContent = 'Thanks — submitted for review.';
+    document.getElementById('correctText').value = '';
+    document.getElementById('correctFrom').value = '';
+  } catch (e) { msg.textContent = 'Could not submit right now. Try again later.'; }
 }
 function closeModal() {
   document.getElementById('pieceModal').classList.remove('open');
@@ -1291,7 +1392,7 @@ function renderSearchResults(matches, container, append) {
       nftURL: meta.nft_url || ''
     });
     const score = document.createElement('div');
-    score.style.cssText = 'font-size:9px;color:var(--gray4);letter-spacing:0.1em;padding:0 12px 8px;';
+    score.style.cssText = 'font-size:9px;color:var(--coral);letter-spacing:0.1em;padding:0 12px 8px;';
     score.textContent = Math.round(match.score * 100) + '% match';
     card.appendChild(score);
     grid.appendChild(card);

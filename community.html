@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gang — Geographies of Trash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808; --white: #ffffff; --gray1: #111111; --gray2: #242424;
+  --gray3: #3a3a3a; --gray4: #8f8f8f; --gray5: #b2b2b2; --gray6: #d2d2d2;
+  --gold: #e0b23a; --coral: #ff6b5e;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; }
+#site-header { position: sticky; top: 0; z-index: 100; background: var(--black); border-bottom: 1px solid var(--gray3); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; gap: 16px; max-width: 1100px; margin: 0 auto; }
+.back-link { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray5); text-decoration: none; transition: color 0.15s; }
+.back-link:hover { color: var(--gold); }
+.site-title { font-family: 'Oswald', sans-serif; font-size: clamp(14px, 2.5vw, 20px); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; flex: 1; line-height: 1.1; }
+.site-title span { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.5em; letter-spacing: 0.2em; color: var(--gray5); font-weight: 400; margin-top: 3px; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 64px 32px 80px; }
+.section-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--coral); text-transform: uppercase; margin-bottom: 12px; }
+.page-title { font-family: 'Oswald', sans-serif; font-size: clamp(36px, 7vw, 72px); font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; line-height: 0.98; margin-bottom: 24px; }
+.lede { color: var(--gray6); font-size: 14px; line-height: 1.9; max-width: 680px; margin-bottom: 8px; }
+.lede strong { color: var(--white); font-weight: normal; }
+hr.div { border: none; border-top: 1px solid var(--gray3); margin: 56px 0; }
+.block-title { font-family: 'Oswald', sans-serif; font-size: clamp(24px, 4vw, 38px); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 24px; }
+.oath-intro { color: var(--gray5); font-size: 13px; line-height: 1.9; margin-bottom: 28px; max-width: 680px; }
+.oath-intro b { color: var(--gold); font-weight: normal; }
+.commandments { list-style: none; counter-reset: cmd; border-top: 1px solid var(--gray2); }
+.commandments li { counter-increment: cmd; display: grid; grid-template-columns: 44px 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--gray2); color: var(--gray6); font-size: 13px; line-height: 1.7; align-items: baseline; }
+.commandments li::before { content: counter(cmd); font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--gold); }
+.oath-close { margin-top: 28px; font-family: 'Oswald', sans-serif; font-size: 16px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--white); }
+.badge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1px; background: var(--gray2); }
+.badge-card { background: var(--gray1); padding: 28px 24px; }
+.badge-name { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.badge-desc { color: var(--gray5); font-size: 12px; line-height: 1.7; }
+.note { color: var(--gray4); font-size: 11px; letter-spacing: 0.05em; margin-top: 18px; }
+.cta-wrap { text-align: center; padding: 16px 0 0; }
+.btn { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 14px 34px; border: 1px solid var(--gold); color: var(--gold); background: transparent; cursor: pointer; text-decoration: none; transition: all 0.15s; display: inline-block; }
+.btn:hover { background: var(--gold); color: var(--black); }
+#site-footer { border-top: 1px solid var(--gray3); padding: 36px 32px; max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.footer-left { font-family: 'Oswald', sans-serif; font-size: 12px; letter-spacing: 0.15em; color: var(--gray4); text-transform: uppercase; }
+.footer-right a { color: var(--gray5); text-decoration: none; font-size: 11px; }
+.footer-right a:hover { color: var(--gold); }
+@media (max-width: 640px) { .wrap { padding: 48px 20px 64px; } }
+</style>
+</head>
+<body>
+<header id="site-header">
+  <div class="header-inner">
+    <a href="/" class="back-link">← Back</a>
+    <div class="site-title">Geographies of Trash<span>The Gang</span></div>
+    <div style="width:48px"></div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="section-label">Community</div>
+  <h1 class="page-title">The Cyber<br>Trapperz</h1>
+  <p class="lede">Geographies of Trash is more than chasing, collecting, and cleaning up the city. It's a community. You earn your place by <strong>finding pieces</strong>, by <strong>super-spreading</strong> — gifting a piece to someone new and onboarding them to the gang — and by carrying the project's values. Through the NFTs, each piece carries digital authenticity. And you don't have to be in Miami to be part of it.</p>
+
+  <hr class="div">
+
+  <div class="section-label">The Oath</div>
+  <h2 class="block-title">The Ten Crack Commandments</h2>
+  <p class="oath-intro">These are the Ten Crack Commandments us Trapperz honor, in hopes of maintaining positive energy within the server. <b>I as a cyber trapper do solemnly swear:</b></p>
+  <ol class="commandments">
+    <li>I will make it easy to participate, encourage conversation and interact with the gang.</li>
+    <li>I will not condone nor participate in any act of bullying. No matter my Discord role, I will always be kind.</li>
+    <li>I will keep the convos channel relevant. I will not spam off-topic, nor promote outside the proper channels.</li>
+    <li>I will always prioritize safety first. No trash is worth a life.</li>
+    <li>I will leave the trash dropping to Ahol. If I do not intend to keep the piece, I leave it be, for another cyber trapper.</li>
+    <li>If I am unavailable for hunting, I will help out a fellow Trapper.</li>
+    <li>If I am taking a piece, I will pick it up in its entirety.</li>
+    <li>I will share the wealth. If I come upon multiple pieces at one drop, I will take a single piece and leave the rest. I will only collect one piece per 24 hours.</li>
+    <li>I will never follow Ahol. I will always hunt and never stalk, for I know this is a heat up.</li>
+    <li>I will always honor Ahol, whose art has brought us together, and not misrepresent or undermine the integrity of this community.</li>
+  </ol>
+  <p class="oath-close">If thou pledge this oath, drop a 🩸</p>
+
+  <hr class="div">
+
+  <div class="section-label">Status</div>
+  <h2 class="block-title">Badges &amp; Levels</h2>
+  <p class="oath-intro">Everyone enters Biscayne World as a Cyber Trapper. From there you level up by collecting, minting, and onboarding others into the gang.</p>
+  <div class="badge-grid">
+    <div class="badge-card"><div class="badge-name">Cyber Trapper</div><div class="badge-desc">Where everyone starts — you become a Cyber Trapper the moment you join Biscayne World.</div></div>
+    <div class="badge-card"><div class="badge-name">Triple OG Trappers</div><div class="badge-desc">The first 305 members of the Discord — the founding crew.</div></div>
+    <div class="badge-card"><div class="badge-name">Keepers of the Landfill</div><div class="badge-desc">Earned when you acquire your first physical piece of trash.</div></div>
+    <div class="badge-card"><div class="badge-name">Non-Fungible Knights</div><div class="badge-desc">Earned when you mint your first piece onto the blockchain — you own an NFT.</div></div>
+    <div class="badge-card"><div class="badge-name">Megalodon 🦈</div><div class="badge-desc">Mint 10 pieces onto the blockchain and hold the physicals in your possession.</div></div>
+    <div class="badge-card"><div class="badge-name">Super Spreader</div><div class="badge-desc">Onboard 20 different people into Discord and MetaMask, each with their own mint.</div></div>
+  </div>
+  <p class="note">Official badge artwork is being added — names &amp; requirements are official.</p>
+
+  <hr class="div">
+
+  <div class="section-label">Join</div>
+  <h2 class="block-title">Enter Biscayne World</h2>
+  <p class="oath-intro">Wherever you are, you can be part of it. Join the Discord, take the oath, and start trapping.</p>
+  <div class="cta-wrap"><a href="https://discord.gg/biscayneworld" target="_blank" rel="noopener" class="btn">Join the Discord →</a></div>
+</div>
+
+<footer id="site-footer">
+  <div class="footer-left">Geographies of Trash — Miami, FL</div>
+  <div class="footer-right">
+    <a href="https://discord.gg/biscayneworld" target="_blank" rel="noopener">Discord</a>
+    &nbsp;·&nbsp; <a href="https://www.instagram.com/aholsniffsglue" target="_blank" rel="noopener">@aholsniffsglue</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -8,8 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  --black: #080808; --white: #ffffff; --gray1: #111111; --gray2: #1a1a1a;
-  --gray3: #2a2a2a; --gray4: #555555; --gray5: #888888; --gray6: #aaaaaa;
+  --black: #080808; --white: #ffffff; --gray1: #111111; --gray2: #242424;
+  --gray3: #3a3a3a; --gray4: #8f8f8f; --gray5: #b2b2b2; --gray6: #d2d2d2;
+  --gold: #e0b23a; --coral: #ff6b5e;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -24,7 +25,11 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 .back-link:hover { color: var(--white); }
 
 .section-wrap { max-width: 1400px; margin: 0 auto; padding: 56px 32px 72px; }
-.section-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--gray4); text-transform: uppercase; margin-bottom: 12px; }
+.section-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.3em; color: var(--coral); text-transform: uppercase; margin-bottom: 12px; }
+.archive-controls { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; margin-bottom: 28px; }
+.archive-controls label { font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--gray5); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.archive-controls select { background: var(--gray1); color: var(--white); border: 1px solid var(--gray3); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 7px 10px; cursor: pointer; }
+.archive-controls input { width: 14px; height: 14px; accent-color: var(--gold); cursor: pointer; }
 .section-title { font-family: 'Oswald', sans-serif; font-size: clamp(32px, 5vw, 56px); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--white); margin-bottom: 8px; line-height: 1; }
 .archive-meta { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--gray4); margin-bottom: 40px; }
 
@@ -40,8 +45,8 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 .load-more-wrap { text-align: center; margin-top: 48px; }
 .btn { font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; padding: 11px 28px; border: 1px solid var(--gray3); color: var(--gray5); background: transparent; cursor: pointer; text-decoration: none; transition: all 0.15s; display: inline-block; }
 .btn:hover { border-color: var(--white); color: var(--white); }
-.btn-primary { border-color: var(--white); color: var(--white); }
-.btn-primary:hover { background: var(--white); color: var(--black); }
+.btn-primary { border-color: var(--gold); color: var(--gold); }
+.btn-primary:hover { background: var(--gold); color: var(--black); }
 
 .loading-msg { font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--gray4); letter-spacing: 0.15em; padding: 48px 0; text-align: center; }
 
@@ -63,6 +68,14 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
   .header-inner { padding: 14px 20px; }
   .piece-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 }
+.modal-correct { margin-top: 20px; border-top: 1px solid var(--gray3); padding-top: 16px; }
+.correct-toggle { background: none; border: none; color: var(--gray5); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; text-decoration: underline; }
+.correct-toggle:hover { color: var(--coral); }
+.correct-form { margin-top: 14px; }
+.correct-form textarea { width: 100%; min-height: 70px; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 10px; outline: none; resize: vertical; }
+.correct-form input { width: 100%; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 8px 10px; margin-top: 8px; outline: none; }
+.correct-form .btn-primary { margin-top: 10px; font-size: 11px; padding: 9px 18px; }
+.correct-msg { font-size: 11px; color: var(--coral); margin-top: 10px; letter-spacing: 0.05em; }
 </style>
 </head>
 <body>
@@ -82,6 +95,16 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
   <div class="section-label">Archive</div>
   <div class="section-title" id="archiveTitle">All Pieces</div>
   <div class="archive-meta" id="archiveMeta">Loading...</div>
+  <div class="archive-controls">
+    <label>Sort
+      <select id="sortSel" onchange="applyControls()">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="nft">NFTs first</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="nftOnly" onchange="applyControls()"> NFTs only</label>
+  </div>
   <div class="piece-grid" id="pieceGrid">
     <div class="loading-msg" id="archiveLoader" style="grid-column:1/-1">Loading archive...</div>
   </div>
@@ -100,6 +123,15 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
       <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-links" id="modalLinks"></div>
+      <div class="modal-correct">
+        <button class="correct-toggle" onclick="toggleCorrect()">Suggest a correction</button>
+        <div class="correct-form" id="correctForm" style="display:none;">
+          <textarea id="correctText" placeholder="What should this piece's description say?"></textarea>
+          <input id="correctFrom" placeholder="Your name or @handle (optional)">
+          <button class="btn btn-primary" onclick="sendCorrection()">Submit</button>
+          <div class="correct-msg" id="correctMsg"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -107,7 +139,10 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfyuPvQOoGQfRMFmD0pbd7MoW8Tte3pnr2iMqxmFNvNl4UBZMpgnvIcyM-w7b50rYd/exec';
 const PAGE_SIZE = 48;
-let allPieces = [], displayedCount = 0;
+let allPieces = [], view = [], displayedCount = 0;
+let currentPieceId = '';
+const gotNum = p => parseInt(String(p.pieceID || p.piece_id || '').replace('GOT_', '')) || 0;
+const hasNft = p => !!(p.nftURL || p.nft_url || p.NFT_URL);
 
 function getDriveImgSrc(imageUrl, size) {
   if (!imageUrl) return null;
@@ -144,11 +179,9 @@ async function loadArchive() {
     const res = await fetch(APPS_SCRIPT_URL + '?action=getAllConfirmed');
     const data = await res.json();
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
-    allPieces.sort((a, b) => new Date(b.postDate || b.post_date || 0) - new Date(a.postDate || a.post_date || 0));
     document.getElementById('archiveLoader').remove();
     document.getElementById('archiveTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
-    document.getElementById('archiveMeta').textContent = 'Newest first · Click any piece to view details';
-    renderPage();
+    applyControls();
   } catch(e) {
     document.getElementById('archiveLoader').textContent = 'Failed to load archive.';
   }
@@ -156,14 +189,28 @@ async function loadArchive() {
 
 function renderPage() {
   const grid = document.getElementById('pieceGrid');
-  allPieces.slice(displayedCount, displayedCount + PAGE_SIZE).forEach(piece => {
+  view.slice(displayedCount, displayedCount + PAGE_SIZE).forEach(piece => {
     grid.appendChild(makeCard(piece));
   });
-  displayedCount += Math.min(PAGE_SIZE, allPieces.length - displayedCount);
-  document.getElementById('loadMoreBtn').style.display = displayedCount < allPieces.length ? 'inline-block' : 'none';
+  displayedCount += Math.min(PAGE_SIZE, view.length - displayedCount);
+  document.getElementById('loadMoreBtn').style.display = displayedCount < view.length ? 'inline-block' : 'none';
 }
 
 function loadMore() { renderPage(); }
+
+function applyControls() {
+  const sort = (document.getElementById('sortSel') || {}).value || 'newest';
+  const onlyNft = (document.getElementById('nftOnly') || {}).checked;
+  view = allPieces.filter(p => !onlyNft || hasNft(p));
+  if (sort === 'oldest') view.sort((a, b) => gotNum(a) - gotNum(b));
+  else if (sort === 'nft') view.sort((a, b) => (hasNft(b) - hasNft(a)) || (gotNum(b) - gotNum(a)));
+  else view.sort((a, b) => gotNum(b) - gotNum(a));
+  document.getElementById('pieceGrid').innerHTML = '';
+  displayedCount = 0;
+  document.getElementById('archiveMeta').textContent =
+    (onlyNft ? view.length.toLocaleString() + ' NFT pieces' : view.length.toLocaleString() + ' shown') + ' · click any piece for details';
+  renderPage();
+}
 
 function makeCard(piece) {
   const id = piece.pieceID || piece.Piece_ID || '';
@@ -182,6 +229,7 @@ function makeCard(piece) {
 
 function openModal(piece) {
   const id = piece.pieceID || '';
+  currentPieceId = id;
   const date = formatDate(piece.postDate || piece.post_date || '');
   const notes = stripMarkdown(piece.notes || piece.notes2 || piece.caption || '');
   const imgSrc = getDriveImgSrc(piece.imageURL || piece.image_url || '', 'w800');
@@ -202,8 +250,29 @@ function openModal(piece) {
   if (stravaUrl) links.innerHTML += '<a href="' + stravaUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>';
   if (nftUrl) links.innerHTML += '<a href="' + nftUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">View NFT →</a>';
 
+  const cf = document.getElementById('correctForm'); if (cf) cf.style.display = 'none';
+  const cm = document.getElementById('correctMsg'); if (cm) cm.textContent = '';
+  const ct = document.getElementById('correctText'); if (ct) ct.value = '';
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function toggleCorrect() {
+  const f = document.getElementById('correctForm');
+  f.style.display = (f.style.display === 'none' || !f.style.display) ? 'block' : 'none';
+}
+async function sendCorrection() {
+  const text = document.getElementById('correctText').value.trim();
+  const msg = document.getElementById('correctMsg');
+  if (!text) { msg.textContent = 'Please enter your suggestion.'; return; }
+  const from = document.getElementById('correctFrom').value.trim();
+  msg.textContent = 'Submitting...';
+  try {
+    await fetch(APPS_SCRIPT_URL + '?action=submitCorrection&pieceID=' + encodeURIComponent(currentPieceId) + '&text=' + encodeURIComponent(text) + '&from=' + encodeURIComponent(from));
+    msg.textContent = 'Thanks — submitted for review.';
+    document.getElementById('correctText').value = '';
+    document.getElementById('correctFrom').value = '';
+  } catch (e) { msg.textContent = 'Could not submit right now. Try again later.'; }
 }
 
 function closeModal() {
