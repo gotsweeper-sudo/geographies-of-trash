@@ -225,6 +225,13 @@ async function loadArchive() {
     document.getElementById('archiveLoader').remove();
     document.getElementById('archiveTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
     applyControls();
+    var qp = new URLSearchParams(location.search).get('q');
+    if (qp) {
+      setSearchMode('semantic');
+      document.getElementById('semanticInput').value = qp;
+      searchSemantic();
+      var sb = document.querySelector('.search-box'); if (sb) sb.scrollIntoView({ behavior: 'smooth' });
+    }
   } catch(e) {
     document.getElementById('archiveLoader').textContent = 'Failed to load archive.';
   }
@@ -334,7 +341,7 @@ async function searchSemantic() {
   results.innerHTML = '<div class="loading-msg">Searching...</div>';
   try {
     var vec = await getEmbedding(q);
-    var matches = await queryPinecone(vec, 40);
+    var matches = await queryPinecone(vec, 60);
     renderSearchResults(matches, results);
   } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
 }
@@ -358,7 +365,7 @@ async function searchByImage() {
     var base64 = await resizeToBase64(uploadedImageFile, 512);
     var description = await getVisionDescription(base64, 'image/jpeg');
     var vec = await getEmbedding(description);
-    var matches = await queryPinecone(vec, 40);
+    var matches = await queryPinecone(vec, 60);
     results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + description + '</div>';
     renderSearchResults(matches, results, true);
   } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
@@ -414,7 +421,7 @@ async function queryPinecone(vector, topK) {
   return (await res.json()).matches || [];
 }
 function renderSearchResults(matches, container, append) {
-  matches = matches.slice(0, 18);
+  matches = matches.slice(0, 60);
   var label = document.createElement('div');
   label.className = 'search-results-label';
   label.textContent = matches.length + ' pieces found';

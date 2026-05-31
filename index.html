@@ -284,7 +284,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   max-width: 760px;
 }
-.search-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+.search-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; }
 @media (max-width: 640px) { .search-grid { grid-template-columns: repeat(2, 1fr); } }
 .piece-card {
   background: var(--black);
@@ -1307,8 +1307,14 @@ async function searchSemantic() {
   results.innerHTML = '<div class="loading-msg">Searching...</div>';
   try {
     const vec = await getEmbedding(q);
-    const matches = await queryPinecone(vec, 40);
+    const matches = await queryPinecone(vec, 60);
     renderSearchResults(matches, results);
+    if (matches.length > 12) {
+      const more = document.createElement('div');
+      more.style.cssText = 'text-align:center;margin-top:24px;';
+      more.innerHTML = '<a class="btn btn-primary" href="archive.html?q=' + encodeURIComponent(q) + '">See all ' + matches.length + ' matches in the archive →</a>';
+      results.appendChild(more);
+    }
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
   }
@@ -1341,7 +1347,7 @@ async function searchByImage() {
     // AI describes the photo, then we semantic-search that description (OpenAI text index — no Jina)
     const description = await getVisionDescription(base64, 'image/jpeg');
     const vec = await getEmbedding(description);
-    const matches = await queryPinecone(vec, 40);
+    const matches = await queryPinecone(vec, 60);
     results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>';
     renderSearchResults(matches, results, true);
   } catch(e) {
