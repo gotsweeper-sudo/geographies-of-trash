@@ -334,6 +334,21 @@ body {
   border-bottom-color: var(--white);
 }
 .search-mode-btn:hover { color: var(--white); }
+.nft-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--gray5);
+  text-transform: uppercase;
+  cursor: pointer;
+  padding-bottom: 10px;
+}
+.nft-toggle input { width: 14px; height: 14px; accent-color: #fff; cursor: pointer; }
+.nft-toggle:hover { color: var(--white); }
 .search-panel { display: none; padding-top: 28px; }
 .search-panel.active { display: block; }
 .search-input-wrap {
@@ -811,6 +826,7 @@ body {
     <div class="search-modes">
       <button class="search-mode-btn active" onclick="setSearchMode('semantic')" id="modeSemantic">Keywords</button>
       <button class="search-mode-btn" onclick="setSearchMode('image')" id="modeImage">Image</button>
+      <label class="nft-toggle"><input type="checkbox" id="nftOnly" onchange="if(window.lastSearch)window.lastSearch()">NFTs only</label>
     </div>
     <div class="search-panel active" id="panelSemantic">
       <div class="search-input-wrap">
@@ -1171,11 +1187,12 @@ function setSearchMode(mode) {
 async function searchSemantic() {
   const q = document.getElementById('semanticInput').value.trim();
   if (!q) return;
+  window.lastSearch = searchSemantic;
   const results = document.getElementById('searchResults');
   results.innerHTML = '<div class="loading-msg">Searching...</div>';
   try {
     const vec = await getEmbedding(q);
-    const matches = await queryPinecone(vec, 12);
+    const matches = await queryPinecone(vec, 40);
     renderSearchResults(matches, results);
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
@@ -1201,6 +1218,7 @@ function setUploadPreview(file) {
 }
 async function searchByImage() {
   if (!uploadedImageFile) return;
+  window.lastSearch = searchByImage;
   const results = document.getElementById('searchResults');
   results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
   try {
@@ -1208,7 +1226,7 @@ async function searchByImage() {
     const description = await getVisionDescription(base64, uploadedImageFile.type);
     results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div><div class="loading-msg">Finding similar pieces...</div>';
     const vec = await getEmbedding(description);
-    const matches = await queryPinecone(vec, 12);
+    const matches = await queryPinecone(vec, 40);
     results.querySelector('.loading-msg').remove();
     renderSearchResults(matches, results, true);
   } catch(e) {
@@ -1251,9 +1269,12 @@ async function queryPinecone(vector, topK) {
   return (await res.json()).matches || [];
 }
 function renderSearchResults(matches, container, append) {
+  const onlyNft = document.getElementById('nftOnly') && document.getElementById('nftOnly').checked;
+  if (onlyNft) matches = matches.filter(m => (m.metadata || {}).nft_url);
+  matches = matches.slice(0, 12);
   const label = document.createElement('div');
   label.className = 'search-results-label';
-  label.textContent = matches.length + ' pieces found';
+  label.textContent = onlyNft ? (matches.length + ' NFT pieces found') : (matches.length + ' pieces found');
   if (!append) container.innerHTML = '';
   container.appendChild(label);
   const grid = document.createElement('div');
