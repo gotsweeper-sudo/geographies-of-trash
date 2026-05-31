@@ -1338,15 +1338,11 @@ async function searchByImage() {
   results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
   try {
     const base64 = await resizeToBase64(uploadedImageFile, 512);
-    // Primary: visual match — embed the photo itself and query the image index
-    const vec = await getImageEmbedding(base64);
-    const matches = await queryPineconeImage(vec, nftOnly() ? 60 : 40);
-    // Also show an AI description of the upload (best-effort)
-    let description = '';
-    try { description = await getVisionDescription(base64, 'image/jpeg'); } catch(err) {}
-    results.innerHTML = description
-      ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>'
-      : '';
+    // AI describes the photo, then we semantic-search that description (OpenAI text index — no Jina)
+    const description = await getVisionDescription(base64, 'image/jpeg');
+    const vec = await getEmbedding(description);
+    const matches = await queryPinecone(vec, 40);
+    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>';
     renderSearchResults(matches, results, true);
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';

@@ -127,7 +127,7 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
     <div class="search-panel" id="panelImage">
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgUpload').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
         <div class="upload-zone-title">Drop a photo or click to upload</div>
-        <p>Finds the visually closest pieces in the archive</p>
+        <p>AI identifies your photo and finds matching pieces</p>
       </div>
       <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
       <div class="preview-wrap" id="uploadPreview" style="display:none;">
@@ -356,13 +356,10 @@ async function searchByImage() {
   results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
   try {
     var base64 = await resizeToBase64(uploadedImageFile, 512);
-    var vec = await getImageEmbedding(base64);
-    var matches = await queryPineconeImage(vec, 40);
-    var description = '';
-    try { description = await getVisionDescription(base64, 'image/jpeg'); } catch(err) {}
-    results.innerHTML = description
-      ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + description + '</div>'
-      : '';
+    var description = await getVisionDescription(base64, 'image/jpeg');
+    var vec = await getEmbedding(description);
+    var matches = await queryPinecone(vec, 40);
+    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + description + '</div>';
     renderSearchResults(matches, results, true);
   } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
 }
