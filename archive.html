@@ -76,6 +76,22 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 .correct-form input { width: 100%; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 8px 10px; margin-top: 8px; outline: none; }
 .correct-form .btn-primary { margin-top: 10px; font-size: 11px; padding: 9px 18px; }
 .correct-msg { font-size: 11px; color: var(--coral); margin-top: 10px; letter-spacing: 0.05em; }
+.search-box { border: 1px solid var(--gray3); background: var(--gray1); padding: 24px; margin-bottom: 40px; }
+.search-modes { display: flex; gap: 8px; margin-bottom: 18px; }
+.mode-btn { font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 18px; border: 1px solid var(--gray3); background: transparent; color: var(--gray5); cursor: pointer; transition: all 0.15s; }
+.mode-btn.active { border-color: var(--gold); color: var(--gold); }
+.search-panel { display: none; }
+.search-panel.active { display: block; }
+.search-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.search-input { flex: 1; min-width: 200px; background: var(--black); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 13px; padding: 11px 14px; outline: none; }
+.search-input:focus { border-color: var(--gold); }
+.upload-zone { border: 1px dashed var(--gray3); padding: 28px; text-align: center; cursor: pointer; transition: border-color 0.15s; }
+.upload-zone:hover { border-color: var(--white); }
+.upload-zone-title { font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: 0.08em; color: var(--gray5); text-transform: uppercase; }
+.upload-zone p { font-size: 10px; color: var(--gray4); margin-top: 6px; }
+.preview-wrap img { max-width: 180px; border: 1px solid var(--gray3); display: block; margin-bottom: 12px; }
+.search-results-label { font-family: 'Share Tech Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--coral); text-transform: uppercase; margin: 24px 0 14px; }
+.search-grid { margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -95,6 +111,33 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
   <div class="section-label">Archive</div>
   <div class="section-title" id="archiveTitle">All Pieces</div>
   <div class="archive-meta" id="archiveMeta">Loading...</div>
+
+  <div class="search-box">
+    <div class="section-label" style="margin-bottom:14px;">Search the archive</div>
+    <div class="search-modes">
+      <button class="mode-btn active" id="modeSemantic" onclick="setSearchMode('semantic')">Keywords</button>
+      <button class="mode-btn" id="modeImage" onclick="setSearchMode('image')">Image</button>
+    </div>
+    <div class="search-panel active" id="panelSemantic">
+      <div class="search-row">
+        <input class="search-input" id="semanticInput" placeholder="Describe a piece — e.g. 'toilet with gold chains'" onkeydown="if(event.key==='Enter')searchSemantic()">
+        <button class="btn btn-primary" onclick="searchSemantic()">Search</button>
+      </div>
+    </div>
+    <div class="search-panel" id="panelImage">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgUpload').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
+        <div class="upload-zone-title">Drop a photo or click to upload</div>
+        <p>Finds the visually closest pieces in the archive</p>
+      </div>
+      <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
+      <div class="preview-wrap" id="uploadPreview" style="display:none;">
+        <img id="previewImg" src="" alt="">
+        <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
+      </div>
+    </div>
+    <div id="searchResults"></div>
+  </div>
+
   <div class="archive-controls">
     <label>Sort
       <select id="sortSel" onchange="applyControls()">
@@ -275,6 +318,110 @@ async function sendCorrection() {
   } catch (e) { msg.textContent = 'Could not submit right now. Try again later.'; }
 }
 
+// ---- Search (keywords + image) ----
+let uploadedImageFile = null;
+function setSearchMode(mode) {
+  ['Semantic','Image'].forEach(function(m) {
+    document.getElementById('panel'+m).classList.toggle('active', m.toLowerCase()===mode);
+    document.getElementById('mode'+m).classList.toggle('active', m.toLowerCase()===mode);
+  });
+  document.getElementById('searchResults').innerHTML = '';
+}
+async function searchSemantic() {
+  var q = document.getElementById('semanticInput').value.trim();
+  if (!q) return;
+  var results = document.getElementById('searchResults');
+  results.innerHTML = '<div class="loading-msg">Searching...</div>';
+  try {
+    var vec = await getEmbedding(q);
+    var matches = await queryPinecone(vec, 40);
+    renderSearchResults(matches, results);
+  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
+}
+function handleDrop(e) { e.preventDefault(); var f = e.dataTransfer.files[0]; if (f && f.type.indexOf('image/')===0) setUploadPreview(f); }
+function handleImageUpload(input) { if (input.files[0]) setUploadPreview(input.files[0]); }
+function setUploadPreview(file) {
+  uploadedImageFile = file;
+  var r = new FileReader();
+  r.onload = function(e) {
+    document.getElementById('previewImg').src = e.target.result;
+    document.getElementById('uploadPreview').style.display = 'block';
+    document.getElementById('uploadZone').style.display = 'none';
+  };
+  r.readAsDataURL(file);
+}
+async function searchByImage() {
+  if (!uploadedImageFile) return;
+  var results = document.getElementById('searchResults');
+  results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
+  try {
+    var base64 = await fileToBase64(uploadedImageFile);
+    var vec = await getImageEmbedding(base64);
+    var matches = await queryPineconeImage(vec, 40);
+    var description = '';
+    try { description = await getVisionDescription(base64, uploadedImageFile.type); } catch(err) {}
+    results.innerHTML = description
+      ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + description + '</div>'
+      : '';
+    renderSearchResults(matches, results, true);
+  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
+}
+function fileToBase64(file) {
+  return new Promise(function(res, rej) {
+    var r = new FileReader();
+    r.onload = function() { res(r.result.split(',')[1]); };
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+async function getVisionDescription(base64, mimeType) {
+  var res = await fetch('/api/describe', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ base64: base64, mimeType: mimeType }) });
+  if (!res.ok) { var e = await res.json(); throw new Error(e.error || res.status); }
+  return (await res.json()).description;
+}
+async function getImageEmbedding(base64) {
+  var res = await fetch('/api/embed-image', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ base64: base64 }) });
+  if (!res.ok) { var e = await res.json().catch(function(){return {};}); throw new Error(e.error || ('embed-image ' + res.status)); }
+  return (await res.json()).embedding;
+}
+async function queryPineconeImage(vector, topK) {
+  var res = await fetch('/api/search-image', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ vector: vector, topK: topK || 40 }) });
+  if (!res.ok) throw new Error('Image search failed');
+  return (await res.json()).matches || [];
+}
+async function getEmbedding(text) {
+  var res = await fetch('/api/embed', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ text: text }) });
+  if (!res.ok) { var e = await res.json(); throw new Error(e.error || res.status); }
+  return (await res.json()).embedding;
+}
+async function queryPinecone(vector, topK) {
+  var res = await fetch('/api/search', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ vector: vector, topK: topK || 40 }) });
+  if (!res.ok) throw new Error('Search failed');
+  return (await res.json()).matches || [];
+}
+function renderSearchResults(matches, container, append) {
+  matches = matches.slice(0, 18);
+  var label = document.createElement('div');
+  label.className = 'search-results-label';
+  label.textContent = matches.length + ' pieces found';
+  if (!append) container.innerHTML = '';
+  container.appendChild(label);
+  var grid = document.createElement('div');
+  grid.className = 'piece-grid search-grid';
+  matches.forEach(function(match) {
+    var meta = match.metadata || {};
+    grid.appendChild(makeCard({
+      pieceID: meta.piece_id || match.id,
+      postDate: meta.post_date || '',
+      notes: meta.description || '',
+      imageURL: meta.image_url || '',
+      postURL: meta.post_url || '',
+      stravaURL: meta.strava_url || '',
+      nftURL: meta.nft_url || ''
+    }));
+  });
+  container.appendChild(grid);
+}
 function closeModal() {
   document.getElementById('pieceModal').classList.remove('open');
   document.body.style.overflow = '';
