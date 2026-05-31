@@ -201,8 +201,8 @@ body {
   min-height: 80vh;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: 96px 32px 72px;
+  justify-content: center;
+  padding: 80px 32px 72px;
   max-width: 1200px;
   margin: 0 auto;
   overflow: hidden;
@@ -215,6 +215,8 @@ body {
   object-fit: cover;
   z-index: 0;
 }
+.hero-mobile { display: none; }
+@media (max-width: 640px) { .hero-desktop { display: none; } .hero-mobile { display: block; } }
 .hero-overlay {
   position: absolute;
   inset: 0;
@@ -282,6 +284,8 @@ body {
   grid-template-columns: repeat(3, 1fr);
   max-width: 760px;
 }
+.search-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+@media (max-width: 640px) { .search-grid { grid-template-columns: repeat(2, 1fr); } }
 .piece-card {
   background: var(--black);
   cursor: pointer;
@@ -785,8 +789,8 @@ body {
   #hero { padding: 64px 20px 56px; }
   #site-footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
 }
-.hero-eye { position: absolute; top: 22px; left: 32px; width: 92px; height: 92px; object-fit: contain; z-index: 3; mix-blend-mode: screen; }
-@media (max-width: 640px) { .hero-eye { width: 60px; height: 60px; top: 18px; left: 20px; } }
+.hero-eye { display: block; width: 88px; height: 88px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: screen; }
+@media (max-width: 640px) { .hero-eye { width: 60px; height: 60px; } }
 .nav-mobile-menu .nav-link { display: flex; align-items: center; }
 .menu-eye { width: 18px; height: 18px; object-fit: contain; margin-right: 10px; flex-shrink: 0; mix-blend-mode: screen; }
 .modal-correct { margin-top: 20px; border-top: 1px solid var(--gray3); padding-top: 16px; }
@@ -852,12 +856,15 @@ body {
   </div>
 </nav>
 <div id="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto">
-    <source src="hero.mp4" type="video/mp4">
+  <video class="hero-video hero-desktop" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="poster-desktop.jpg">
+    <source src="hero-desktop.mp4" type="video/mp4">
+  </video>
+  <video class="hero-video hero-mobile" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="poster-mobile.jpg">
+    <source src="hero-mobile.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
-  <img class="hero-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
   <div class="hero-content">
+  <img class="hero-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
   <p class="hero-sub">Geographies of Trash is an ongoing public art practice by Miami artist Ahol Sniffs Glue in which discarded objects are transformed into artworks and returned to the street. Through cycling across Miami, the work becomes a practice of attention — shifting from routine to awareness, from what is overlooked to what is seen. Documented across more than 3,000 interventions, the project maps the geographies of urban neglect through creative reuse, generating a living provenance archive of found objects, GPS-logged rides, and on-chain records. Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia — recognized by six municipal governments and studied as a model for community-engaged environmental education.</p>
@@ -1153,6 +1160,7 @@ function countUp(el, target, duration) {
   requestAnimationFrame(step);
 }
 window.addEventListener('load', () => {
+  document.querySelectorAll('.hero-video').forEach(function(v) { v.muted = true; const pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); });
   setTimeout(() => {
     countUp(document.getElementById('stat-nfts'), 1141);
     countUp(document.getElementById('stat-miles'), 30815);
@@ -1379,7 +1387,7 @@ function renderSearchResults(matches, container, append) {
   if (!append) container.innerHTML = '';
   container.appendChild(label);
   const grid = document.createElement('div');
-  grid.className = 'piece-grid';
+  grid.className = 'piece-grid search-grid';
   matches.forEach(match => {
     const meta = match.metadata || {};
     const card = makePieceCard({
