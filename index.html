@@ -17,10 +17,8 @@
   --gray5: #888888;
   --gray6: #aaaaaa;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-
 body {
   background: var(--black);
   color: var(--white);
@@ -29,7 +27,6 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
 }
-
 #site-header {
   position: sticky;
   top: 0;
@@ -37,7 +34,6 @@ body {
   background: var(--black);
   border-bottom: 1px solid var(--gray3);
 }
-
 .header-inner {
   display: flex;
   align-items: center;
@@ -47,7 +43,6 @@ body {
   max-width: 1200px;
   margin: 0 auto;
 }
-
 .logo-wrap {
   display: flex;
   align-items: center;
@@ -55,21 +50,21 @@ body {
   flex-shrink: 0;
   text-decoration: none;
 }
-
 .logo-mark {
   width: 48px;
   height: 48px;
-  border: 2px solid var(--white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--white);
   flex-shrink: 0;
+  overflow: hidden;
 }
-
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 .site-title {
   font-family: 'Oswald', sans-serif;
   font-size: clamp(14px, 2.5vw, 22px);
@@ -81,7 +76,6 @@ body {
   flex: 1;
   line-height: 1.1;
 }
-
 .site-title span {
   display: block;
   font-family: 'Share Tech Mono', monospace;
@@ -92,7 +86,6 @@ body {
   margin-top: 3px;
   text-transform: uppercase;
 }
-
 .header-stats {
   display: flex;
   flex-direction: column;
@@ -100,7 +93,6 @@ body {
   gap: 3px;
   flex-shrink: 0;
 }
-
 .stat-item {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
@@ -108,17 +100,14 @@ body {
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
-
 .stat-item b {
   color: var(--white);
   font-size: 12px;
 }
-
 #site-nav {
   background: var(--black);
   border-bottom: 1px solid var(--gray3);
 }
-
 .nav-inner {
   display: flex;
   align-items: center;
@@ -127,7 +116,6 @@ body {
   margin: 0 auto;
   padding: 0 32px;
 }
-
 .nav-link {
   font-family: 'Oswald', sans-serif;
   font-size: 12px;
@@ -141,12 +129,10 @@ body {
   transition: color 0.15s, border-color 0.15s;
   display: inline-block;
 }
-
 .nav-link:hover, .nav-link.active {
   color: var(--white);
   border-bottom-color: var(--white);
 }
-
 .nav-hamburger {
   display: none;
   background: none;
@@ -159,14 +145,12 @@ body {
   line-height: 1;
   font-family: monospace;
 }
-
 .nav-mobile-menu {
   display: none;
   flex-direction: column;
   background: var(--gray1);
   border-top: 1px solid var(--gray3);
 }
-
 .nav-mobile-menu.open { display: flex; }
 .nav-mobile-menu .nav-link {
   padding: 14px 32px;
@@ -174,7 +158,6 @@ body {
   border-left: none;
   font-size: 14px;
 }
-
 @media (max-width: 640px) {
   .nav-inner { display: none; }
   .nav-hamburger { display: block; }
@@ -182,19 +165,16 @@ body {
   .header-inner { padding: 14px 20px; }
   .site-title { text-align: left; }
 }
-
 .section-wrap {
   max-width: 1200px;
   margin: 0 auto;
   padding: 72px 32px;
 }
-
 .section-divider {
   border: none;
   border-top: 1px solid var(--gray3);
   margin: 0;
 }
-
 .section-label {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -203,7 +183,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 12px;
 }
-
 .section-title {
   font-family: 'Oswald', sans-serif;
   font-size: clamp(32px, 5vw, 56px);
@@ -214,13 +193,11 @@ body {
   margin-bottom: 48px;
   line-height: 1;
 }
-
 #hero {
   padding: 96px 32px 80px;
   max-width: 1200px;
   margin: 0 auto;
 }
-
 .hero-title {
   font-family: 'Oswald', sans-serif;
   font-size: clamp(48px, 9vw, 112px);
@@ -231,7 +208,6 @@ body {
   margin-bottom: 32px;
   max-width: 900px;
 }
-
 .hero-sub {
   font-family: 'Share Tech Mono', monospace;
   font-size: 13px;
@@ -240,13 +216,11 @@ body {
   line-height: 1.8;
   margin-bottom: 40px;
 }
-
 .hero-cta {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
-
 .btn {
   font-family: 'Oswald', sans-serif;
   font-size: 13px;
@@ -262,38 +236,31 @@ body {
   transition: all 0.15s;
   display: inline-block;
 }
-
 .btn:hover {
   border-color: var(--white);
   color: var(--white);
 }
-
 .btn-primary {
   border-color: var(--white);
   color: var(--white);
 }
-
 .btn-primary:hover {
   background: var(--white);
   color: var(--black);
 }
-
 .piece-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1px;
   background: var(--gray2);
 }
-
 .piece-card {
   background: var(--black);
   cursor: pointer;
   transition: background 0.15s;
   overflow: hidden;
 }
-
 .piece-card:hover { background: var(--gray1); }
-
 .piece-img {
   width: 100%;
   aspect-ratio: 1;
@@ -301,7 +268,6 @@ body {
   background: var(--gray1);
   display: block;
 }
-
 .piece-img-placeholder {
   width: 100%;
   aspect-ratio: 1;
@@ -313,11 +279,9 @@ body {
   font-size: 10px;
   letter-spacing: 0.15em;
 }
-
 .piece-info {
   padding: 10px 12px 12px;
 }
-
 .piece-id {
   font-family: 'Oswald', sans-serif;
   font-size: 14px;
@@ -325,14 +289,12 @@ body {
   color: var(--white);
   letter-spacing: 0.04em;
 }
-
 .piece-date {
   font-size: 10px;
   color: var(--gray4);
   margin-top: 2px;
   letter-spacing: 0.05em;
 }
-
 .piece-desc {
   font-size: 10px;
   color: var(--gray5);
@@ -343,19 +305,16 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
 .load-more-wrap {
   text-align: center;
   margin-top: 48px;
 }
-
 .search-modes {
   display: flex;
   gap: 0;
   margin-bottom: 32px;
   border-bottom: 1px solid var(--gray3);
 }
-
 .search-mode-btn {
   background: transparent;
   border: none;
@@ -370,23 +329,18 @@ body {
   margin-bottom: -1px;
   transition: all 0.15s;
 }
-
 .search-mode-btn.active {
   color: var(--white);
   border-bottom-color: var(--white);
 }
-
 .search-mode-btn:hover { color: var(--white); }
-
 .search-panel { display: none; padding-top: 28px; }
 .search-panel.active { display: block; }
-
 .search-input-wrap {
   display: flex;
   gap: 12px;
   margin-bottom: 12px;
 }
-
 .search-input {
   flex: 1;
   background: var(--gray1);
@@ -398,10 +352,8 @@ body {
   outline: none;
   transition: border-color 0.15s;
 }
-
 .search-input:focus { border-color: var(--white); }
 .search-input::placeholder { color: var(--gray4); }
-
 .search-hint {
   font-size: 10px;
   color: var(--gray4);
@@ -409,7 +361,6 @@ body {
   margin-bottom: 24px;
   line-height: 1.6;
 }
-
 .upload-zone {
   border: 1px solid var(--gray3);
   padding: 56px 24px;
@@ -418,9 +369,7 @@ body {
   transition: border-color 0.15s;
   margin-bottom: 24px;
 }
-
 .upload-zone:hover { border-color: var(--white); }
-
 .upload-zone-title {
   font-family: 'Oswald', sans-serif;
   font-size: 14px;
@@ -429,16 +378,13 @@ body {
   text-transform: uppercase;
   margin-bottom: 8px;
 }
-
 .upload-zone p {
   color: var(--gray4);
   font-size: 11px;
   letter-spacing: 0.05em;
   line-height: 1.7;
 }
-
 .search-results { margin-top: 40px; }
-
 .search-results-label {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -447,62 +393,71 @@ body {
   text-transform: uppercase;
   margin-bottom: 20px;
 }
-
-.about-grid {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 80px;
-  align-items: start;
-}
-
-@media (max-width: 900px) {
-  .about-grid { grid-template-columns: 1fr; gap: 48px; }
-}
-
-.about-text p {
+.about-intro { max-width: 760px; margin-bottom: 28px; }
+.about-intro p {
   color: var(--gray6);
   font-family: 'Share Tech Mono', monospace;
   font-size: 13px;
   line-height: 1.95;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
-
-.about-text p strong {
+.about-intro p strong { color: var(--white); font-weight: normal; }
+.archive-disclaimer {
+  border-left: 2px solid var(--gray4);
+  border-radius: 0;
+  padding: 14px 0 14px 20px;
+  margin: 0 0 44px;
+  max-width: 760px;
+  font-size: 12px;
+  color: var(--gray5);
+  line-height: 1.85;
+}
+.archive-disclaimer .disclaimer-head {
   color: var(--white);
-  font-weight: normal;
-}
-
-.about-text .closer {
   font-family: 'Oswald', sans-serif;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--white);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin-top: 32px;
+  font-size: 12px;
 }
-
-.about-stats {
+.cluster { margin-bottom: 32px; }
+.clusterHead {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+  border-bottom: 1px solid var(--gray3);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+.clusterHead span {
+  color: var(--gray4);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  margin-left: 10px;
+  text-transform: none;
+}
+.clusterRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--gray2);
 }
-
+@media (max-width: 640px) { .clusterRow { grid-template-columns: repeat(2, 1fr); } }
 .about-stat {
   background: var(--black);
   padding: 24px 20px;
 }
-
 .about-stat-num {
   font-family: 'Oswald', sans-serif;
-  font-size: 40px;
+  font-size: 38px;
   font-weight: 700;
   color: var(--white);
   display: block;
   line-height: 1;
 }
-
 .about-stat-label {
   font-size: 9px;
   letter-spacing: 0.2em;
@@ -511,14 +466,33 @@ body {
   margin-top: 8px;
   display: block;
 }
-
+.esg-quote {
+  border: none;
+  margin: 48px 0 0;
+  max-width: 820px;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--white);
+}
+.esg-quote cite {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: var(--gray4);
+  margin-top: 18px;
+  text-transform: uppercase;
+}
 .press-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 1px;
   background: var(--gray2);
 }
-
 .press-item {
   background: var(--black);
   padding: 32px 16px;
@@ -535,14 +509,11 @@ body {
   align-items: center;
   justify-content: center;
 }
-
 .press-item:hover {
   color: var(--white);
   background: var(--gray1);
 }
-
 .triumphs-list { border-top: 1px solid var(--gray3); }
-
 .triumph-item {
   display: grid;
   grid-template-columns: 100px 1fr;
@@ -551,11 +522,9 @@ body {
   border-bottom: 1px solid var(--gray2);
   align-items: baseline;
 }
-
 @media (max-width: 640px) {
   .triumph-item { grid-template-columns: 1fr; gap: 6px; }
 }
-
 .triumph-date {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -563,7 +532,6 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-
 .triumph-title {
   font-family: 'Oswald', sans-serif;
   font-size: 17px;
@@ -573,20 +541,17 @@ body {
   text-transform: uppercase;
   margin-bottom: 4px;
 }
-
 .triumph-desc {
   font-size: 11px;
   color: var(--gray5);
   line-height: 1.7;
 }
-
 .nft-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1px;
   background: var(--gray2);
 }
-
 .nft-card {
   background: var(--black);
   padding: 40px 36px;
@@ -594,9 +559,7 @@ body {
   display: block;
   transition: background 0.15s;
 }
-
 .nft-card:hover { background: var(--gray1); }
-
 .nft-label {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px;
@@ -605,7 +568,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 16px;
 }
-
 .nft-title {
   font-family: 'Oswald', sans-serif;
   font-size: 28px;
@@ -616,7 +578,6 @@ body {
   margin-bottom: 16px;
   line-height: 1.1;
 }
-
 .nft-count {
   font-family: 'Oswald', sans-serif;
   font-size: 56px;
@@ -626,14 +587,12 @@ body {
   line-height: 1;
   margin-bottom: 20px;
 }
-
 .nft-desc {
   font-size: 11px;
   color: var(--gray5);
   line-height: 1.8;
   margin-bottom: 28px;
 }
-
 .nft-link {
   font-family: 'Oswald', sans-serif;
   font-size: 11px;
@@ -642,9 +601,7 @@ body {
   text-transform: uppercase;
   transition: color 0.15s;
 }
-
 .nft-card:hover .nft-link { color: var(--white); }
-
 #site-footer {
   border-top: 1px solid var(--gray3);
   padding: 40px 32px;
@@ -656,7 +613,6 @@ body {
   flex-wrap: wrap;
   gap: 16px;
 }
-
 .footer-left {
   font-family: 'Oswald', sans-serif;
   font-size: 12px;
@@ -664,21 +620,17 @@ body {
   color: var(--gray4);
   text-transform: uppercase;
 }
-
 .footer-right {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
   color: var(--gray4);
 }
-
 .footer-ig {
   color: var(--gray5);
   text-decoration: none;
   transition: color 0.15s;
 }
-
 .footer-ig:hover { color: var(--white); }
-
 .modal-backdrop {
   display: none;
   position: fixed;
@@ -688,9 +640,7 @@ body {
   overflow-y: auto;
   padding: 40px 24px;
 }
-
 .modal-backdrop.open { display: flex; align-items: flex-start; justify-content: center; }
-
 .modal {
   background: var(--black);
   border: 1px solid var(--gray3);
@@ -700,7 +650,6 @@ body {
   position: relative;
   margin-top: 20px;
 }
-
 .modal-close {
   position: absolute;
   top: 16px; right: 16px;
@@ -714,9 +663,7 @@ body {
   z-index: 1;
   transition: color 0.15s;
 }
-
 .modal-close:hover { color: var(--white); }
-
 .modal-img {
   width: 100%;
   aspect-ratio: 1;
@@ -724,9 +671,7 @@ body {
   background: var(--gray1);
   display: block;
 }
-
 .modal-body { padding: 24px 28px 28px; }
-
 .modal-id {
   font-family: 'Oswald', sans-serif;
   font-size: 22px;
@@ -735,7 +680,6 @@ body {
   letter-spacing: 0.04em;
   margin-bottom: 4px;
 }
-
 .modal-date {
   font-size: 10px;
   color: var(--gray4);
@@ -743,7 +687,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 12px;
 }
-
 .modal-desc-label {
   font-size: 9px;
   letter-spacing: 0.25em;
@@ -751,7 +694,6 @@ body {
   text-transform: uppercase;
   margin-bottom: 8px;
 }
-
 .modal-desc {
   font-size: 12px;
   color: var(--gray5);
@@ -759,13 +701,11 @@ body {
   margin-bottom: 24px;
   white-space: pre-wrap;
 }
-
 .modal-links {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
-
 .loading-msg {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
@@ -774,7 +714,6 @@ body {
   padding: 48px 0;
   text-align: center;
 }
-
 @media (max-width: 640px) {
   .section-wrap { padding: 56px 20px; }
   #hero { padding: 64px 20px 56px; }
@@ -783,11 +722,10 @@ body {
 </style>
 </head>
 <body>
-
 <header id="site-header">
   <div class="header-inner">
     <div class="logo-wrap">
-      <div class="logo-mark">G</div>
+      <div class="logo-mark"><img src="logo.png" alt="Geographies of Trash"></div>
     </div>
     <div class="site-title">
       Geographies of Trash
@@ -800,7 +738,6 @@ body {
     </div>
   </div>
 </header>
-
 <nav id="site-nav">
   <div class="nav-inner">
     <a href="#archive" class="nav-link" data-section="archive">Archive</a>
@@ -820,7 +757,6 @@ body {
     <a href="#nft" class="nav-link" onclick="closeMenu()">Digital Provenance</a>
   </div>
 </nav>
-
 <div id="hero">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
@@ -830,9 +766,7 @@ body {
     <a href="#search" class="btn">Search Pieces</a>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="archive">
   <div class="section-wrap">
     <div class="section-label">Archive</div>
@@ -845,36 +779,23 @@ body {
     </div>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="search">
   <div class="section-wrap">
     <div class="section-label">Search</div>
     <div class="section-title">Find a Piece</div>
     <p style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray4);line-height:1.7;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--gray2);max-width:640px;">This is the most complete public record of Geographies of Trash that exists. Some pieces never made it here — picked up before they were logged, never publicly claimed, or simply gone.</p>
-
     <div class="search-modes">
-      <button class="search-mode-btn active" onclick="setSearchMode('id')" id="modeId">GOT ID</button>
-      <button class="search-mode-btn" onclick="setSearchMode('semantic')" id="modeSemantic">Keywords</button>
+      <button class="search-mode-btn active" onclick="setSearchMode('semantic')" id="modeSemantic">Keywords</button>
       <button class="search-mode-btn" onclick="setSearchMode('image')" id="modeImage">Image</button>
     </div>
-
-    <div class="search-panel active" id="panelId">
-      <div class="search-input-wrap">
-        <input type="text" class="search-input" id="idInput" placeholder="GOT_000420" onkeydown="if(event.key==='Enter')searchById()">
-        <button class="btn btn-primary" onclick="searchById()">Lookup</button>
-      </div>
-    </div>
-
-    <div class="search-panel" id="panelSemantic">
+    <div class="search-panel active" id="panelSemantic">
       <div class="search-input-wrap">
         <input type="text" class="search-input" id="semanticInput" placeholder="red bucket on sidewalk, eyes on cardboard near water..." onkeydown="if(event.key==='Enter')searchSemantic()">
         <button class="btn btn-primary" onclick="searchSemantic()">Search</button>
       </div>
       <p class="search-hint">Search by color, material, object, scene, or location type.</p>
     </div>
-
     <div class="search-panel" id="panelImage">
       <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgUpload').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
         <div class="upload-zone-title">Drop an image or click to upload</div>
@@ -887,48 +808,56 @@ body {
         <button class="btn btn-primary" onclick="searchByImage()" style="margin-top:16px;display:block;">Find Similar Pieces</button>
       </div>
     </div>
-
     <div class="search-results" id="searchResults"></div>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="about">
   <div class="section-wrap">
     <div class="section-label">Data</div>
     <div class="section-title">The Project</div>
-    <div class="about-grid">
-      <div class="about-text">
-        <p><strong>Ahol Sniffs Glue</strong> is a Miami-based artist working at the intersection of street art, cycling, and environmental practice. Born in Hialeah, he has exhibited internationally and built one of the most active collector communities in contemporary street art.</p>
-<p><strong>Geographies of Trash</strong> is an ongoing public art practice in which discarded objects found across Miami are transformed into artworks and returned to the street. Each piece is documented, GPS-logged, and archived — generating a living provenance record of found objects, rides, and on-chain records.</p>
-<p>Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia. Recognized by six municipal governments. Studied as a model for community-engaged environmental education.</p>
-      <div>
-        <div class="about-stats">
-          <div class="about-stat">
-            <span class="about-stat-num" data-count="3001">0</span>
-            <span class="about-stat-label">Confirmed Pieces</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num" data-count="1141">0</span>
-            <span class="about-stat-label">NFTs Minted</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num" data-count="30784">0</span>
-            <span class="about-stat-label">Miles Cycled</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num" data-count="2483">0</span>
-            <span class="about-stat-label">Strava Matches</span>
-          </div>
-        </div>
+    <div class="about-intro">
+      <p><strong>Ahol Sniffs Glue</strong> is a Miami-based artist working at the intersection of street art, cycling, and environmental practice. Born in Hialeah, he has exhibited internationally and built one of the most active collector communities in contemporary street art.</p>
+      <p><strong>Geographies of Trash</strong> is an ongoing public art practice in which discarded objects found across Miami are transformed into artworks and returned to the street. Each piece is documented, GPS-logged, and archived — generating a living provenance record of found objects, rides, and on-chain records.</p>
+      <p>Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia. Recognized by six municipal governments. Studied as a model for community-engaged environmental education.</p>
+    </div>
+    <div class="archive-disclaimer">
+      <span class="disclaimer-head">A living archive.</span> The pieces logged here are what we've been able to verify. Geographies of Trash is ongoing and, by nature, uncontained — there's always more trash on the streets than a database can hold. Some pieces were collected before they could be logged, never publicly claimed, or are simply gone. This is the record we can stand behind.
+    </div>
+    <div class="cluster">
+      <div class="clusterHead">The Archive <span>— what's been found</span></div>
+      <div class="clusterRow">
+        <div class="about-stat"><span class="about-stat-num" id="aboutPieces" data-count="2999">0</span><span class="about-stat-label">Confirmed Pieces</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="520">0</span><span class="about-stat-label">Object Types</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="133">0</span><span class="about-stat-label">Neighborhoods</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="2020">0</span><span class="about-stat-label">Documenting Since</span></div>
       </div>
     </div>
+    <div class="cluster">
+      <div class="clusterHead">The Ride <span>— ≈ 12.5× the height of Everest climbed</span></div>
+      <div class="clusterRow">
+        <div class="about-stat"><span class="about-stat-num" data-count="30815">0</span><span class="about-stat-label">Miles Cycled</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="364037">0</span><span class="about-stat-label">Feet Climbed</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="2949">0</span><span class="about-stat-label">Hours In Saddle</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="104">0</span><span class="about-stat-label">Longest Ride (mi)</span></div>
+      </div>
+    </div>
+    <div class="cluster">
+      <div class="clusterHead">The Record <span>— on-chain &amp; recognized</span></div>
+      <div class="clusterRow">
+        <div class="about-stat"><span class="about-stat-num" data-count="1141">0</span><span class="about-stat-label">NFTs On-Chain</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="6">0</span><span class="about-stat-label">City Proclamations</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="2179">0</span><span class="about-stat-label">Community Members</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-count="12">0</span><span class="about-stat-label">Tons CO₂ Avoided (est.)</span></div>
+      </div>
+    </div>
+    <blockquote class="esg-quote">
+      "Discarded materials become aesthetic objects that challenge conventional perceptions of waste and value."
+      <cite>— The Art of ESG, Florida International University case study</cite>
+    </blockquote>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="press">
   <div class="section-wrap">
     <div class="section-label">Press</div>
@@ -947,43 +876,41 @@ body {
     </div>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="triumphs">
   <div class="section-wrap">
     <div class="section-label">Accolades</div>
     <div class="section-title">The Receipts</div>
     <div class="triumphs-list">
-      <div class="">
+      <div class="triumph-item">
+        <div class="triumph-date">2025</div>
+        <div>
+          <div class="triumph-title">The Art of ESG — FIU Case Study</div>
+          <div class="triumph-desc">Published academic case study examining Geographies of Trash as a model for community-engaged ESG education, co-created with Florida International University. <a href="the-art-of-esg.pdf" target="_blank" rel="noopener" style="color:var(--gray6);text-decoration:underline;">Read the study →</a></div>
+        </div>
+      </div>
+      <div class="triumph-item">
+        <div class="triumph-date">2023–2025</div>
+        <div>
+          <div class="triumph-title">Six Municipal Proclamations</div>
+          <div class="triumph-desc">Officially recognized by six South Florida governments: North Miami Beach · Miami Beach · City of Hialeah · Cutler Bay · Miami-Dade County · City of Miami.</div>
+        </div>
+      </div>
+      <div class="triumph-item">
         <div class="triumph-date">Sept 2025</div>
         <div>
           <div class="triumph-title">FIU LiveTalk</div>
           <div class="triumph-desc">Featured speaker at Florida International University's LiveTalk series.</div>
         </div>
       </div>
-      <div class="">
+      <div class="triumph-item">
         <div class="triumph-date">2023</div>
         <div>
           <div class="triumph-title">Oolite Arts Residency</div>
           <div class="triumph-desc">Selected artist residency at Oolite Arts, Miami's premier contemporary arts organization.</div>
         </div>
       </div>
-      <div class="">
-        <div class="triumph-date">Jun 30, 2023</div>
-        <div>
-          <div class="triumph-title">Miami-Dade County Proclamation</div>
-          <div class="triumph-desc">Miami-Dade County officially declared June 30, 2023 "Geographies of Trash Day" in recognition of the project's cultural contribution to the city.</div>
-        </div>
-      </div>
-      <div class="">
-        <div class="triumph-date">Jan 2023</div>
-        <div>
-          <div class="triumph-title">City of North Miami Beach Proclamation</div>
-          <div class="triumph-desc">Official city proclamation honoring the Geographies of Trash project.</div>
-        </div>
-      </div>
-      <div class="">
+      <div class="triumph-item">
         <div class="triumph-date">2023</div>
         <div>
           <div class="triumph-title">FIU Ratcliffe RA+DI Entrepreneurial Resident</div>
@@ -1014,9 +941,7 @@ body {
     </div>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <div id="nft">
   <div class="section-wrap">
     <div class="section-label">On-Chain</div>
@@ -1039,9 +964,7 @@ body {
     </div>
   </div>
 </div>
-
 <hr class="section-divider">
-
 <footer id="site-footer">
   <div class="footer-left">Geographies of Trash — Miami, FL</div>
   <div class="footer-right">
@@ -1049,7 +972,6 @@ body {
     &nbsp;·&nbsp; Archive managed by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank">@youngwildpanda</a>
   </div>
 </footer>
-
 <div class="modal-backdrop" id="pieceModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -1063,15 +985,12 @@ body {
     </div>
   </div>
 </div>
-
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfyuPvQOoGQfRMFmD0pbd7MoW8Tte3pnr2iMqxmFNvNl4UBZMpgnvIcyM-w7b50rYd/exec';
 const PAGE_SIZE = 5;
 const KM_TO_MILES = 0.621371;
-
 let allPieces = [], filteredPieces = [], displayedCount = 0;
 let uploadedImageFile = null;
-
 function getDriveImgSrc(imageUrl, size) {
   if (!imageUrl) return '';
   // Extract Drive file ID and use thumbnail API — works on mobile without login
@@ -1083,14 +1002,12 @@ function getDriveImgSrc(imageUrl, size) {
   }
   return imageUrl;
 }
-
 function formatDate(raw) {
   if (!raw) return '';
   const d = new Date(raw);
   if (isNaN(d)) return raw;
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
-
 function stripMarkdown(text) {
   if (!text) return '';
   return text
@@ -1100,7 +1017,6 @@ function stripMarkdown(text) {
     .replace(/\|/g, '')
     .trim();
 }
-
 function countUp(el, target, duration) {
   duration = duration || 1800;
   const start = Date.now();
@@ -1113,13 +1029,11 @@ function countUp(el, target, duration) {
   };
   requestAnimationFrame(step);
 }
-
 window.addEventListener('load', () => {
   setTimeout(() => {
     countUp(document.getElementById('stat-nfts'), 1141);
-    countUp(document.getElementById('stat-miles'), Math.round(49526 * KM_TO_MILES));
+    countUp(document.getElementById('stat-miles'), 30815);
   }, 400);
-
   document.querySelectorAll('.about-stat-num[data-count]').forEach(el => {
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
@@ -1129,13 +1043,10 @@ window.addEventListener('load', () => {
     }, { threshold: 0.3 });
     observer.observe(el);
   });
-
   loadArchive();
 });
-
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
-
 const sections = ['archive','search','about','press','triumphs','nft'];
 window.addEventListener('scroll', () => {
   let current = '';
@@ -1147,7 +1058,6 @@ window.addEventListener('scroll', () => {
     a.classList.toggle('active', a.dataset.section === current);
   });
 }, { passive: true });
-
 async function loadArchive() {
   try {
     const res = await fetch(APPS_SCRIPT_URL + '?action=getAllConfirmed');
@@ -1159,13 +1069,14 @@ async function loadArchive() {
     if (loader) loader.remove();
     document.getElementById('archiveSectionTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
     document.getElementById('stat-pieces').textContent = allPieces.length.toLocaleString();
+    const aboutPieces = document.getElementById('aboutPieces');
+    if (aboutPieces && allPieces.length) aboutPieces.dataset.count = allPieces.length;
     renderArchivePage();
   } catch(e) {
     const loader = document.getElementById('archiveLoader');
     if (loader) loader.textContent = 'Failed to load archive.';
   }
 }
-
 function renderArchivePage() {
   const grid = document.getElementById('pieceGrid');
   const slice = filteredPieces.slice(displayedCount, displayedCount + PAGE_SIZE);
@@ -1175,7 +1086,6 @@ function renderArchivePage() {
     document.getElementById('loadMoreBtn').style.display = 'inline-block';
   }
 }
-
 function makePieceCard(piece, clickable) {
   clickable = clickable !== false;
   const id = piece.pieceID || '';
@@ -1194,7 +1104,6 @@ function makePieceCard(piece, clickable) {
       (notes ? '<div class="piece-desc">' + notes.slice(0,100) + '</div>' : '') + '</div>';
   return card;
 }
-
 function openModal(piece) {
   const id = piece.pieceID || '';
   const date = formatDate(piece.postDate || '');
@@ -1203,56 +1112,35 @@ function openModal(piece) {
   const postUrl = piece.postURL || '';
   const stravaRaw = piece.stravaURL || piece.strava_url || '';
   const stravaUrl = stravaRaw.split('|')[0].trim();
+  const nftUrl = piece.nftURL || '';
   const imgSrc = getDriveImgSrc(imageUrl, 'w800');
-
   document.getElementById('modalImg').src = imgSrc;
   document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
   document.getElementById('modalDesc').textContent = notes || 'No description available.';
-
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';
   if (postUrl) links.innerHTML += '<a href="' + postUrl + '" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>';
   if (stravaUrl) links.innerHTML += '<a href="' + stravaUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">Strava →</a>';
-
+  if (nftUrl) links.innerHTML += '<a href="' + nftUrl + '" target="_blank" class="btn" style="font-size:11px;padding:9px 18px;">View NFT →</a>';
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeModal() {
   document.getElementById('pieceModal').classList.remove('open');
   document.body.style.overflow = '';
 }
-
 document.getElementById('pieceModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-
 function setSearchMode(mode) {
-  ['Id','Semantic','Image'].forEach(m => {
+  ['Semantic','Image'].forEach(m => {
     document.getElementById('panel' + m).classList.toggle('active', m.toLowerCase() === mode);
     document.getElementById('mode' + m).classList.toggle('active', m.toLowerCase() === mode);
   });
   document.getElementById('searchResults').innerHTML = '';
 }
-
-function searchById() {
-  const q = document.getElementById('idInput').value.trim().toUpperCase();
-  if (!q) return;
-  const match = allPieces.find(p => (p.pieceID||'').toUpperCase() === q || (p.pieceID||'').toUpperCase().includes(q));
-  const results = document.getElementById('searchResults');
-  if (match) {
-    results.innerHTML = '<div class="search-results-label">1 piece found</div>';
-    const grid = document.createElement('div');
-    grid.className = 'piece-grid';
-    grid.appendChild(makePieceCard(match));
-    results.appendChild(grid);
-  } else {
-    results.innerHTML = '<div class="search-results-label">No piece found for "' + q + '"</div>';
-  }
-}
-
 async function searchSemantic() {
   const q = document.getElementById('semanticInput').value.trim();
   if (!q) return;
@@ -1266,17 +1154,14 @@ async function searchSemantic() {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
   }
 }
-
 function handleDrop(e) {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
   if (file && file.type.startsWith('image/')) setUploadPreview(file);
 }
-
 function handleImageUpload(input) {
   if (input.files[0]) setUploadPreview(input.files[0]);
 }
-
 function setUploadPreview(file) {
   uploadedImageFile = file;
   const reader = new FileReader();
@@ -1287,7 +1172,6 @@ function setUploadPreview(file) {
   };
   reader.readAsDataURL(file);
 }
-
 async function searchByImage() {
   if (!uploadedImageFile) return;
   const results = document.getElementById('searchResults');
@@ -1304,7 +1188,6 @@ async function searchByImage() {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
   }
 }
-
 function fileToBase64(file) {
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -1313,7 +1196,6 @@ function fileToBase64(file) {
     r.readAsDataURL(file);
   });
 }
-
 async function getVisionDescription(base64, mimeType) {
   const res = await fetch('/api/describe', {
     method: 'POST',
@@ -1323,7 +1205,6 @@ async function getVisionDescription(base64, mimeType) {
   if (!res.ok) { const e = await res.json(); throw new Error(e.error || res.status); }
   return (await res.json()).description;
 }
-
 async function getEmbedding(text) {
   const res = await fetch('/api/embed', {
     method: 'POST',
@@ -1333,7 +1214,6 @@ async function getEmbedding(text) {
   if (!res.ok) { const e = await res.json(); throw new Error(e.error || res.status); }
   return (await res.json()).embedding;
 }
-
 async function queryPinecone(vector, topK) {
   const res = await fetch('/api/search', {
     method: 'POST',
@@ -1343,7 +1223,6 @@ async function queryPinecone(vector, topK) {
   if (!res.ok) throw new Error('Search failed');
   return (await res.json()).matches || [];
 }
-
 function renderSearchResults(matches, container, append) {
   const label = document.createElement('div');
   label.className = 'search-results-label';
@@ -1359,7 +1238,8 @@ function renderSearchResults(matches, container, append) {
       postDate: meta.post_date || '',
       notes: meta.description || '',
       imageURL: meta.image_url || '',
-      postURL: meta.post_url || ''
+      postURL: meta.post_url || '',
+      nftURL: meta.nft_url || ''
     });
     const score = document.createElement('div');
     score.style.cssText = 'font-size:9px;color:var(--gray4);letter-spacing:0.1em;padding:0 12px 8px;';
