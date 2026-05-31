@@ -1337,13 +1337,13 @@ async function searchByImage() {
   const results = document.getElementById('searchResults');
   results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
   try {
-    const base64 = await fileToBase64(uploadedImageFile);
+    const base64 = await resizeToBase64(uploadedImageFile, 512);
     // Primary: visual match — embed the photo itself and query the image index
     const vec = await getImageEmbedding(base64);
     const matches = await queryPineconeImage(vec, nftOnly() ? 60 : 40);
     // Also show an AI description of the upload (best-effort)
     let description = '';
-    try { description = await getVisionDescription(base64, uploadedImageFile.type); } catch(err) {}
+    try { description = await getVisionDescription(base64, 'image/jpeg'); } catch(err) {}
     results.innerHTML = description
       ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>'
       : '';
@@ -1358,6 +1358,23 @@ function fileToBase64(file) {
     r.onload = () => res(r.result.split(',')[1]);
     r.onerror = rej;
     r.readAsDataURL(file);
+  });
+}
+// Shrink to a 512x512 JPEG (matches the index) so the upload stays small (avoids 413)
+function resizeToBase64(file, dim) {
+  dim = dim || 512;
+  return new Promise(function(res, rej) {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = function() {
+      const c = document.createElement('canvas');
+      c.width = dim; c.height = dim;
+      c.getContext('2d').drawImage(img, 0, 0, dim, dim);
+      URL.revokeObjectURL(url);
+      res(c.toDataURL('image/jpeg', 0.85).split(',')[1]);
+    };
+    img.onerror = function(e) { URL.revokeObjectURL(url); rej(e); };
+    img.src = url;
   });
 }
 async function getVisionDescription(base64, mimeType) {
