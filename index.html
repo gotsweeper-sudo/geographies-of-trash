@@ -785,10 +785,10 @@ body {
   #hero { padding: 64px 20px 56px; }
   #site-footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
 }
-.hero-eye { position: absolute; top: 22px; left: 32px; width: 78px; height: 78px; color: var(--gold); z-index: 3; opacity: 0.92; }
-@media (max-width: 640px) { .hero-eye { width: 56px; height: 56px; top: 18px; left: 20px; } }
+.hero-eye { position: absolute; top: 22px; left: 32px; width: 92px; height: 92px; object-fit: contain; z-index: 3; mix-blend-mode: screen; }
+@media (max-width: 640px) { .hero-eye { width: 60px; height: 60px; top: 18px; left: 20px; } }
 .nav-mobile-menu .nav-link { display: flex; align-items: center; }
-.menu-eye { width: 15px; height: 15px; color: var(--gold); margin-right: 11px; flex-shrink: 0; }
+.menu-eye { width: 18px; height: 18px; object-fit: contain; margin-right: 10px; flex-shrink: 0; mix-blend-mode: screen; }
 .modal-correct { margin-top: 20px; border-top: 1px solid var(--gray3); padding-top: 16px; }
 .correct-toggle { background: none; border: none; color: var(--gray5); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; text-decoration: underline; }
 .correct-toggle:hover { color: var(--coral); }
@@ -842,13 +842,13 @@ body {
   </div>
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
   <div class="nav-mobile-menu" id="mobileMenu">
-    <a href="archive.html" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Archive</a>
-    <a href="#search" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Search</a>
-    <a href="#about" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Data</a>
-    <a href="#press" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Trash Talk</a>
-    <a href="#triumphs" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>The Receipts</a>
-    <a href="#nft" class="nav-link" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Digital Provenance</a>
-    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener" onclick="closeMenu()"><svg class="menu-eye"><use href="#aholEye"/></svg>Discord</a>
+    <a href="archive.html" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Archive</a>
+    <a href="#search" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Search</a>
+    <a href="#about" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Data</a>
+    <a href="#press" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Trash Talk</a>
+    <a href="#triumphs" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">The Receipts</a>
+    <a href="#nft" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Digital Provenance</a>
+    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Discord</a>
   </div>
 </nav>
 <div id="hero">
@@ -856,7 +856,7 @@ body {
     <source src="hero.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
-  <svg class="hero-eye"><use href="#aholEye"/></svg>
+  <img class="hero-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
   <div class="hero-content">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
