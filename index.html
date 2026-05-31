@@ -1080,6 +1080,12 @@ body {
         <div class="nft-desc" style="margin-top:8px;">The cyber trapperz, the oath &amp; the Ten Crack Commandments, status badges, and how to take part — find pieces, super-spread, earn your place. You don't have to be in Miami. Join the Discord.</div>
         <div class="nft-link">Enter the community →</div>
       </a>
+      <a class="nft-card" href="https://oncyber.io/6529om?coords=383.99x2.8x968.88x1.55" target="_blank" rel="noopener">
+        <div class="nft-label">Metaverse — oncyber</div>
+        <div class="nft-title">Walk the Gallery</div>
+        <div class="nft-desc" style="margin-top:8px;">Step inside Geographies of Trash in an immersive 3D virtual gallery — explore the collection in an on-chain space you can walk through.</div>
+        <div class="nft-link">Enter in 3D →</div>
+      </a>
     </div>
   </div>
 </div>
@@ -1332,11 +1338,15 @@ async function searchByImage() {
   results.innerHTML = '<div class="loading-msg">Analyzing image...</div>';
   try {
     const base64 = await fileToBase64(uploadedImageFile);
-    const description = await getVisionDescription(base64, uploadedImageFile.type);
-    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div><div class="loading-msg">Finding similar pieces...</div>';
-    const vec = await getEmbedding(description);
-    const matches = await queryPinecone(vec, 40);
-    results.querySelector('.loading-msg').remove();
+    // Primary: visual match — embed the photo itself and query the image index
+    const vec = await getImageEmbedding(base64);
+    const matches = await queryPineconeImage(vec, nftOnly() ? 60 : 40);
+    // Also show an AI description of the upload (best-effort)
+    let description = '';
+    try { description = await getVisionDescription(base64, uploadedImageFile.type); } catch(err) {}
+    results.innerHTML = description
+      ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>'
+      : '';
     renderSearchResults(matches, results, true);
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
@@ -1358,6 +1368,22 @@ async function getVisionDescription(base64, mimeType) {
   });
   if (!res.ok) { const e = await res.json(); throw new Error(e.error || res.status); }
   return (await res.json()).description;
+}
+async function getImageEmbedding(base64) {
+  const res = await fetch('/api/embed-image', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ base64 })
+  });
+  if (!res.ok) { const e = await res.json().catch(function(){return {};}); throw new Error(e.error || ('embed-image ' + res.status)); }
+  return (await res.json()).embedding;
+}
+async function queryPineconeImage(vector, topK) {
+  const res = await fetch('/api/search-image', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ vector, topK: topK || 40 })
+  });
+  if (!res.ok) throw new Error('Image search failed');
+  return (await res.json()).matches || [];
 }
 async function getEmbedding(text) {
   const res = await fetch('/api/embed', {
