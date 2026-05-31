@@ -789,7 +789,7 @@ body {
   #hero { padding: 64px 20px 56px; }
   #site-footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
 }
-.hero-eye { display: block; width: 88px; height: 88px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: screen; }
+.hero-eye { position: relative; z-index: 2; display: block; width: 88px; height: 88px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: screen; }
 @media (max-width: 640px) { .hero-eye { width: 60px; height: 60px; } }
 .nav-mobile-menu .nav-link { display: flex; align-items: center; }
 .menu-eye { width: 18px; height: 18px; object-fit: contain; margin-right: 10px; flex-shrink: 0; mix-blend-mode: screen; }
@@ -863,8 +863,8 @@ body {
     <source src="hero-mobile.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
-  <div class="hero-content">
   <img class="hero-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">
+  <div class="hero-content">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
   <p class="hero-sub">Geographies of Trash is an ongoing public art practice by Miami artist Ahol Sniffs Glue in which discarded objects are transformed into artworks and returned to the street. Through cycling across Miami, the work becomes a practice of attention — shifting from routine to awareness, from what is overlooked to what is seen. Documented across more than 3,000 interventions, the project maps the geographies of urban neglect through creative reuse, generating a living provenance archive of found objects, GPS-logged rides, and on-chain records. Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia — recognized by six municipal governments and studied as a model for community-engaged environmental education.</p>
