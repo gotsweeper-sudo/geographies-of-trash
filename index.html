@@ -873,6 +873,8 @@ body {
 <hr class="section-divider">
 <div id="archive">
   <div class="section-wrap" style="padding-top:44px;padding-bottom:44px;">
+    <div class="section-label" style="margin-bottom:14px;">Most Recent</div>
+    <div id="latestGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gray2);margin-bottom:30px;"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid var(--gray3);background:var(--gray1);padding:24px 28px;">
       <div>
         <span class="section-title" id="archiveSectionTitle" style="font-size:clamp(28px,4vw,44px);">3,018</span>
@@ -1217,6 +1219,8 @@ async function loadArchive() {
     filteredPieces = allPieces;
     const t = document.getElementById('archiveSectionTitle');
     if (t) t.textContent = allPieces.length.toLocaleString();
+    const lg = document.getElementById('latestGrid');
+    if (lg) { lg.innerHTML = ''; allPieces.slice(0, 3).forEach(function(p) { lg.appendChild(makePieceCard(p)); }); }
     const aboutPieces = document.getElementById('aboutPieces');
     if (aboutPieces && allPieces.length) countUp(aboutPieces, allPieces.length);
   } catch(e) {}
