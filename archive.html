@@ -131,8 +131,14 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
       </div>
       <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
       <div class="preview-wrap" id="uploadPreview" style="display:none;">
-        <img id="previewImg" src="" alt="">
-        <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
+        <div style="position:relative;display:inline-block;">
+          <img id="previewImg" src="" alt="">
+          <button onclick="clearUpload()" title="Remove photo" aria-label="Remove photo" style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.72);color:#fff;font-size:13px;line-height:1;cursor:pointer;">✕</button>
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
+          <button class="btn" onclick="clearUpload()" style="margin-left:8px;">Clear</button>
+        </div>
       </div>
     </div>
     <div id="searchResults"></div>
@@ -356,6 +362,14 @@ function setUploadPreview(file) {
     document.getElementById('uploadZone').style.display = 'none';
   };
   r.readAsDataURL(file);
+}
+function clearUpload() {
+  uploadedImageFile = null;
+  var inp = document.getElementById('imgUpload'); if (inp) inp.value = '';
+  document.getElementById('previewImg').src = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadZone').style.display = '';
+  document.getElementById('searchResults').innerHTML = '';
 }
 async function searchByImage() {
   if (!uploadedImageFile) return;

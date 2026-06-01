@@ -913,8 +913,14 @@ body {
       </div>
       <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
       <div id="uploadPreview" style="display:none;margin-bottom:16px;">
-        <img id="previewImg" style="max-height:200px;border:1px solid var(--gray3);">
-        <button class="btn btn-primary" onclick="searchByImage()" style="margin-top:16px;display:block;">Find Similar Pieces</button>
+        <div style="position:relative;display:inline-block;">
+          <img id="previewImg" style="max-height:200px;border:1px solid var(--gray3);display:block;">
+          <button onclick="clearUpload()" title="Remove photo" aria-label="Remove photo" style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.72);color:#fff;font-size:13px;line-height:1;cursor:pointer;">✕</button>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
+          <button class="btn" onclick="clearUpload()" style="margin-left:8px;">Clear</button>
+        </div>
       </div>
     </div>
     <div class="search-results" id="searchResults"></div>
@@ -1336,6 +1342,14 @@ function setUploadPreview(file) {
     document.getElementById('uploadZone').style.display = 'none';
   };
   reader.readAsDataURL(file);
+}
+function clearUpload() {
+  uploadedImageFile = null;
+  const inp = document.getElementById('imgUpload'); if (inp) inp.value = '';
+  document.getElementById('previewImg').src = '';
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadZone').style.display = '';
+  document.getElementById('searchResults').innerHTML = '';
 }
 async function searchByImage() {
   if (!uploadedImageFile) return;
