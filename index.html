@@ -1349,7 +1349,7 @@ async function searchByImage() {
     const vec = await getEmbedding(description);
     const matches = await queryPinecone(vec, 60);
     results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>';
-    renderSearchResults(matches, results, true);
+    renderSearchResults(matches, results, true, true);
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
   }
@@ -1422,35 +1422,54 @@ async function queryPinecone(vector, topK) {
   if (!res.ok) throw new Error('Search failed');
   return (await res.json()).matches || [];
 }
-function renderSearchResults(matches, container, append) {
-  const onlyNft = document.getElementById('nftOnly') && document.getElementById('nftOnly').checked;
-  if (onlyNft) matches = matches.filter(m => (m.metadata || {}).nft_url);
-  matches = matches.slice(0, 12);
-  const label = document.createElement('div');
-  label.className = 'search-results-label';
-  label.textContent = onlyNft ? (matches.length + ' NFT pieces found') : (matches.length + ' pieces found');
-  if (!append) container.innerHTML = '';
-  container.appendChild(label);
-  const grid = document.createElement('div');
-  grid.className = 'piece-grid search-grid';
-  matches.forEach(match => {
-    const meta = match.metadata || {};
-    const card = makePieceCard({
-      pieceID: meta.piece_id || match.id,
-      postDate: meta.post_date || '',
-      notes: meta.description || '',
-      imageURL: meta.image_url || '',
-      postURL: meta.post_url || '',
-      stravaURL: meta.strava_url || '',
-      nftURL: meta.nft_url || ''
-    });
+function makeResultCard(match) {
+  const meta = match.metadata || {};
+  const card = makePieceCard({
+    pieceID: meta.piece_id || match.id,
+    postDate: meta.post_date || '',
+    notes: meta.description || '',
+    imageURL: meta.image_url || '',
+    postURL: meta.post_url || '',
+    stravaURL: meta.strava_url || '',
+    nftURL: meta.nft_url || ''
+  });
+  if (typeof match.score === 'number') {
     const score = document.createElement('div');
     score.style.cssText = 'font-size:9px;color:var(--coral);letter-spacing:0.1em;padding:0 12px 8px;';
     score.textContent = Math.round(match.score * 100) + '% match';
     card.appendChild(score);
-    grid.appendChild(card);
-  });
+  }
+  return card;
+}
+function renderSearchResults(matches, container, append, inlineMore) {
+  const onlyNft = document.getElementById('nftOnly') && document.getElementById('nftOnly').checked;
+  if (onlyNft) matches = matches.filter(m => (m.metadata || {}).nft_url);
+  const full = matches;
+  const shown = full.slice(0, 12);
+  const label = document.createElement('div');
+  label.className = 'search-results-label';
+  label.textContent = onlyNft ? (shown.length + ' NFT pieces found') : (shown.length + ' pieces found');
+  if (!append) container.innerHTML = '';
+  container.appendChild(label);
+  const grid = document.createElement('div');
+  grid.className = 'piece-grid search-grid';
+  shown.forEach(m => grid.appendChild(makeResultCard(m)));
   container.appendChild(grid);
+  if (inlineMore && full.length > 12) {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'text-align:center;margin-top:24px;';
+    const btn = document.createElement('a');
+    btn.className = 'btn btn-primary';
+    btn.href = 'javascript:void(0)';
+    btn.textContent = 'See all ' + full.length + ' matches →';
+    btn.onclick = function() {
+      wrap.remove();
+      full.slice(12).forEach(m => grid.appendChild(makeResultCard(m)));
+      label.textContent = onlyNft ? (full.length + ' NFT pieces found') : (full.length + ' pieces found');
+    };
+    wrap.appendChild(btn);
+    container.appendChild(wrap);
+  }
 }
 </script>
 </body>
