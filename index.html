@@ -236,10 +236,11 @@ body {
 }
 .hero-sub {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 13px;
-  color: var(--gray5);
+  font-size: 14px;
+  color: #ededed;
+  text-shadow: 0 1px 14px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.6);
   max-width: 560px;
-  line-height: 1.8;
+  line-height: 1.85;
   margin-bottom: 40px;
 }
 .hero-cta {
@@ -827,11 +828,6 @@ body {
       Geographies of Trash
       <span>GOT Provenance Archive</span>
     </div>
-    <div class="header-stats">
-      <div class="stat-item"><b id="stat-pieces">0</b> pieces</div>
-      <div class="stat-item"><b id="stat-nfts">0</b> NFTs</div>
-      <div class="stat-item"><b id="stat-miles">0</b> miles cycled</div>
-    </div>
   </div>
 </header>
 <nav id="site-nav">
@@ -867,7 +863,7 @@ body {
   <div class="hero-content">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
-  <p class="hero-sub">Geographies of Trash is an ongoing public art practice by Miami artist Ahol Sniffs Glue in which discarded objects are transformed into artworks and returned to the street. Through cycling across Miami, the work becomes a practice of attention — shifting from routine to awareness, from what is overlooked to what is seen. Documented across more than 3,000 interventions, the project maps the geographies of urban neglect through creative reuse, generating a living provenance archive of found objects, GPS-logged rides, and on-chain records. Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia — recognized by six municipal governments and studied as a model for community-engaged environmental education.</p>
+  <p class="hero-sub">Miami artist <strong>Ahol Sniffs Glue</strong> transforms the city's discarded objects into art and returns them to the streets. This is the living archive: 3,000+ pieces mapped, every ride GPS-logged, 1,100+ minted on-chain.</p>
   <div class="hero-cta">
     <a href="archive.html" class="btn btn-primary">Browse Archive</a>
     <a href="#search" class="btn">Search Pieces</a>
@@ -876,14 +872,13 @@ body {
 </div>
 <hr class="section-divider">
 <div id="archive">
-  <div class="section-wrap">
-    <div class="section-label">Archive</div>
-    <div class="section-title" id="archiveSectionTitle">Loading...</div>
-    <div class="piece-grid preview-grid" id="pieceGrid">
-      <div class="loading-msg" id="archiveLoader" style="grid-column:1/-1">Loading archive...</div>
-    </div>
-    <div class="load-more-wrap">
-      <a class="btn btn-primary" id="loadMoreBtn" href="archive.html" style="display:none;letter-spacing:0.15em;">View Full Archive →</a>
+  <div class="section-wrap" style="padding-top:44px;padding-bottom:44px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid var(--gray3);background:var(--gray1);padding:24px 28px;">
+      <div>
+        <span class="section-title" id="archiveSectionTitle" style="font-size:clamp(28px,4vw,44px);">3,018</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gray4);letter-spacing:0.08em;margin-left:12px;">pieces documented · the full record</span>
+      </div>
+      <a class="btn btn-primary" href="archive.html" style="letter-spacing:0.15em;">Browse Full Archive →</a>
     </div>
   </div>
 </div>
@@ -1101,7 +1096,7 @@ body {
   <div class="footer-right">
     <a href="https://discord.gg/biscayneworld" class="footer-ig" target="_blank" rel="noopener">Discord</a>
     &nbsp;·&nbsp; <a href="https://www.instagram.com/aholsniffsglue" class="footer-ig" target="_blank" rel="noopener">@aholsniffsglue</a>
-    &nbsp;·&nbsp; Archive by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank" rel="noopener">@youngwildpanda</a>
+    &nbsp;·&nbsp; Produced &amp; managed by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank" rel="noopener">@youngwildpanda</a>
   </div>
 </footer>
 <div class="modal-backdrop" id="pieceModal">
@@ -1173,10 +1168,6 @@ function countUp(el, target, duration) {
 }
 window.addEventListener('load', () => {
   document.querySelectorAll('.hero-video').forEach(function(v) { v.muted = true; const pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); });
-  setTimeout(() => {
-    countUp(document.getElementById('stat-nfts'), 1141);
-    countUp(document.getElementById('stat-miles'), 30815);
-  }, 400);
   document.querySelectorAll('.about-stat-num[data-count]').forEach(el => {
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
@@ -1208,26 +1199,11 @@ async function loadArchive() {
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
     allPieces.sort((a, b) => (parseInt(String(b.pieceID || '').replace('GOT_', '')) || 0) - (parseInt(String(a.pieceID || '').replace('GOT_', '')) || 0));
     filteredPieces = allPieces;
-    const loader = document.getElementById('archiveLoader');
-    if (loader) loader.remove();
-    document.getElementById('archiveSectionTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
-    document.getElementById('stat-pieces').textContent = allPieces.length.toLocaleString();
+    const t = document.getElementById('archiveSectionTitle');
+    if (t) t.textContent = allPieces.length.toLocaleString();
     const aboutPieces = document.getElementById('aboutPieces');
     if (aboutPieces && allPieces.length) aboutPieces.dataset.count = allPieces.length;
-    renderArchivePage();
-  } catch(e) {
-    const loader = document.getElementById('archiveLoader');
-    if (loader) loader.textContent = 'Failed to load archive.';
-  }
-}
-function renderArchivePage() {
-  const grid = document.getElementById('pieceGrid');
-  const slice = filteredPieces.slice(displayedCount, displayedCount + PAGE_SIZE);
-  slice.forEach(piece => grid.appendChild(makePieceCard(piece)));
-  displayedCount += slice.length;
-  if (allPieces.length > 0) {
-    document.getElementById('loadMoreBtn').style.display = 'inline-block';
-  }
+  } catch(e) {}
 }
 function makePieceCard(piece, clickable) {
   clickable = clickable !== false;
@@ -1363,7 +1339,13 @@ async function searchByImage() {
     const vec = await getEmbedding(description);
     const matches = await queryPinecone(vec, 60);
     results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>';
-    renderSearchResults(matches, results, true, true);
+    renderSearchResults(matches, results, true);
+    if (matches.length > 12) {
+      const more = document.createElement('div');
+      more.style.cssText = 'text-align:center;margin-top:24px;';
+      more.innerHTML = '<a class="btn btn-primary" href="archive.html?mode=image">Search the full archive by image →</a>';
+      results.appendChild(more);
+    }
   } catch(e) {
     results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
   }
