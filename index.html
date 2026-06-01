@@ -937,28 +937,28 @@ body {
     <div class="cluster">
       <div class="clusterHead">The Archive <span>— what's been found</span></div>
       <div class="clusterRow">
-        <div class="about-stat"><span class="about-stat-num" id="aboutPieces" data-count="2999">0</span><span class="about-stat-label">Confirmed Pieces</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="520">0</span><span class="about-stat-label">Object Types</span></div>
-        <div class="about-stat"><span class="about-stat-num">25+</span><span class="about-stat-label">Neighborhoods</span></div>
-        <div class="about-stat"><span class="about-stat-num">2020</span><span class="about-stat-label">Documenting Since</span></div>
+        <div class="about-stat"><span class="about-stat-num" id="aboutPieces" data-stat="confirmedPieces">0</span><span class="about-stat-label">Confirmed Pieces</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="objectTypes">0</span><span class="about-stat-label">Object Types</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="neighborhoods">0</span><span class="about-stat-label">Neighborhoods</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="documentingSince">0</span><span class="about-stat-label">Documenting Since</span></div>
       </div>
     </div>
     <div class="cluster">
       <div class="clusterHead">The Ride <span>— ≈ 12.5× the height of Everest climbed</span></div>
       <div class="clusterRow">
-        <div class="about-stat"><span class="about-stat-num" data-count="30815">0</span><span class="about-stat-label">Miles Cycled</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="364037">0</span><span class="about-stat-label">Feet Climbed</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="2949">0</span><span class="about-stat-label">Hours In Saddle</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="104">0</span><span class="about-stat-label">Longest Ride (mi)</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="milesCycled">0</span><span class="about-stat-label">Miles Cycled</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="feetClimbed">0</span><span class="about-stat-label">Feet Climbed</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="hoursInSaddle">0</span><span class="about-stat-label">Hours In Saddle</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="longestRide">0</span><span class="about-stat-label">Longest Ride (mi)</span></div>
       </div>
     </div>
     <div class="cluster">
       <div class="clusterHead">The Record <span>— on-chain &amp; recognized</span></div>
       <div class="clusterRow">
-        <div class="about-stat"><span class="about-stat-num" data-count="1141">0</span><span class="about-stat-label">NFTs On-Chain</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="6">0</span><span class="about-stat-label">City Proclamations</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="2179">0</span><span class="about-stat-label">Community Members</span></div>
-        <div class="about-stat"><span class="about-stat-num" data-count="12">0</span><span class="about-stat-label">Tons CO₂ Avoided (est.)</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="nftsOnChain">0</span><span class="about-stat-label">NFTs On-Chain</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="cityProclamations">0</span><span class="about-stat-label">City Proclamations</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="communityMembers">0</span><span class="about-stat-label">Community Members</span></div>
+        <div class="about-stat"><span class="about-stat-num" data-stat="tonsCO2">0</span><span class="about-stat-label">Tons CO₂ Avoided (est.)</span></div>
       </div>
     </div>
     <div class="hood-strip">
@@ -1166,17 +1166,33 @@ function countUp(el, target, duration) {
   };
   requestAnimationFrame(step);
 }
+// ===== EDIT YOUR STATS HERE =====
+// "Confirmed Pieces" auto-fills from the live archive count on every load — leave it alone.
+// The Strava numbers (miles / feet / hours / longest) are manual — just change them here.
+const STATS = {
+  objectTypes: 520,
+  neighborhoods: '25+',
+  documentingSince: '2020',
+  milesCycled: 30815,      // Strava — update manually
+  feetClimbed: 364037,     // Strava — update manually
+  hoursInSaddle: 2949,     // Strava — update manually
+  longestRide: 104,        // Strava — update manually
+  nftsOnChain: 1141,
+  cityProclamations: 6,
+  communityMembers: 2179,
+  tonsCO2: 12
+};
+function renderStats() {
+  document.querySelectorAll('[data-stat]').forEach(function(el) {
+    var v = STATS[el.dataset.stat];
+    if (v === undefined || v === null) return;   // confirmedPieces is filled from live data
+    if (typeof v === 'number') countUp(el, v);
+    else el.textContent = v;
+  });
+}
 window.addEventListener('load', () => {
   document.querySelectorAll('.hero-video').forEach(function(v) { v.muted = true; const pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); });
-  document.querySelectorAll('.about-stat-num[data-count]').forEach(el => {
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        countUp(el, parseInt(el.dataset.count));
-        observer.disconnect();
-      }
-    }, { threshold: 0.3 });
-    observer.observe(el);
-  });
+  renderStats();
   loadArchive();
 });
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
@@ -1202,7 +1218,7 @@ async function loadArchive() {
     const t = document.getElementById('archiveSectionTitle');
     if (t) t.textContent = allPieces.length.toLocaleString();
     const aboutPieces = document.getElementById('aboutPieces');
-    if (aboutPieces && allPieces.length) aboutPieces.dataset.count = allPieces.length;
+    if (aboutPieces && allPieces.length) countUp(aboutPieces, allPieces.length);
   } catch(e) {}
 }
 function makePieceCard(piece, clickable) {
