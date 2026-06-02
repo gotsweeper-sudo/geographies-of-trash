@@ -297,7 +297,7 @@ body {
 .piece-img {
   width: 100%;
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: contain;
   background: var(--gray1);
   display: block;
 }
@@ -737,8 +737,8 @@ body {
 .modal-close:hover { color: var(--white); }
 .modal-img {
   width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
+  max-height: 72vh;
+  object-fit: contain;
   background: var(--gray1);
   display: block;
 }
@@ -978,15 +978,15 @@ body {
     <div class="section-label">Press</div>
     <div class="section-title">Trash Talk</div>
     <div class="press-grid">
-      <a class="press-item" href="#" target="_blank" rel="noopener">NBC News</a>
+      <span class="press-item" style="cursor:default">NBC News</span>
       <a class="press-item" href="https://www.miamiherald.com" target="_blank" rel="noopener">Miami Herald</a>
       <a class="press-item" href="https://www.pbs.org/video/south-florida-originals-art-loft-1110-episode-0shbpp/" target="_blank" rel="noopener">PBS ArtLoft</a>
       <a class="press-item" href="https://www.timeout.com/miami/art/i-went-on-an-art-scavenger-hunt-with-this-miami-graffiti-legend" target="_blank" rel="noopener">Time Out Miami</a>
       <a class="press-item" href="https://www.wlrn.org/podcast/sundial/2023-07-31/biking-graffiti-artist-miami-aholsniffsglue" target="_blank" rel="noopener">WLRN / NPR</a>
       <a class="press-item" href="https://www.local10.com/news/local/2023/03/29/south-florida-artist-making-treasure-out-of-trash-using-social-media-to-spread-word/" target="_blank" rel="noopener">Local 10 / WPLG</a>
-      <a class="press-item" href="#" target="_blank" rel="noopener">Cheddar News</a>
+      <span class="press-item" style="cursor:default">Cheddar News</span>
       <a class="press-item" href="https://www.miaminewtimes.com" target="_blank" rel="noopener">Miami New Times</a>
-      <a class="press-item" href="#" target="_blank" rel="noopener">Univision</a>
+      <span class="press-item" style="cursor:default">Univision</span>
       <a class="press-item" href="https://digitalcommons.fiu.edu/ahol-archive/" target="_blank" rel="noopener">FIU Digital Commons</a>
     </div>
   </div>
@@ -1216,12 +1216,13 @@ async function loadArchive() {
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
     allPieces.sort((a, b) => (parseInt(String(b.pieceID || '').replace('GOT_', '')) || 0) - (parseInt(String(a.pieceID || '').replace('GOT_', '')) || 0));
     filteredPieces = allPieces;
+    const headline = allPieces.length ? (parseInt(String(allPieces[0].pieceID || '').replace(/\D/g, ''), 10) || allPieces.length) : 0;
     const t = document.getElementById('archiveSectionTitle');
-    if (t) t.textContent = allPieces.length.toLocaleString();
+    if (t) t.textContent = headline.toLocaleString();
     const lg = document.getElementById('latestGrid');
     if (lg) { lg.innerHTML = ''; allPieces.slice(0, 3).forEach(function(p) { lg.appendChild(makePieceCard(p)); }); }
     const aboutPieces = document.getElementById('aboutPieces');
-    if (aboutPieces && allPieces.length) countUp(aboutPieces, allPieces.length);
+    if (aboutPieces && headline) countUp(aboutPieces, headline);
   } catch(e) {}
 }
 function makePieceCard(piece, clickable) {
