@@ -53,8 +53,8 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
 .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 200; overflow-y: auto; padding: 40px 24px; }
 .modal-backdrop.open { display: flex; align-items: flex-start; justify-content: center; }
 .modal { background: var(--black); border: 1px solid var(--gray3); max-width: 640px; width: 100%; padding: 0; position: relative; margin-top: 20px; }
-.modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--gray4); font-size: 18px; cursor: pointer; line-height: 1; font-family: monospace; z-index: 1; transition: color 0.15s; }
-.modal-close:hover { color: var(--white); }
+.modal-close { position: absolute; top: 12px; right: 12px; width: 38px; height: 38px; background: rgba(0,0,0,0.7); border: 1px solid var(--gray3); border-radius: 50%; color: var(--white); font-size: 16px; cursor: pointer; line-height: 1; font-family: monospace; z-index: 3; transition: all 0.15s; }
+.modal-close:hover { background: var(--coral); color: #000; border-color: var(--coral); }
 .modal-img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--gray1); display: block; }
 .modal-body { padding: 24px 28px 28px; }
 .modal-id { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; margin-bottom: 4px; }
@@ -120,7 +120,7 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
     </div>
     <div class="search-panel active" id="panelSemantic">
       <div class="search-row">
-        <input class="search-input" id="semanticInput" placeholder="Describe a piece — e.g. 'toilet with gold chains'" onkeydown="if(event.key==='Enter')searchSemantic()">
+        <input class="search-input" id="semanticInput" placeholder="Describe a piece — e.g. 'rusty shopping cart with painted eyes'" onkeydown="if(event.key==='Enter')searchSemantic()">
         <button class="btn btn-primary" onclick="searchSemantic()">Search</button>
       </div>
     </div>
@@ -140,6 +140,27 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
           <button class="btn" onclick="clearUpload()" style="margin-left:8px;">Clear</button>
         </div>
       </div>
+    </div>
+    <div id="resultControls" style="display:none;gap:16px;flex-wrap:wrap;align-items:center;margin:20px 0 2px;">
+      <label style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--gray5);text-transform:uppercase;display:flex;align-items:center;gap:8px;">Year
+        <select id="yearFilter" onchange="renderResults()" style="background:var(--gray1);color:var(--white);border:1px solid var(--gray3);font-family:'Share Tech Mono',monospace;font-size:12px;padding:7px 10px;cursor:pointer;">
+          <option value="">All years</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
+          <option value="2023">2023</option>
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+        </select>
+      </label>
+      <label style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--gray5);text-transform:uppercase;display:flex;align-items:center;gap:8px;">Sort
+        <select id="resultSort" onchange="renderResults()" style="background:var(--gray1);color:var(--white);border:1px solid var(--gray3);font-family:'Share Tech Mono',monospace;font-size:12px;padding:7px 10px;cursor:pointer;">
+          <option value="match">Best match</option>
+          <option value="newest">Newest</option>
+          <option value="oldest">Oldest</option>
+        </select>
+      </label>
     </div>
     <div id="searchResults"></div>
   </div>
@@ -172,6 +193,10 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
       <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-links" id="modalLinks"></div>
+      <div style="margin-top:14px;">
+        <button class="btn" onclick="copyPieceLink()" style="font-size:11px;padding:9px 18px;">Copy link to this piece</button>
+        <span id="copyMsg" style="font-size:11px;color:var(--coral);margin-left:10px;letter-spacing:0.05em;"></span>
+      </div>
       <div class="modal-correct">
         <button class="correct-toggle" onclick="toggleCorrect()">Suggest a correction</button>
         <div class="correct-form" id="correctForm" style="display:none;">
@@ -184,6 +209,10 @@ body { background: var(--black); color: var(--white); font-family: 'Share Tech M
     </div>
   </div>
 </div>
+
+<footer style="border-top:1px solid var(--gray3);text-align:center;padding:28px 20px;font-size:11px;color:var(--gray4);letter-spacing:0.08em;">
+  Produced &amp; managed by <a href="https://www.instagram.com/youngwildpanda" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none;">@youngwildpanda</a>
+</footer>
 
 <script>
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfyuPvQOoGQfRMFmD0pbd7MoW8Tte3pnr2iMqxmFNvNl4UBZMpgnvIcyM-w7b50rYd/exec';
@@ -229,14 +258,24 @@ async function loadArchive() {
     const data = await res.json();
     allPieces = data.items || data.rows || data.data || (Array.isArray(data) ? data : []);
     document.getElementById('archiveLoader').remove();
-    document.getElementById('archiveTitle').textContent = allPieces.length.toLocaleString() + ' Pieces';
+    var headline = allPieces.reduce(function(m, p){ var n = parseInt(String(p.pieceID || p.piece_id || '').replace(/\D/g, ''), 10) || 0; return n > m ? n : m; }, 0) || allPieces.length;
+    document.getElementById('archiveTitle').textContent = headline.toLocaleString() + ' Pieces';
     applyControls();
-    var qp = new URLSearchParams(location.search).get('q');
+    var params = new URLSearchParams(location.search);
+    var qp = params.get('q');
     if (qp) {
       setSearchMode('semantic');
       document.getElementById('semanticInput').value = qp;
       searchSemantic();
       var sb = document.querySelector('.search-box'); if (sb) sb.scrollIntoView({ behavior: 'smooth' });
+    } else if (params.get('mode') === 'image') {
+      setSearchMode('image');
+      var sbi = document.querySelector('.search-box'); if (sbi) sbi.scrollIntoView({ behavior: 'smooth' });
+    }
+    var pieceParam = params.get('piece');
+    if (pieceParam) {
+      var pp = allPieces.find(function (x) { return (x.pieceID || '') === pieceParam; });
+      if (pp) openModal(pp);
     }
   } catch(e) {
     document.getElementById('archiveLoader').textContent = 'Failed to load archive.';
@@ -311,6 +350,17 @@ function openModal(piece) {
   const ct = document.getElementById('correctText'); if (ct) ct.value = '';
   document.getElementById('pieceModal').classList.add('open');
   document.body.style.overflow = 'hidden';
+  if (history.replaceState) history.replaceState(null, '', location.pathname + '?piece=' + encodeURIComponent(id));
+}
+function copyPieceLink() {
+  var url = location.origin + location.pathname + '?piece=' + encodeURIComponent(currentPieceId);
+  var msg = document.getElementById('copyMsg');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(
+      function () { if (msg) { msg.textContent = 'Link copied!'; setTimeout(function () { msg.textContent = ''; }, 2000); } },
+      function () { if (msg) msg.textContent = url; }
+    );
+  } else if (msg) { msg.textContent = url; }
 }
 
 function toggleCorrect() {
@@ -347,8 +397,9 @@ async function searchSemantic() {
   results.innerHTML = '<div class="loading-msg">Searching...</div>';
   try {
     var vec = await getEmbedding(q);
-    var matches = await queryPinecone(vec, 60);
-    renderSearchResults(matches, results);
+    var matches = await queryPinecone(vec, 250);
+    lastMatches = matches; lastDescription = '';
+    renderResults();
   } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
 }
 function handleDrop(e) { e.preventDefault(); var f = e.dataTransfer.files[0]; if (f && f.type.indexOf('image/')===0) setUploadPreview(f); }
@@ -379,9 +430,9 @@ async function searchByImage() {
     var base64 = await resizeToBase64(uploadedImageFile, 512);
     var description = await getVisionDescription(base64, 'image/jpeg');
     var vec = await getEmbedding(description);
-    var matches = await queryPinecone(vec, 60);
-    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + description + '</div>';
-    renderSearchResults(matches, results, true);
+    var matches = await queryPinecone(vec, 250);
+    lastMatches = matches; lastDescription = description;
+    renderResults();
   } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
 }
 function fileToBase64(file) {
@@ -434,8 +485,27 @@ async function queryPinecone(vector, topK) {
   if (!res.ok) throw new Error('Search failed');
   return (await res.json()).matches || [];
 }
+var lastMatches = [], lastDescription = '';
+function _pieceYear(m) { var d = new Date(((m.metadata || {}).post_date) || 0); return isNaN(d) ? '' : String(d.getFullYear()); }
+function _pieceTime(m) { var d = new Date(((m.metadata || {}).post_date) || 0); return isNaN(d) ? 0 : d.getTime(); }
+function renderResults() {
+  var results = document.getElementById('searchResults');
+  var ctrls = document.getElementById('resultControls');
+  if (!lastMatches.length && !lastDescription) { if (ctrls) ctrls.style.display = 'none'; return; }
+  if (ctrls) ctrls.style.display = 'flex';
+  var ms = lastMatches.slice();
+  var yr = (document.getElementById('yearFilter') || {}).value || '';
+  if (yr) ms = ms.filter(function (m) { return _pieceYear(m) === yr; });
+  var sort = (document.getElementById('resultSort') || {}).value || 'match';
+  if (sort === 'newest') ms.sort(function (a, b) { return _pieceTime(b) - _pieceTime(a); });
+  else if (sort === 'oldest') ms.sort(function (a, b) { return _pieceTime(a) - _pieceTime(b); });
+  results.innerHTML = lastDescription
+    ? '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:8px;line-height:1.8;max-width:560px;">' + lastDescription + '</div>'
+    : '';
+  renderSearchResults(ms, results, !!lastDescription);
+}
 function renderSearchResults(matches, container, append) {
-  matches = matches.slice(0, 60);
+  matches = matches.slice(0, 250);
   var label = document.createElement('div');
   label.className = 'search-results-label';
   label.textContent = matches.length + ' pieces found';
@@ -460,6 +530,8 @@ function renderSearchResults(matches, container, append) {
 function closeModal() {
   document.getElementById('pieceModal').classList.remove('open');
   document.body.style.overflow = '';
+  if (history.replaceState) history.replaceState(null, '', location.pathname);
+  var cm = document.getElementById('copyMsg'); if (cm) cm.textContent = '';
 }
 
 document.getElementById('pieceModal').addEventListener('click', function(e) {
