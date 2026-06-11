@@ -723,18 +723,20 @@ body {
 }
 .modal-close {
   position: absolute;
-  top: 16px; right: 16px;
-  background: none;
-  border: none;
-  color: var(--gray4);
-  font-size: 18px;
+  top: 12px; right: 12px;
+  width: 38px; height: 38px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--gray3);
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 16px;
   cursor: pointer;
   line-height: 1;
   font-family: monospace;
-  z-index: 1;
-  transition: color 0.15s;
+  z-index: 3;
+  transition: all 0.15s;
 }
-.modal-close:hover { color: var(--white); }
+.modal-close:hover { background: var(--coral); color: #000; border-color: var(--coral); }
 .modal-img {
   width: 100%;
   max-height: 72vh;
@@ -1110,6 +1112,10 @@ body {
       <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
       <div class="modal-links" id="modalLinks"></div>
+      <div style="margin-top:14px;">
+        <button class="btn" onclick="copyPieceLink()" style="font-size:11px;padding:9px 18px;">Copy link to this piece</button>
+        <span id="copyMsg" style="font-size:11px;color:var(--coral);margin-left:10px;letter-spacing:0.05em;"></span>
+      </div>
       <div class="modal-correct">
         <button class="correct-toggle" onclick="toggleCorrect()">Suggest a correction</button>
         <div class="correct-form" id="correctForm" style="display:none;">
@@ -1287,9 +1293,20 @@ async function sendCorrection() {
     document.getElementById('correctFrom').value = '';
   } catch (e) { msg.textContent = 'Could not submit right now. Try again later.'; }
 }
+function copyPieceLink() {
+  var url = location.origin + '/archive.html?piece=' + encodeURIComponent(currentPieceId);
+  var msg = document.getElementById('copyMsg');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(
+      function () { if (msg) { msg.textContent = 'Link copied!'; setTimeout(function () { msg.textContent = ''; }, 2000); } },
+      function () { if (msg) msg.textContent = url; }
+    );
+  } else if (msg) { msg.textContent = url; }
+}
 function closeModal() {
   document.getElementById('pieceModal').classList.remove('open');
   document.body.style.overflow = '';
+  var cm = document.getElementById('copyMsg'); if (cm) cm.textContent = '';
 }
 document.getElementById('pieceModal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
