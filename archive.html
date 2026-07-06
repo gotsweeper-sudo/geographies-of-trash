@@ -337,7 +337,15 @@ function openModal(piece) {
   document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
-  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+  var descEl = document.getElementById('modalDesc');
+  if (notes) { descEl.textContent = notes; }
+  else {
+    descEl.textContent = 'Loading description…';
+    fetch(APPS_SCRIPT_URL + '?action=getPiece&id=' + encodeURIComponent(id))
+      .then(function (r) { return r.json(); })
+      .then(function (p) { if (currentPieceId === id) descEl.textContent = stripMarkdown(p.notes || p.notes2 || p.caption || '') || 'No description available.'; })
+      .catch(function () { if (currentPieceId === id) descEl.textContent = 'No description available.'; });
+  }
 
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';

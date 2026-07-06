@@ -879,7 +879,7 @@ body {
     <div id="latestGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--gray2);margin-bottom:30px;"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid var(--gray3);background:var(--gray1);padding:24px 28px;">
       <div>
-        <span class="section-title" id="archiveSectionTitle" style="font-size:clamp(28px,4vw,44px);">3,018</span>
+        <span class="section-title" id="archiveSectionTitle" style="font-size:clamp(28px,4vw,44px);">…</span>
         <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gray4);letter-spacing:0.08em;margin-left:12px;">pieces documented · the complete public record</span>
       </div>
     </div>
@@ -1264,7 +1264,15 @@ function openModal(piece) {
   document.getElementById('modalImg').style.display = imgSrc ? 'block' : 'none';
   document.getElementById('modalId').textContent = id;
   document.getElementById('modalDate').textContent = date;
-  document.getElementById('modalDesc').textContent = notes || 'No description available.';
+  var descEl = document.getElementById('modalDesc');
+  if (notes) { descEl.textContent = notes; }
+  else {
+    descEl.textContent = 'Loading description…';
+    fetch(APPS_SCRIPT_URL + '?action=getPiece&id=' + encodeURIComponent(id))
+      .then(function (r) { return r.json(); })
+      .then(function (p) { if (currentPieceId === id) descEl.textContent = stripMarkdown(p.notes || p.notes2 || p.caption || '') || 'No description available.'; })
+      .catch(function () { if (currentPieceId === id) descEl.textContent = 'No description available.'; });
+  }
   const links = document.getElementById('modalLinks');
   links.innerHTML = '';
   if (postUrl) links.innerHTML += '<a href="' + postUrl + '" target="_blank" class="btn btn-primary" style="font-size:11px;padding:9px 18px;">Instagram →</a>';
