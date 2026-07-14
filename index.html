@@ -1111,10 +1111,6 @@ body {
       <div class="modal-date" id="modalDate"></div>
       <div class="modal-desc-label">AI Description</div>
       <div class="modal-desc" id="modalDesc"></div>
-      <div id="modalMedia" style="display:none;margin-top:16px;">
-        <div class="modal-desc-label">More media</div>
-        <div id="modalMediaStrip" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;"></div>
-      </div>
       <div class="modal-links" id="modalLinks"></div>
       <div style="margin-top:14px;">
         <button class="btn" onclick="copyPieceLink()" style="font-size:11px;padding:9px 18px;">Copy link to this piece</button>
@@ -1139,7 +1135,8 @@ const SVG_IG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stro
 const SVG_STRAVA = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6 2 4.2 15h3.9l2.5-5.1L13.1 15H17L10.6 2z"/><path d="M14.3 15l-1.2 2.5L11.9 15H9.2l3.9 7.9L17 15h-2.7z"/></svg>';
 const SVG_NFT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3 6 9l6 12 6-12-3-6"/></svg>';
 const SVG_PLAY = '<svg width="9" height="9" viewBox="0 0 24 24" fill="#fff"><path d="M7 4.5v15l12-7.5z"/></svg>';
-function mediaLinkBtn(href, primary, svg, label){ return '<a href="' + href + '" target="_blank" rel="noopener" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;gap:7px;font-size:11px;padding:9px 16px;">' + svg + '<span>' + label + '</span></a>'; }
+const SVG_FN = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+function mediaLinkBtn(href, primary, svg, label){ return '<a href="' + href + '" target="_blank" rel="noopener" aria-label="' + label + '" title="' + label + '" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;">' + svg + '</a>'; }
 const PAGE_SIZE = 3;
 const KM_TO_MILES = 0.621371;
 let allPieces = [], filteredPieces = [], displayedCount = 0;
@@ -1296,33 +1293,23 @@ function openModal(piece) {
   document.body.style.overflow = 'hidden';
 }
 function loadPieceMedia(id) {
-  var wrap = document.getElementById('modalMedia');
-  var strip = document.getElementById('modalMediaStrip');
-  if (!wrap || !strip) return;
-  wrap.style.display = 'none'; strip.innerHTML = '';
   fetch(APPS_SCRIPT_URL + '?action=getMedia&id=' + encodeURIComponent(id))
     .then(function (r) { return r.json(); })
     .then(function (res) {
       if (currentPieceId !== id) return;
+      var links = document.getElementById('modalLinks');
+      if (!links) return;
       var items = (res && res.items) || [];
-      if (!items.length) return;
       items.forEach(function (m) {
+        var label = (m.type === 'discord') ? 'BTS Footage' : 'Field Notes';
         var a = document.createElement('a');
         a.href = m.url; a.target = '_blank'; a.rel = 'noopener';
-        a.title = (m.type === 'discord' ? 'BTS footage' : 'Field Note') + (m.caption ? ' — ' + String(m.caption).slice(0, 80) : '');
-        a.style.cssText = 'position:relative;width:92px;height:92px;border-radius:8px;overflow:hidden;background:#111;border:1px solid var(--gray3);flex:0 0 auto;display:flex;align-items:center;justify-content:center;text-decoration:none;color:var(--gray6);font-size:10px;text-align:center;letter-spacing:.06em;';
-        var thumb = m.thumbnail ? getDriveImgSrc(m.thumbnail, 'w400') : '';
-        if (thumb) {
-          var img = document.createElement('img');
-          img.src = thumb; img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-          a.appendChild(img);
-          a.insertAdjacentHTML('beforeend', '<span style="position:absolute;bottom:5px;right:5px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;">' + SVG_PLAY + '</span>');
-        } else {
-          a.innerHTML = '<span>' + (m.type === 'discord' ? 'BTS ▶' : 'Field Note ▶') + '</span>';
-        }
-        strip.appendChild(a);
+        a.className = 'btn';
+        a.title = m.caption ? String(m.caption).slice(0, 100) : label;
+        a.style.cssText = 'display:inline-flex;align-items:center;gap:7px;font-size:11px;padding:9px 16px;';
+        a.innerHTML = SVG_FN + '<span>' + label + '</span>';
+        links.appendChild(a);
       });
-      wrap.style.display = 'block';
     })
     .catch(function () {});
 }
