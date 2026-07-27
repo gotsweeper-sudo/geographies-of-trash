@@ -880,7 +880,7 @@ body {
     <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid var(--gray3);background:var(--gray1);padding:24px 28px;">
       <div>
         <span class="section-title" id="archiveSectionTitle" style="font-size:clamp(28px,4vw,44px);">…</span>
-        <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gray4);letter-spacing:0.08em;margin-left:12px;">pieces documented · the complete public record</span>
+        <span id="archiveSectionMeta" style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--gray4);letter-spacing:0.08em;margin-left:12px;">pieces documented · the complete public record</span>
       </div>
     </div>
   </div>
@@ -1232,6 +1232,9 @@ async function loadArchive() {
     const headline = allPieces.length ? (parseInt(String(allPieces[0].pieceID || '').replace(/\D/g, ''), 10) || allPieces.length) : 0;
     const t = document.getElementById('archiveSectionTitle');
     if (t) t.textContent = headline.toLocaleString();
+    var newestT = allPieces.reduce(function (mx, p) { var tt = Date.parse(p.postDate || ''); return (!isNaN(tt) && tt > mx) ? tt : mx; }, 0);
+    var meta = document.getElementById('archiveSectionMeta');
+    if (meta && newestT) meta.textContent = 'pieces documented · the complete public record · updated ' + new Date(newestT).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     const lg = document.getElementById('latestGrid');
     if (lg) { lg.innerHTML = ''; allPieces.slice(0, 3).forEach(function(p) { lg.appendChild(makePieceCard(p)); }); }
     const aboutPieces = document.getElementById('aboutPieces');
