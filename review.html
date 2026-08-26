@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex,nofollow">
+<title>GOT — Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--black:#080808;--gray1:#111;--gray2:#1c1c1c;--gray3:#2e2e2e;--gray4:#8f8f8f;--gray5:#b2b2b2;--gray6:#d2d2d2;--gold:#e0b23a;--coral:#ff6b5e;--green:#4ccd8d;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--black);color:#fff;font-family:'Share Tech Mono',monospace;min-height:100vh;}
+header{padding:14px 16px 0;}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+h1{font-family:'Oswald',sans-serif;font-size:16px;letter-spacing:.14em;text-transform:uppercase;}
+#count{font-size:11px;color:var(--gray4);letter-spacing:.1em;}
+.tabs{display:flex;gap:6px;margin:12px 0 0;border-bottom:1px solid var(--gray2);}
+.tab{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:10px 14px;color:var(--gray4);cursor:pointer;border-bottom:2px solid transparent;}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+#tokenBar{padding:12px 16px;display:flex;gap:8px;}
+#tokenBar input{flex:1;background:var(--gray1);border:1px solid var(--gray3);color:#fff;font-family:inherit;font-size:12px;padding:9px 11px;}
+.btn{font-family:'Oswald',sans-serif;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:10px 16px;border:1px solid var(--gray3);color:var(--gray6);background:transparent;cursor:pointer;}
+.btn.gold{border-color:var(--gold);color:var(--gold);}
+#deck{padding:14px 16px 130px;max-width:680px;margin:0 auto;}
+.card{background:var(--gray1);border:1px solid var(--gray3);border-radius:14px;padding:16px;touch-action:pan-y;}
+.meta{font-size:10px;color:var(--gray4);letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.pid{font-family:'Oswald',sans-serif;font-size:21px;letter-spacing:.06em;margin:8px 0 2px;color:var(--gold);}
+.verdict{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 9px;border-radius:20px;margin:6px 0 10px;}
+.v-legit{background:rgba(76,205,141,.14);color:var(--green);border:1px solid rgba(76,205,141,.4);}
+.v-junk{background:rgba(255,107,94,.14);color:var(--coral);border:1px solid rgba(255,107,94,.4);}
+.v-unsure{background:rgba(224,178,58,.13);color:var(--gold);border:1px solid rgba(224,178,58,.4);}
+.lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--coral);margin:14px 0 5px;}
+.body{font-size:12.5px;line-height:1.75;color:var(--gray6);white-space:pre-wrap;}
+.body.dim{color:var(--gray5);max-height:76px;overflow:hidden;}
+.more{font-size:10px;color:var(--gray4);letter-spacing:.14em;text-transform:uppercase;margin-top:6px;cursor:pointer;text-decoration:underline;}
+textarea{width:100%;background:#0d0d0d;border:1px solid var(--gray3);color:#fff;font-family:inherit;font-size:12.5px;line-height:1.7;padding:11px;min-height:110px;margin-top:6px;}
+/* media mode */
+.reel{width:100%;max-height:260px;object-fit:cover;border-radius:10px;background:#000;display:block;}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;}
+.cand{border:1px solid var(--gray3);border-radius:10px;overflow:hidden;background:#0d0d0d;cursor:pointer;transition:border-color .12s;}
+.cand.sel{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset;}
+.cand img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:#000;}
+.cand .cid{font-size:9.5px;letter-spacing:.05em;padding:5px 4px 2px;color:var(--gray6);text-align:center;}
+.cand .csc{font-size:9px;color:var(--gray4);text-align:center;padding-bottom:5px;}
+.cand.sel .cid{color:var(--green);}
+.manual{width:100%;background:#0d0d0d;border:1px solid var(--gray3);color:#fff;font-family:inherit;font-size:12px;padding:10px;margin-top:10px;}
+.actions{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(to top,var(--black) 62%,transparent);padding:14px 16px 20px;display:flex;gap:10px;justify-content:center;max-width:680px;margin:0 auto;}
+.big{flex:1;max-width:190px;font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:15px 10px;border-radius:10px;cursor:pointer;border:1px solid;}
+.no{background:transparent;border-color:var(--coral);color:var(--coral);}
+.yes{background:var(--green);border-color:var(--green);color:#04301c;}
+.yes:disabled{opacity:.35;cursor:not-allowed;}
+.hint{text-align:center;font-size:10px;color:var(--gray4);letter-spacing:.12em;margin-top:10px;text-transform:uppercase;}
+.empty{text-align:center;padding:60px 20px;color:var(--gray4);font-size:13px;line-height:2;}
+.empty b{display:block;font-family:'Oswald',sans-serif;font-size:23px;color:var(--gold);letter-spacing:.08em;margin-bottom:10px;}
+.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--gray2);border:1px solid var(--gray3);padding:10px 16px;font-size:11px;letter-spacing:.1em;z-index:9;border-radius:8px;}
+.hidden{display:none!important;}
+a.reellink{color:var(--gold);font-size:11px;letter-spacing:.1em;text-decoration:underline;}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><h1 id="title">Review</h1><span id="count">—</span></div>
+  <div class="tabs">
+    <div class="tab on" id="tabS" onclick="setMode('sugg')">Suggestions</div>
+    <div class="tab" id="tabM" onclick="setMode('media')">Field Notes</div>
+  </div>
+</header>
+
+<div id="tokenBar">
+  <input id="token" type="password" placeholder="Admin token" autocomplete="off">
+  <button class="btn gold" onclick="saveToken()">Load</button>
+</div>
+
+<div id="deck"><div class="empty">Enter your admin token to load.</div></div>
+
+<div class="actions hidden" id="actions">
+  <button class="big no" id="btnNo" onclick="decide('no')">✕ Skip</button>
+  <button class="big yes" id="btnYes" onclick="decide('yes')">✓ Apply</button>
+</div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbz4ni6Y2jwjMXGgiZvpLoIqjH0jg41hahfva2BqKGAi7Of3UzsoG_CMBW5hHxmhbzsR/exec';
+var mode='sugg', queue=[], idx=0, token='', busy=false, picked='';
+
+function setMode(m){
+  mode=m; idx=0; picked='';
+  document.getElementById('tabS').classList.toggle('on', m==='sugg');
+  document.getElementById('tabM').classList.toggle('on', m==='media');
+  document.getElementById('title').textContent = m==='sugg' ? 'Suggestions' : 'Field Notes';
+  document.getElementById('btnNo').textContent = m==='sugg' ? '✕ Dismiss' : '✕ Skip';
+  document.getElementById('btnYes').textContent = m==='sugg' ? '✓ Apply' : '✓ Link';
+  if(token) load();
+}
+function saveToken(){
+  token=document.getElementById('token').value.trim();
+  if(!token){ toast('Enter your token'); return; }
+  load();
+}
+function toast(m){ var t=document.createElement('div'); t.className='toast'; t.textContent=m; document.body.appendChild(t); setTimeout(function(){t.remove();},1900); }
+function esc(s){ return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function driveImg(u,sz){
+  u=String(u||''); if(!u) return '';
+  var m=u.match(/[?&]id=([^&]+)/)||u.match(/\/d\/([^\/]+)/);
+  return m ? 'https://drive.google.com/thumbnail?id='+m[1]+'&sz='+(sz||'w400') : u;
+}
+
+function load(){
+  document.getElementById('deck').innerHTML='<div class="empty">Loading…</div>';
+  document.getElementById('actions').classList.add('hidden');
+  var action = mode==='sugg' ? 'getSuggestionQueue' : 'getMediaQueue';
+  fetch(API+'?action='+action+'&limit=40&token='+encodeURIComponent(token))
+    .then(function(r){return r.json();})
+    .then(function(res){
+      if(res && res.error){ document.getElementById('deck').innerHTML='<div class="empty"><b>Unauthorized</b>Check your token.</div>'; return; }
+      queue=(res&&res.items)||[]; idx=0; render();
+    })
+    .catch(function(){ document.getElementById('deck').innerHTML='<div class="empty">Failed to load.</div>'; });
+}
+
+function render(){
+  var deck=document.getElementById('deck'), actions=document.getElementById('actions');
+  document.getElementById('count').textContent = queue.length ? (idx+1)+' / '+queue.length : '0 pending';
+  if(idx>=queue.length){
+    deck.innerHTML='<div class="empty"><b>All clear</b>Nothing waiting here.</div>';
+    actions.classList.add('hidden'); return;
+  }
+  actions.classList.remove('hidden');
+  mode==='sugg' ? renderSugg() : renderMedia();
+}
+
+function renderSugg(){
+  var it=queue[idx];
+  var v=(it.verdict||'').toUpperCase();
+  var vc=v.indexOf('LEGIT')>-1?'v-legit':(v.indexOf('JUNK')>-1?'v-junk':'v-unsure');
+  var when=it.received?new Date(it.received).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'';
+  document.getElementById('btnYes').disabled=false;
+  document.getElementById('deck').innerHTML=
+    '<div class="card" id="card">'+
+      '<div class="meta"><span>'+esc((it.from||'').replace(/<.*/,'').slice(0,32))+'</span><span>'+when+'</span></div>'+
+      '<div class="pid">'+esc(it.pieceID||'NO PIECE ID')+'</div>'+
+      '<span class="verdict '+vc+'">AI: '+esc(v||'UNSCREENED')+'</span>'+
+      '<div class="lbl">Their note</div><div class="body">'+esc(it.suggestion)+'</div>'+
+      '<div class="lbl">Current description</div><div class="body dim" id="cur">'+esc(it.current||'(none)')+'</div>'+
+      '<div class="more" onclick="document.getElementById(\'cur\').classList.toggle(\'dim\')">show / hide full</div>'+
+      '<div class="lbl">Final text (editable — this is what posts)</div>'+
+      '<textarea id="finalText">'+esc(it.proposed||it.current||it.suggestion)+'</textarea>'+
+    '</div><div class="hint">swipe → apply · swipe ← dismiss</div>';
+  wireSwipe();
+}
+
+function renderMedia(){
+  var it=queue[idx];
+  picked=it.prefill||'';
+  var cands=(it.candidates||[]).map(function(c){
+    return '<div class="cand'+(c.id===picked?' sel':'')+'" data-id="'+c.id+'" onclick="pick(\''+c.id+'\')">'+
+      '<img src="'+driveImg(c.image,'w300')+'" loading="lazy" onerror="this.style.opacity=.15">'+
+      '<div class="cid">'+c.id.replace('GOT_','')+'</div><div class="csc">'+c.score+'%</div></div>';
+  }).join('');
+  document.getElementById('deck').innerHTML=
+    '<div class="card" id="card">'+
+      '<div class="meta"><span>Field Note</span><span>'+esc(it.date||'')+'</span></div>'+
+      '<img class="reel" src="'+esc(it.thumbnail)+'" onerror="this.style.display=\'none\'">'+
+      '<div style="margin-top:8px;"><a class="reellink" href="'+esc(it.url)+'" target="_blank" rel="noopener">▶ open the reel</a></div>'+
+      '<div class="lbl">Caption</div><div class="body dim" id="cap">'+esc(it.caption)+'</div>'+
+      '<div class="more" onclick="document.getElementById(\'cap\').classList.toggle(\'dim\')">show / hide full</div>'+
+      '<div class="lbl">Which piece is this? — tap one</div>'+
+      '<div class="grid">'+(cands||'<div class="body">No candidates found.</div>')+'</div>'+
+      '<input class="manual" id="manualId" placeholder="…or type a GOT_ id" value="'+esc(picked)+'" oninput="picked=this.value.trim();syncSel();">'+
+    '</div><div class="hint">tap a photo, then Link</div>';
+  syncSel();
+  wireSwipe();
+}
+
+function pick(id){
+  picked=id;
+  var mi=document.getElementById('manualId'); if(mi) mi.value=id;
+  syncSel();
+}
+function syncSel(){
+  document.querySelectorAll('.cand').forEach(function(el){ el.classList.toggle('sel', el.dataset.id===picked); });
+  var y=document.getElementById('btnYes');
+  if(mode==='media') y.disabled = !/^GOT_\d{6}$/.test(picked);
+}
+
+function wireSwipe(){
+  var card=document.getElementById('card'); if(!card) return;
+  var x0=null,dx=0;
+  card.addEventListener('touchstart',function(e){ var t=e.target.tagName; if(t==='TEXTAREA'||t==='INPUT'||t==='IMG') return; x0=e.touches[0].clientX; },{passive:true});
+  card.addEventListener('touchmove',function(e){
+    if(x0===null) return; dx=e.touches[0].clientX-x0;
+    card.style.transform='translateX('+dx+'px) rotate('+(dx*0.03)+'deg)';
+    card.style.borderColor = dx>60?'var(--green)':(dx<-60?'var(--coral)':'var(--gray3)');
+  },{passive:true});
+  card.addEventListener('touchend',function(){
+    if(x0===null) return;
+    if(dx>90 && !document.getElementById('btnYes').disabled) decide('yes');
+    else if(dx<-90) decide('no');
+    else { card.style.transform=''; card.style.borderColor='var(--gray3)'; }
+    x0=null; dx=0;
+  });
+}
+
+function decide(ans){
+  if(busy||idx>=queue.length) return;
+  var it=queue[idx], url;
+  if(mode==='sugg'){
+    var txt = ans==='yes' ? ((document.getElementById('finalText')||{}).value||'') : '';
+    url = API+'?action=reviewSuggestion&token='+encodeURIComponent(token)+'&row='+it.row+
+          '&decision='+(ans==='yes'?'apply':'dismiss')+'&text='+encodeURIComponent(txt.slice(0,4000));
+  } else {
+    if(ans==='yes' && !/^GOT_\d{6}$/.test(picked)){ toast('Pick a piece first'); return; }
+    url = API+'?action=assignMedia&token='+encodeURIComponent(token)+'&row='+it.row+
+          '&pieceID='+encodeURIComponent(ans==='yes'?picked:'skip');
+  }
+  busy=true;
+  var card=document.getElementById('card');
+  if(card){ card.style.transition='transform .2s ease,opacity .2s ease'; card.style.transform='translateX('+(ans==='yes'?600:-600)+'px)'; card.style.opacity='0'; }
+  fetch(url).then(function(r){return r.json();}).then(function(res){
+    toast(res&&res.ok ? (ans==='yes' ? '✓ '+(res.action||'done')+' '+(res.pieceID||'') : '✕ skipped') : 'Error: '+((res&&res.error)||'failed'));
+  }).catch(function(){ toast('Network error'); })
+  .then(function(){ busy=false; idx++; picked=''; setTimeout(render,170); });
+}
+</script>
+</body>
+</html>
