@@ -584,6 +584,134 @@ body {
   color: var(--white);
   background: var(--gray1);
 }
+/* ===== Proclamations ===== */
+.proc-intro { color: var(--gray5); max-width: 720px; margin: 0 0 30px; }
+.proc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1px;
+  background: var(--gray2);
+}
+.proc-card {
+  background: var(--black);
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.proc-card:hover { background: var(--gray1); }
+.proc-card.no-photo { cursor: default; }
+.proc-thumb, .proc-thumb-empty {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: block;
+  background: var(--gray1);
+}
+.proc-thumb { object-fit: cover; }
+.proc-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--gray2);
+  color: var(--gray4);
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.proc-meta { padding: 14px 16px 18px; }
+.proc-city {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.3;
+}
+.proc-award {
+  margin-top: 7px;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+.proc-date { margin-top: 5px; font-size: 12px; color: var(--gray4); letter-spacing: 0.06em; }
+.proc-lb-cap { line-height: 1.7; }
+.proc-lb {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.95);
+  display: none; align-items: center; justify-content: center;
+  padding: 30px;
+}
+.proc-lb.open { display: flex; }
+.proc-lb img { max-width: 94vw; max-height: 84vh; object-fit: contain; }
+.proc-lb-cap {
+  position: absolute; bottom: 22px; left: 0; right: 0;
+  text-align: center; color: var(--gray5);
+  font-family: 'Oswald', sans-serif; font-size: 12px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.proc-lb-close {
+  position: absolute; top: 18px; right: 20px;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--gray3); background: rgba(0,0,0,0.6);
+  color: var(--gray5); font-size: 22px; line-height: 1; cursor: pointer;
+  transition: all 0.15s;
+}
+.proc-lb-close:hover { background: var(--coral); color: #000; border-color: var(--coral); }
+/* ===== FIU archive listing ===== */
+.fiu-group { margin-top: 34px; }
+.fiu-group-head {
+  font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray4);
+  padding-bottom: 10px; border-bottom: 1px solid var(--gray3);
+}
+.fiu-group-head span { color: var(--gray3); }
+.fiu-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 24px;
+  padding: 16px 0; border-bottom: 1px solid var(--gray2); align-items: start;
+}
+@media (max-width: 640px) { .fiu-item { grid-template-columns: 1fr; gap: 8px; } }
+.fiu-title { color: var(--white); font-size: 14px; line-height: 1.4; }
+.fiu-abs { color: var(--gray5); font-size: 12.5px; margin-top: 5px; line-height: 1.55; }
+.fiu-tags { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 6px; }
+.fiu-tag {
+  font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 7px;
+  border: 1px solid var(--gray3); color: var(--gray4);
+}
+.fiu-tag.is-file { border-color: var(--gold-dim); color: var(--gold); }
+.fiu-tag.no-file { border-style: dashed; }
+.fiu-link {
+  font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gray4); text-decoration: none; white-space: nowrap;
+}
+.fiu-link:hover { color: var(--coral); }
+/* ===== Credits & rights ===== */
+#credits { background: var(--gray1); border-top: 1px solid var(--gray3); }
+.credits-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 34px; margin-top: 26px;
+}
+.credits-col h4 {
+  font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray4); margin-bottom: 11px;
+}
+.credits-col p, .credits-col li { color: var(--gray5); font-size: 12.5px; line-height: 1.65; }
+.credits-col ul { list-style: none; }
+.credits-col li { padding: 3px 0; }
+.credits-col a { color: var(--gray6); text-decoration: underline; }
+.credits-col a:hover { color: var(--coral); }
+.rights-note {
+  margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gray3);
+  color: var(--gray4); font-size: 12px; line-height: 1.7; max-width: 860px;
+}
 .triumphs-list { border-top: 1px solid var(--gray3); }
 .triumph-item {
   display: grid;
@@ -835,8 +963,8 @@ body {
 <nav id="site-nav">
   <div class="nav-inner">
     <a href="archive.html" class="nav-link">Archive</a>
-    <a href="#search" class="nav-link" data-section="search">Search</a>
     <a href="#about" class="nav-link" data-section="about">Data</a>
+    <a href="#search" class="nav-link" data-section="search">Search</a>
     <a href="#press" class="nav-link" data-section="press">Trash Talk</a>
     <a href="#triumphs" class="nav-link" data-section="triumphs">The Receipts</a>
     <a href="#nft" class="nav-link" data-section="nft">Digital Provenance</a>
@@ -845,8 +973,8 @@ body {
   <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
   <div class="nav-mobile-menu" id="mobileMenu">
     <a href="archive.html" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Archive</a>
-    <a href="#search" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Search</a>
     <a href="#about" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Data</a>
+    <a href="#search" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Search</a>
     <a href="#press" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Trash Talk</a>
     <a href="#triumphs" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">The Receipts</a>
     <a href="#nft" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Digital Provenance</a>
@@ -865,7 +993,7 @@ body {
   <div class="hero-content">
   <div class="section-label">Miami · Street Art · Provenance Archive</div>
   <h1 class="hero-title">The trash<br>lasagna.</h1>
-  <p class="hero-sub">Miami artist <strong>Ahol Sniffs Glue</strong> transforms the city's discarded objects into art and returns them to the streets. This is the living archive: 3,000+ pieces mapped, every ride GPS-logged, 1,100+ minted on-chain.</p>
+  <p class="hero-sub">Miami artist <strong>Ahol Sniffs Glue</strong> finds the city's discarded objects and paints them on the spot — then rides on, leaving each piece in the street for whoever picks it up first. This is the living archive: 3,000+ pieces mapped, every ride GPS-logged, 1,100+ minted on-chain.</p>
   <div class="hero-cta">
     <a href="archive.html" class="btn btn-primary">Browse Archive</a>
     <a href="#search" class="btn">Search Pieces</a>
@@ -886,52 +1014,13 @@ body {
   </div>
 </div>
 <hr class="section-divider">
-<div id="search">
-  <div class="section-wrap">
-    <div class="section-label">Search</div>
-    <div class="section-title">Find a Piece</div>
-    <p style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray4);line-height:1.7;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--gray2);max-width:640px;">This is the most complete public record of Geographies of Trash that exists. Some pieces never made it here — picked up before they were logged, never publicly claimed, or simply gone.</p>
-    <div class="search-modes">
-      <button class="search-mode-btn active" onclick="setSearchMode('semantic')" id="modeSemantic">Keywords</button>
-      <button class="search-mode-btn" onclick="setSearchMode('image')" id="modeImage">Image</button>
-      <label class="nft-toggle"><input type="checkbox" id="nftOnly" onchange="if(window.lastSearch)window.lastSearch()">NFTs only</label>
-    </div>
-    <div class="search-panel active" id="panelSemantic">
-      <div class="search-input-wrap">
-        <input type="text" class="search-input" id="semanticInput" placeholder="red bucket on sidewalk, eyes on cardboard near water..." onkeydown="if(event.key==='Enter')searchSemantic()">
-        <button class="btn btn-primary" onclick="searchSemantic()">Search</button>
-      </div>
-      <p class="search-hint">Search by color, material, object, scene, or location type.</p>
-    </div>
-    <div class="search-panel" id="panelImage">
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgUpload').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
-        <div class="upload-zone-title">Drop an image or click to upload</div>
-        <p>JPG, PNG, WEBP</p>
-        <p>AI vision analyzes your image and finds visually similar GOT pieces</p>
-      </div>
-      <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
-      <div id="uploadPreview" style="display:none;margin-bottom:16px;">
-        <div style="position:relative;display:inline-block;">
-          <img id="previewImg" style="max-height:200px;border:1px solid var(--gray3);display:block;">
-          <button onclick="clearUpload()" title="Remove photo" aria-label="Remove photo" style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.72);color:#fff;font-size:13px;line-height:1;cursor:pointer;">✕</button>
-        </div>
-        <div style="margin-top:14px;">
-          <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
-          <button class="btn" onclick="clearUpload()" style="margin-left:8px;">Clear</button>
-        </div>
-      </div>
-    </div>
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</div>
-<hr class="section-divider">
 <div id="about">
   <div class="section-wrap">
     <div class="section-label">Data</div>
     <div class="section-title">The Project</div>
     <div class="about-intro">
       <p><strong>Ahol Sniffs Glue</strong> is a Miami-based artist working at the intersection of street art, cycling, and environmental practice. Born in Hialeah, he has exhibited internationally and built one of the most active collector communities in contemporary street art.</p>
-      <p><strong>Geographies of Trash</strong> is an ongoing public art practice in which discarded objects found across Miami are transformed into artworks and returned to the street. Each piece is documented, GPS-logged, and archived — generating a living provenance record of found objects, rides, and on-chain records.</p>
+      <p><strong>Geographies of Trash</strong> is an ongoing public art practice. Riding through Miami, Ahol paints discarded objects where he finds them and leaves them exactly there, free for whoever comes across them first. Each piece is documented, GPS-logged, and archived — generating a living provenance record of found objects, rides, and on-chain records.</p>
       <p>Exhibited at The Wolfsonian–FIU and at the 61st International Art Exhibition, La Biennale di Venezia. Recognized by six municipal governments. Studied as a model for community-engaged environmental education.</p>
     </div>
     <div class="archive-disclaimer">
@@ -972,6 +1061,45 @@ body {
       "Discarded materials become aesthetic objects that challenge conventional perceptions of waste and value."
       <cite>— The Art of ESG (FIU × David Anasagasti), IGI Global, 2026</cite>
     </blockquote>
+  </div>
+</div>
+<hr class="section-divider">
+<div id="search">
+  <div class="section-wrap">
+    <div class="section-label">Search</div>
+    <div class="section-title">Find a Piece</div>
+    <p style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gray4);line-height:1.7;margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--gray2);max-width:640px;">This is the most complete public record of Geographies of Trash that exists. Some pieces never made it here — picked up before they were logged, never publicly claimed, or simply gone.</p>
+    <div class="search-modes">
+      <button class="search-mode-btn active" onclick="setSearchMode('semantic')" id="modeSemantic">Keywords</button>
+      <button class="search-mode-btn" onclick="setSearchMode('image')" id="modeImage">Image</button>
+      <label class="nft-toggle"><input type="checkbox" id="nftOnly" onchange="if(window.lastSearch)window.lastSearch()">NFTs only</label>
+    </div>
+    <div class="search-panel active" id="panelSemantic">
+      <div class="search-input-wrap">
+        <input type="text" class="search-input" id="semanticInput" placeholder="red bucket on sidewalk, eyes on cardboard near water..." onkeydown="if(event.key==='Enter')searchSemantic()">
+        <button class="btn btn-primary" onclick="searchSemantic()">Search</button>
+      </div>
+      <p class="search-hint">Search by color, material, object, scene, or location type.</p>
+    </div>
+    <div class="search-panel" id="panelImage">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('imgUpload').click()" ondrop="handleDrop(event)" ondragover="event.preventDefault()">
+        <div class="upload-zone-title">Drop an image or click to upload</div>
+        <p>JPG, PNG, WEBP</p>
+        <p>AI vision analyzes your image and finds visually similar GOT pieces</p>
+      </div>
+      <input type="file" id="imgUpload" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
+      <div id="uploadPreview" style="display:none;margin-bottom:16px;">
+        <div style="position:relative;display:inline-block;">
+          <img id="previewImg" style="max-height:200px;border:1px solid var(--gray3);display:block;">
+          <button onclick="clearUpload()" title="Remove photo" aria-label="Remove photo" style="position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,0.72);color:#fff;font-size:13px;line-height:1;cursor:pointer;">✕</button>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-primary" onclick="searchByImage()">Find Similar Pieces</button>
+          <button class="btn" onclick="clearUpload()" style="margin-left:8px;">Clear</button>
+        </div>
+      </div>
+    </div>
+    <div class="search-results" id="searchResults"></div>
   </div>
 </div>
 <hr class="section-divider">
@@ -1024,31 +1152,39 @@ body {
         <div class="triumph-date">2023–2025</div>
         <div>
           <div class="triumph-title">Six Municipal Proclamations</div>
-          <div class="triumph-desc">Officially recognized by six South Florida governments: North Miami Beach · Miami Beach · City of Hialeah · Cutler Bay · Miami-Dade County · City of Miami.</div>
+          <div class="triumph-desc">Officially recognized by six South Florida governments — four proclaiming a <em>Geographies of Trash Day</em>, Miami Beach a <em>David Anasagasti Day</em>, and the City of Miami issuing its own recognition. Tap any one to read the original.</div>
+          <div class="proc-grid" id="procGrid" style="margin-top:18px;"></div>
         </div>
       </div>
       <div class="triumph-item">
+        <div class="triumph-date">Aug 2023</div>
+        <div>
+          <div class="triumph-title">Rapha — Limited Edition Jersey Collection</div>
+          <div class="triumph-desc">A second collaboration with Rapha Miami: two limited-edition jerseys in Ahol's self-described "choppy, sharp line work" — one drawn from the pastel palette of Miami's art deco, one a nationwide cycling design — released exclusively through Rapha Clubhouses. The first Rapha collaboration, during lockdown, is what put him on a bike in the first place and set Geographies of Trash in motion. <a href="https://www.rapha.cc/eu/en/story/ahol-sniffs-glue" target="_blank" rel="noopener" style="color:var(--gray6);text-decoration:underline;">Rapha Meets: Ahol Sniffs Glue →</a></div>
+        </div>
+      </div>
+      <div class="triumph-item triumph-old" style="display:none;">
         <div class="triumph-date">2023</div>
         <div>
           <div class="triumph-title">Oolite Arts Residency</div>
           <div class="triumph-desc">Selected artist residency at Oolite Arts, Miami's premier contemporary arts organization.</div>
         </div>
       </div>
-      <div class="triumph-item">
+      <div class="triumph-item triumph-old" style="display:none;">
         <div class="triumph-date">2023</div>
         <div>
           <div class="triumph-title">FIU Ratcliffe RA+DI Entrepreneurial Resident</div>
           <div class="triumph-desc">Selected as Entrepreneurial Resident at FIU's Ratcliffe Art + Design Incubator.</div>
         </div>
       </div>
-      <div class="triumph-item">
+      <div class="triumph-item triumph-old" style="display:none;">
         <div class="triumph-date">May 2022</div>
         <div>
           <div class="triumph-title">The Wolfsonian–FIU</div>
           <div class="triumph-desc">41 GOT pieces exhibited at The Wolfsonian, FIU's internationally recognized design museum on Miami Beach. Works loaned by the collectors who found them on the streets of Miami.</div>
         </div>
       </div>
-      <div class="triumph-item">
+      <div class="triumph-item triumph-old" style="display:none;">
         <div class="triumph-date">Dec 2021</div>
         <div>
           <div class="triumph-title">Paramount Miami Worldcenter — 58th Floor</div>
@@ -1057,6 +1193,7 @@ body {
       </div>
     </div>
   </div>
+</div>
 </div>
 <hr class="section-divider">
 <div id="nft">
@@ -1078,6 +1215,13 @@ body {
         <div class="nft-desc">A curated selection of GOT pieces with fully on-chain metadata and image storage. The permanent, trustless record of the archive.</div>
         <div class="nft-link">View on OpenSea →</div>
       </a>
+      <a class="nft-card" href="provenance.html">
+        <div class="nft-label">Institutional — FIU</div>
+        <div class="nft-title">The FIU Archive</div>
+        <span class="nft-count">18</span>
+        <div class="nft-desc">Preserved in the FIU Institutional Repository by the Wolfsonian Public Humanities Lab-FIU with the Ratcliffe Art + Design Incubator. Exhibition records, the San Gomma film material, and collector interviews — with the rights statements that govern them.</div>
+        <div class="nft-link">Provenance &amp; rights →</div>
+      </a>
       <a class="nft-card" href="community.html">
         <div class="nft-label">The Gang — Community</div>
         <div class="nft-title">Biscayne World</div>
@@ -1094,8 +1238,12 @@ body {
   </div>
 </div>
 <hr class="section-divider">
+<div class="proc-lb" id="procLb" role="dialog" aria-modal="true" aria-label="Proclamation">
+  <button class="proc-lb-close" id="procLbClose" aria-label="Close">&times;</button>
+  <img id="procLbImg" src="" alt="">
+  <div class="proc-lb-cap" id="procLbCap"></div>
 <footer id="site-footer">
-  <div class="footer-left">Geographies of Trash — Miami, FL</div>
+  <div class="footer-left">Geographies of Trash — Miami, FL &nbsp;·&nbsp; <a href="provenance.html" class="footer-ig">Provenance &amp; Rights</a></div>
   <div class="footer-right">
     <a href="https://discord.gg/biscayneworld" class="footer-ig" target="_blank" rel="noopener">Discord</a>
     &nbsp;·&nbsp; <a href="https://www.instagram.com/aholsniffsglue" class="footer-ig" target="_blank" rel="noopener">@aholsniffsglue</a>
@@ -1136,7 +1284,11 @@ const SVG_STRAVA = '<svg width="14" height="14" viewBox="0 0 24 24" fill="curren
 const SVG_NFT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3 6 9l6 12 6-12-3-6"/></svg>';
 const SVG_PLAY = '<svg width="9" height="9" viewBox="0 0 24 24" fill="#fff"><path d="M7 4.5v15l12-7.5z"/></svg>';
 const SVG_FN = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-function mediaLinkBtn(href, primary, svg, label){ return '<a href="' + href + '" target="_blank" rel="noopener" aria-label="' + label + '" title="' + label + '" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;">' + svg + '</a>'; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function safeUrl(u){ var s = String(u == null ? '' : u).trim();
+  return /^https?:\/\//i.test(s) ? s : ''; }   // blocks javascript:, data:, vbscript:
+function mediaLinkBtn(href, primary, svg, label){ var u = safeUrl(href); if (!u) return ''; return '<a href="' + esc(u) + '" target="_blank" rel="noopener" aria-label="' + esc(label) + '" title="' + esc(label) + '" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;">' + svg + '</a>'; }
 const PAGE_SIZE = 3;
 const KM_TO_MILES = 0.621371;
 let allPieces = [], filteredPieces = [], displayedCount = 0;
@@ -1180,6 +1332,65 @@ function countUp(el, target, duration) {
   };
   requestAnimationFrame(step);
 }
+// ===== PROCLAMATIONS =====
+// Dates and titles transcribed directly from the framed originals.
+// Photos live in /proclamations/ — <slug>.jpg (lightbox) and <slug>-thumb.jpg (card).
+const PROCLAMATIONS = [
+  { city: 'City of North Miami Beach', title: 'Geographies of Trash Day', date: 'January 23, 2023',
+    who: 'Mayor Anthony F. DeFillipo & Commission', slug: 'north-miami-beach' },
+  { city: 'Miami-Dade County', title: 'Geographies of Trash Day', date: 'June 30, 2023',
+    who: 'Mayor Daniella Levine Cava & Chairman Oliver G. Gilbert III', slug: 'miami-dade-county' },
+  { city: 'City of Hialeah', title: 'Geographies of Trash Day', date: 'August 22, 2023',
+    who: 'Mayor Esteban Bovo, Jr.', slug: 'hialeah' },
+  { city: 'City of Miami Beach', title: 'David Anasagasti Day', date: 'September 2, 2023',
+    who: 'Mayor Dan Gelber & Commissioner Kristen Rosen Gonzalez', slug: 'miami-beach' },
+  { city: 'The City of Miami', title: 'Recognition of Geographies of Trash', date: 'November 16, 2023',
+    who: 'Mayor Francis X. Suarez', slug: 'miami' },
+  { city: 'Town of Cutler Bay', title: 'Geographies of Trash Day', date: 'April 16, 2025',
+    who: 'Mayor Tim Meerbott & Town Council', slug: 'cutler-bay' }
+];
+function renderProclamations() {
+  var grid = document.getElementById('procGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  PROCLAMATIONS.forEach(function (p) {
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'proc-card';
+    card.setAttribute('aria-label', p.city + ' proclamation — view full size');
+    card.innerHTML =
+      '<img class="proc-thumb" src="proclamations/' + p.slug + '-thumb.jpg" alt="' + p.city + ' proclamation" loading="lazy">' +
+      '<div class="proc-meta">' +
+        '<div class="proc-city">' + p.city + '</div>' +
+        '<div class="proc-award">' + p.title + '</div>' +
+        '<div class="proc-date">' + p.date + '</div>' +
+      '</div>';
+    card.addEventListener('click', function () { openProc(p); });
+    grid.appendChild(card);
+  });
+}
+function openProc(p) {
+  document.getElementById('procLbImg').src = 'proclamations/' + p.slug + '.jpg';
+  document.getElementById('procLbImg').alt = p.city + ' proclamation';
+  document.getElementById('procLbCap').innerHTML =
+    p.city + ' · ' + p.title + ' · ' + p.date + '<br><span style="color:var(--gray4);">' + p.who + '</span>';
+  document.getElementById('procLb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeProc() {
+  document.getElementById('procLb').classList.remove('open');
+  document.getElementById('procLbImg').src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('DOMContentLoaded', function () {
+  var lb = document.getElementById('procLb');
+  var btn = document.getElementById('procLbClose');
+  if (btn) btn.addEventListener('click', closeProc);
+  if (lb) lb.addEventListener('click', function (e) { if (e.target === lb) closeProc(); });
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') closeProc();
+});
 // ===== EDIT YOUR STATS HERE =====
 // "Confirmed Pieces" auto-fills from the live archive count on every load — leave it alone.
 // The Strava numbers (miles / feet / hours / longest) are manual — just change them here.
@@ -1207,6 +1418,12 @@ function renderStats() {
 window.addEventListener('load', () => {
   document.querySelectorAll('.hero-video').forEach(function(v) { v.muted = true; const pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); });
   renderStats();
+  renderProclamations();
+  var rm = document.getElementById('receiptsMore');
+  if (rm) rm.addEventListener('click', function () {
+    document.querySelectorAll('.triumph-old').forEach(function (el) { el.style.display = ''; });
+    var w = document.getElementById('receiptsMoreWrap'); if (w) w.remove();
+  });
   loadArchive();
 });
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
@@ -1375,7 +1592,7 @@ async function searchSemantic() {
       results.appendChild(more);
     }
   } catch(e) {
-    results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
+    results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + esc(e.message) + '</div>';
   }
 }
 function handleDrop(e) {
@@ -1415,7 +1632,7 @@ async function searchByImage() {
     const description = await getVisionDescription(base64, 'image/jpeg');
     const vec = await getEmbedding(description);
     const matches = await queryPinecone(vec, 60);
-    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + description + '</div>';
+    results.innerHTML = '<div class="search-results-label">AI Analysis</div><div style="font-size:11px;color:var(--gray5);margin-bottom:28px;line-height:1.8;max-width:560px;">' + esc(description) + '</div>';
     renderSearchResults(matches, results, true);
     if (matches.length > 12) {
       const more = document.createElement('div');
@@ -1424,7 +1641,7 @@ async function searchByImage() {
       results.appendChild(more);
     }
   } catch(e) {
-    results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + e.message + '</div>';
+    results.innerHTML = '<div class="search-results-label" style="color:#888">Search failed: ' + esc(e.message) + '</div>';
   }
 }
 function fileToBase64(file) {

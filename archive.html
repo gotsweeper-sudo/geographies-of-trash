@@ -222,7 +222,11 @@ const SVG_STRAVA = '<svg width="14" height="14" viewBox="0 0 24 24" fill="curren
 const SVG_NFT = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 3h12l3 6-9 12L3 9z"/><path d="M3 9h18M9 3 6 9l6 12 6-12-3-6"/></svg>';
 const SVG_PLAY = '<svg width="9" height="9" viewBox="0 0 24 24" fill="#fff"><path d="M7 4.5v15l12-7.5z"/></svg>';
 const SVG_FN = '<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-function mediaLinkBtn(href, primary, svg, label){ return '<a href="' + href + '" target="_blank" rel="noopener" aria-label="' + label + '" title="' + label + '" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;">' + svg + '</a>'; }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function safeUrl(u){ var s = String(u == null ? '' : u).trim();
+  return /^https?:\/\//i.test(s) ? s : ''; }   // blocks javascript:, data:, vbscript:
+function mediaLinkBtn(href, primary, svg, label){ var u = safeUrl(href); if (!u) return ''; return '<a href="' + esc(u) + '" target="_blank" rel="noopener" aria-label="' + esc(label) + '" title="' + esc(label) + '" class="btn' + (primary ? ' btn-primary' : '') + '" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;">' + svg + '</a>'; }
 const PAGE_SIZE = 48;
 let allPieces = [], view = [], displayedCount = 0;
 let currentPieceId = '';
@@ -441,7 +445,7 @@ async function searchSemantic() {
     var matches = await queryPinecone(vec, 250);
     lastMatches = matches; lastDescription = '';
     renderResults();
-  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
+  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + esc(e.message) + '</div>'; }
 }
 function handleDrop(e) { e.preventDefault(); var f = e.dataTransfer.files[0]; if (f && f.type.indexOf('image/')===0) setUploadPreview(f); }
 function handleImageUpload(input) { if (input.files[0]) setUploadPreview(input.files[0]); }
@@ -474,7 +478,7 @@ async function searchByImage() {
     var matches = await queryPinecone(vec, 250);
     lastMatches = matches; lastDescription = description;
     renderResults();
-  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + e.message + '</div>'; }
+  } catch(e) { results.innerHTML = '<div class="search-results-label">Search failed: ' + esc(e.message) + '</div>'; }
 }
 function fileToBase64(file) {
   return new Promise(function(res, rej) {

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provenance &amp; Rights — Geographies of Trash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080808;
+  --white: #ffffff;
+  --gray1: #111111;
+  --gray2: #242424;
+  --gray3: #3a3a3a;
+  --gray4: #8f8f8f;
+  --gray5: #b2b2b2;
+  --gray6: #d2d2d2;
+  --gold: #e0b23a;
+  --gold-dim: #b98f23;
+  --coral: #ff6b5e;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+#site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--black);
+  border-bottom: 1px solid var(--gray3);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.site-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(14px, 2.5vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  text-align: center;
+  flex: 1;
+  line-height: 1.1;
+}
+.site-title span {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5em;
+  letter-spacing: 0.2em;
+  color: var(--gray5);
+  font-weight: 400;
+  margin-top: 3px;
+  text-transform: uppercase;
+}
+.header-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.stat-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gray5);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.stat-item b {
+  color: var(--white);
+  font-size: 12px;
+}
+#site-nav {
+  background: var(--black);
+  border-bottom: 1px solid var(--gray3);
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.nav-link {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray4);
+  text-decoration: none;
+  padding: 12px 20px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  display: inline-block;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  padding: 14px 32px;
+  margin-right: auto;
+  font-size: 20px;
+  line-height: 1;
+  font-family: monospace;
+}
+.nav-mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: var(--gray1);
+  border-top: 1px solid var(--gray3);
+}
+.nav-mobile-menu.open { display: flex; }
+.nav-mobile-menu .nav-link {
+  padding: 14px 32px;
+  border-bottom: 1px solid var(--gray2);
+  border-left: none;
+  font-size: 14px;
+}
+@media (max-width: 640px) {
+  .nav-inner { display: none; }
+  .nav-hamburger { display: block; }
+  .header-stats { display: none; }
+  .header-inner { padding: 14px 20px; }
+  .site-title { text-align: left; }
+}
+.section-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 72px 32px;
+}
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--gray3);
+  margin: 0;
+}
+.section-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--coral);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 48px;
+  line-height: 1;
+}
+#hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 32px 72px;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.hero-mobile { display: none; }
+@media (max-width: 640px) { .hero-desktop { display: none; } .hero-mobile { display: block; } }
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(8,8,8,0.40) 0%, rgba(8,8,8,0.62) 55%, rgba(8,8,8,0.92) 100%);
+  z-index: 1;
+}
+.hero-content { position: relative; z-index: 2; }
+.hero-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(48px, 9vw, 112px);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  max-width: 900px;
+}
+.hero-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  color: #ededed;
+  text-shadow: 0 1px 14px rgba(0,0,0,0.9), 0 0 2px rgba(0,0,0,0.6);
+  max-width: 560px;
+  line-height: 1.85;
+  margin-bottom: 40px;
+}
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.btn {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 11px 28px;
+  border: 1px solid var(--gray3);
+  color: var(--gray5);
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+  display: inline-block;
+}
+.btn:hover {
+  border-color: var(--white);
+  color: var(--white);
+}
+.btn-primary {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.btn-primary:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+.piece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--gray2);
+}
+.preview-grid {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 760px;
+}
+.search-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1px; }
+@media (max-width: 640px) { .search-grid { grid-template-columns: repeat(2, 1fr); } }
+.piece-card {
+  background: var(--black);
+  cursor: pointer;
+  transition: background 0.15s;
+  overflow: hidden;
+}
+.piece-card:hover { background: var(--gray1); }
+.piece-img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: var(--gray1);
+  display: block;
+}
+.piece-img-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--gray1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray3);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+.piece-info {
+  padding: 10px 12px 12px;
+}
+.piece-id {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+.piece-date {
+  font-size: 10px;
+  color: var(--gray4);
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+.piece-desc {
+  font-size: 10px;
+  color: var(--gray5);
+  margin-top: 5px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.load-more-wrap {
+  text-align: center;
+  margin-top: 48px;
+}
+.search-modes {
+  display: flex;
+  gap: 0;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--gray3);
+}
+.search-mode-btn {
+  background: transparent;
+  border: none;
+  color: var(--gray4);
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 10px 24px 10px 0;
+  border-bottom: 1px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+}
+.search-mode-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.search-mode-btn:hover { color: var(--white); }
+.nft-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--gray5);
+  text-transform: uppercase;
+  cursor: pointer;
+  padding-bottom: 10px;
+}
+.nft-toggle input { width: 14px; height: 14px; accent-color: var(--gold); cursor: pointer; }
+.nft-toggle:hover { color: var(--white); }
+.search-panel { display: none; padding-top: 28px; }
+.search-panel.active { display: block; }
+.search-input-wrap {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.search-input {
+  flex: 1;
+  background: var(--gray1);
+  border: 1px solid var(--gray3);
+  color: var(--white);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-input:focus { border-color: var(--white); }
+.search-input::placeholder { color: var(--gray4); }
+.search-hint {
+  font-size: 10px;
+  color: var(--gray4);
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.upload-zone {
+  border: 1px solid var(--gray3);
+  padding: 56px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  margin-bottom: 24px;
+}
+.upload-zone:hover { border-color: var(--white); }
+.upload-zone-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.upload-zone p {
+  color: var(--gray4);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  line-height: 1.7;
+}
+.search-results { margin-top: 40px; }
+.search-results-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--coral);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.about-intro { max-width: 760px; margin-bottom: 28px; }
+.about-intro p {
+  color: var(--gray6);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  line-height: 1.95;
+  margin-bottom: 18px;
+}
+.about-intro p strong { color: var(--white); font-weight: normal; }
+.archive-disclaimer {
+  border-left: 2px solid var(--gray4);
+  border-radius: 0;
+  padding: 14px 0 14px 20px;
+  margin: 0 0 44px;
+  max-width: 760px;
+  font-size: 12px;
+  color: var(--gray5);
+  line-height: 1.85;
+}
+.archive-disclaimer .disclaimer-head {
+  color: var(--white);
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.cluster { margin-bottom: 32px; }
+.clusterHead {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+  border-bottom: 1px solid var(--gray3);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+.clusterHead span {
+  color: var(--gray4);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  margin-left: 10px;
+  text-transform: none;
+}
+.clusterRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--gray2);
+}
+@media (max-width: 640px) { .clusterRow { grid-template-columns: repeat(2, 1fr); } }
+.hood-strip {
+  margin: 6px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--gray2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  align-items: baseline;
+}
+.hood-strip .hood-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gray4);
+  text-transform: uppercase;
+}
+.hood-strip .hood-list {
+  font-family: 'Oswald', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: var(--gray6);
+  text-transform: uppercase;
+}
+.about-stat {
+  background: var(--black);
+  padding: 24px 20px;
+}
+.about-stat-num {
+  font-family: 'Oswald', sans-serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--white);
+  display: block;
+  line-height: 1;
+}
+.about-stat-label {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gray4);
+  text-transform: uppercase;
+  margin-top: 8px;
+  display: block;
+}
+.esg-quote {
+  border: none;
+  margin: 48px 0 0;
+  max-width: 820px;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: var(--white);
+}
+.esg-quote cite {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  font-style: normal;
+  letter-spacing: 0.1em;
+  color: var(--gray4);
+  margin-top: 18px;
+  text-transform: uppercase;
+}
+.press-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--gray2);
+}
+.press-item {
+  background: var(--black);
+  padding: 32px 16px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--gray4);
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.press-item:hover {
+  color: var(--white);
+  background: var(--gray1);
+}
+/* ===== Proclamations ===== */
+.proc-intro { color: var(--gray5); max-width: 720px; margin: 0 0 30px; }
+.proc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1px;
+  background: var(--gray2);
+}
+.proc-card {
+  background: var(--black);
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.proc-card:hover { background: var(--gray1); }
+.proc-card.no-photo { cursor: default; }
+.proc-thumb, .proc-thumb-empty {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  display: block;
+  background: var(--gray1);
+}
+.proc-thumb { object-fit: cover; }
+.proc-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--gray2);
+  color: var(--gray4);
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.proc-meta { padding: 14px 16px 18px; }
+.proc-city {
+  font-family: 'Oswald', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1.3;
+}
+.proc-award {
+  margin-top: 7px;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+.proc-date { margin-top: 5px; font-size: 12px; color: var(--gray4); letter-spacing: 0.06em; }
+.proc-lb-cap { line-height: 1.7; }
+.proc-lb {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.95);
+  display: none; align-items: center; justify-content: center;
+  padding: 30px;
+}
+.proc-lb.open { display: flex; }
+.proc-lb img { max-width: 94vw; max-height: 84vh; object-fit: contain; }
+.proc-lb-cap {
+  position: absolute; bottom: 22px; left: 0; right: 0;
+  text-align: center; color: var(--gray5);
+  font-family: 'Oswald', sans-serif; font-size: 12px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.proc-lb-close {
+  position: absolute; top: 18px; right: 20px;
+  width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--gray3); background: rgba(0,0,0,0.6);
+  color: var(--gray5); font-size: 22px; line-height: 1; cursor: pointer;
+  transition: all 0.15s;
+}
+.proc-lb-close:hover { background: var(--coral); color: #000; border-color: var(--coral); }
+/* ===== FIU archive listing ===== */
+.fiu-group { margin-top: 34px; }
+.fiu-group-head {
+  font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray4);
+  padding-bottom: 10px; border-bottom: 1px solid var(--gray3);
+}
+.fiu-group-head span { color: var(--gray3); }
+.fiu-item {
+  display: grid; grid-template-columns: 1fr auto; gap: 24px;
+  padding: 16px 0; border-bottom: 1px solid var(--gray2); align-items: start;
+}
+@media (max-width: 640px) { .fiu-item { grid-template-columns: 1fr; gap: 8px; } }
+.fiu-title { color: var(--white); font-size: 14px; line-height: 1.4; }
+.fiu-abs { color: var(--gray5); font-size: 12.5px; margin-top: 5px; line-height: 1.55; }
+.fiu-tags { margin-top: 9px; display: flex; flex-wrap: wrap; gap: 6px; }
+.fiu-tag {
+  font-family: 'Oswald', sans-serif; font-size: 9.5px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 3px 7px;
+  border: 1px solid var(--gray3); color: var(--gray4);
+}
+.fiu-tag.is-file { border-color: var(--gold-dim); color: var(--gold); }
+.fiu-tag.no-file { border-style: dashed; }
+.fiu-link {
+  font-family: 'Oswald', sans-serif; font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--gray4); text-decoration: none; white-space: nowrap;
+}
+.fiu-link:hover { color: var(--coral); }
+/* ===== Credits & rights ===== */
+#credits { background: var(--gray1); border-top: 1px solid var(--gray3); }
+.credits-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 34px; margin-top: 26px;
+}
+.credits-col h4 {
+  font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray4); margin-bottom: 11px;
+}
+.credits-col p, .credits-col li { color: var(--gray5); font-size: 12.5px; line-height: 1.65; }
+.credits-col ul { list-style: none; }
+.credits-col li { padding: 3px 0; }
+.credits-col a { color: var(--gray6); text-decoration: underline; }
+.credits-col a:hover { color: var(--coral); }
+.rights-note {
+  margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--gray3);
+  color: var(--gray4); font-size: 12px; line-height: 1.7; max-width: 860px;
+}
+.triumphs-list { border-top: 1px solid var(--gray3); }
+.triumph-item {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 32px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--gray2);
+  align-items: baseline;
+}
+@media (max-width: 640px) {
+  .triumph-item { grid-template-columns: 1fr; gap: 6px; }
+}
+.triumph-date {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  color: var(--gray4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.triumph-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.triumph-desc {
+  font-size: 11px;
+  color: var(--gray5);
+  line-height: 1.7;
+}
+.nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--gray2);
+}
+.nft-card {
+  background: var(--black);
+  padding: 40px 36px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.15s;
+}
+.nft-card:hover { background: var(--gray1); }
+.nft-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--coral);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.nft-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.nft-count {
+  font-family: 'Oswald', sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--white);
+  display: block;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+.nft-desc {
+  font-size: 11px;
+  color: var(--gray5);
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+.nft-link {
+  font-family: 'Oswald', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--gray4);
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+.nft-card:hover .nft-link { color: var(--white); }
+#site-footer {
+  border-top: 1px solid var(--gray3);
+  padding: 40px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-left {
+  font-family: 'Oswald', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  color: var(--gray4);
+  text-transform: uppercase;
+}
+.footer-right {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gray4);
+}
+.footer-ig {
+  color: var(--gray5);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.footer-ig:hover { color: var(--gold); }
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 200;
+  overflow-y: auto;
+  padding: 40px 24px;
+}
+.modal-backdrop.open { display: flex; align-items: flex-start; justify-content: center; }
+.modal {
+  background: var(--black);
+  border: 1px solid var(--gray3);
+  max-width: 640px;
+  width: 100%;
+  padding: 0;
+  position: relative;
+  margin-top: 20px;
+}
+.modal-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 38px; height: 38px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--gray3);
+  border-radius: 50%;
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  line-height: 1;
+  font-family: monospace;
+  z-index: 3;
+  transition: all 0.15s;
+}
+.modal-close:hover { background: var(--coral); color: #000; border-color: var(--coral); }
+.modal-img {
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+  background: var(--gray1);
+  display: block;
+}
+.modal-body { padding: 24px 28px 28px; }
+.modal-id {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.modal-date {
+  font-size: 10px;
+  color: var(--gray4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.modal-desc-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--gray4);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.modal-desc {
+  font-size: 12px;
+  color: var(--gray5);
+  line-height: 1.85;
+  margin-bottom: 24px;
+  white-space: pre-wrap;
+}
+.modal-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.loading-msg {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--gray4);
+  letter-spacing: 0.15em;
+  padding: 48px 0;
+  text-align: center;
+}
+@media (max-width: 640px) {
+  .section-wrap { padding: 56px 20px; }
+  #hero { padding: 64px 20px 56px; }
+  #site-footer { padding: 32px 20px; flex-direction: column; align-items: flex-start; }
+}
+.hero-eye { position: relative; z-index: 2; display: block; width: 88px; height: 88px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: screen; }
+@media (max-width: 640px) { .hero-eye { width: 60px; height: 60px; } }
+.nav-mobile-menu .nav-link { display: flex; align-items: center; }
+.menu-eye { width: 18px; height: 18px; object-fit: contain; margin-right: 10px; flex-shrink: 0; mix-blend-mode: screen; }
+.modal-correct { margin-top: 20px; border-top: 1px solid var(--gray3); padding-top: 16px; }
+.correct-toggle { background: none; border: none; color: var(--gray5); font-family: 'Share Tech Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; padding: 0; text-decoration: underline; }
+.correct-toggle:hover { color: var(--coral); }
+.correct-form { margin-top: 14px; }
+.correct-form textarea { width: 100%; min-height: 70px; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 10px; outline: none; resize: vertical; }
+.correct-form input { width: 100%; background: var(--gray1); border: 1px solid var(--gray3); color: var(--white); font-family: 'Share Tech Mono', monospace; font-size: 12px; padding: 8px 10px; margin-top: 8px; outline: none; }
+.correct-form .btn-primary { margin-top: 10px; font-size: 11px; padding: 9px 18px; }
+.correct-msg { font-size: 11px; color: var(--coral); margin-top: 10px; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+<nav id="site-nav">
+  <div class="nav-inner">
+    <a href="archive.html" class="nav-link">Archive</a>
+    <a href="index.html#search" class="nav-link" data-section="search">Search</a>
+    <a href="index.html#about" class="nav-link" data-section="about">Data</a>
+    <a href="index.html#press" class="nav-link" data-section="press">Trash Talk</a>
+    <a href="index.html#triumphs" class="nav-link" data-section="triumphs">The Receipts</a>
+    <a href="index.html#nft" class="nav-link" data-section="nft">Digital Provenance</a>
+    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener">Discord</a>
+  </div>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">☰</button>
+  <div class="nav-mobile-menu" id="mobileMenu">
+    <a href="archive.html" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Archive</a>
+    <a href="index.html#search" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Search</a>
+    <a href="index.html#about" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Data</a>
+    <a href="index.html#press" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Trash Talk</a>
+    <a href="index.html#triumphs" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">The Receipts</a>
+    <a href="index.html#nft" class="nav-link" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Digital Provenance</a>
+    <a href="https://discord.gg/biscayneworld" class="nav-link" target="_blank" rel="noopener" onclick="closeMenu()"><img class="menu-eye" src="eye.gif" alt="" aria-hidden="true" onerror="this.style.display='none'">Discord</a>
+  </div>
+</nav>
+<div class="section-wrap" style="padding-top:112px;padding-bottom:8px;">
+  <div class="section-label">Geographies of Trash</div>
+  <h1 class="section-title" style="margin-bottom:14px;">Provenance &amp; Rights</h1>
+  <p class="proc-intro">Where the record of this project is held, who holds it, and under what terms. Maintained alongside the public archive at <a href="index.html" style="color:var(--gray6);text-decoration:underline;">geographiesoftrash</a>.</p>
+</div>
+<hr class="section-divider">
+<div id="fiu-archive">
+  <div class="section-wrap">
+    <div class="section-label">Institutional Record</div>
+    <div class="section-title">The FIU Archive</div>
+    <p class="proc-intro">Geographies of Trash is preserved in the FIU Institutional Repository by the Wolfsonian Public Humanities Lab-FIU, in collaboration with the FIU Ratcliffe Art + Design Incubator, where Ahol held an artist/entrepreneur residency. Eighteen records across four collections, listed here as catalogued. Each links back to its record at FIU; rights statements are those published by the holding institution.</p>
+    <div id="fiuList"></div>
+  </div>
+</div>
+<hr class="section-divider">
+<div id="credits">
+  <div class="section-wrap">
+    <div class="section-label">Attribution</div>
+    <div class="section-title">Credits &amp; Rights</div>
+    <div class="credits-grid">
+      <div class="credits-col">
+        <h4>Archival material</h4>
+        <p>Records and media in <em>The FIU Archive</em> section are held by the <a href="https://digitalscholarship.fiu.edu/" target="_blank" rel="noopener">FIU Digital Scholarship Commons</a>, in the collection <em>Geographies of Trash: Art Cycling with Ahol Sniffs Glue</em>, preserved by the Wolfsonian Public Humanities Lab-FIU.</p>
+        <p style="margin-top:10px;">Each item is credited to that collection and links to its record of origin.</p>
+      </div>
+      <div class="credits-col">
+        <h4>Rights statements</h4>
+        <ul>
+          <li><a href="http://rightsstatements.org/vocab/InC-EDU/1.0/" target="_blank" rel="noopener">In Copyright — Educational Use Permitted (InC-EDU)</a></li>
+          <li><a href="http://rightsstatements.org/vocab/InC/1.0/" target="_blank" rel="noopener">In Copyright (InC)</a></li>
+        </ul>
+        <p style="margin-top:10px;">These are the statements published by FIU for those items and are reproduced here unaltered. They govern the archival material, not this site's own content.</p>
+      </div>
+      <div class="credits-col">
+        <h4>Project partners</h4>
+        <ul>
+          <li>FIU Ratcliffe Art + Design Incubator</li>
+          <li>Wolfsonian Public Humanities Lab-FIU</li>
+          <li>The Wolfsonian–FIU</li>
+          <li>Paramount Miami Worldcenter</li>
+          <li>Rapha Miami</li>
+          <li>Oolite Arts</li>
+        </ul>
+      </div>
+      <div class="credits-col">
+        <h4>Civic recognition</h4>
+        <p>Proclamations reproduced in <em>The Proclamations</em> are public documents issued by the City of North Miami Beach, Miami-Dade County, the City of Hialeah, the City of Miami Beach, the City of Miami and the Town of Cutler Bay. Photographs of the framed originals.</p>
+      </div>
+    </div>
+    <div class="rights-note">
+      <strong style="color:var(--gray5);">Notice.</strong> Artwork is © David Anasagasti (Ahol Sniffs Glue). Archival items listed in <em>The FIU Archive</em> remain the property of, and are catalogued by, Florida International University; they are presented here with attribution and under the rights statements FIU has published for them. Press coverage, photographs and quotations remain the property of their respective publishers and authors, credited where they appear. Nothing on this page asserts a transfer or licence of rights. Enquiries about reuse of FIU-held material should be directed to FIU Libraries; enquiries about the artwork should be directed to the artist.
+    </div>
+  </div>
+</div>
+<footer id="site-footer">
+  <div class="footer-left">Geographies of Trash — Miami, FL</div>
+  <div class="footer-right">
+    <a href="https://discord.gg/biscayneworld" class="footer-ig" target="_blank" rel="noopener">Discord</a>
+    &nbsp;·&nbsp; <a href="https://www.instagram.com/aholsniffsglue" class="footer-ig" target="_blank" rel="noopener">@aholsniffsglue</a>
+    &nbsp;·&nbsp; Produced &amp; managed by <a href="https://www.instagram.com/youngwildpanda" class="footer-ig" target="_blank" rel="noopener">@youngwildpanda</a>
+  </div>
+</footer>
+<script>
+
+function toggleMenu(){var m=document.getElementById('mobileMenu');if(m)m.classList.toggle('open');}
+function closeMenu(){var m=document.getElementById('mobileMenu');if(m)m.classList.remove('open');}
+
+// ===== FIU INSTITUTIONAL ARCHIVE =====
+// Source: FIU Digital Scholarship Commons (TIND). Retrieved 2026-09-20.
+// Collection: "Geographies of Trash: Art Cycling with Ahol Sniffs Glue" — 18 records.
+// Rights values are the statements published by FIU; do not edit them to suit.
+const FIU_BASE = 'https://digitalscholarship.fiu.edu/record/';
+const FIU_ARCHIVE = [
+  { group: '"Geographies of Trash" Exhibition', items: [
+    { id: 17525, t: 'Ahol Sniffs Glue and Lucas Atehortua with FIU Personnel', type: 'Image', rights: 'InC-EDU', file: true,
+      a: 'Ahol with Paramount Miami Worldcenter staff Lucas Atehortua and FIU personnel — Jacek Kolasiński, Neil Ramsay and Margarita Salas Amaro (Ratcliffe); Katie Coldiron, Isabel Brador, Rebecca Friedman and Martha Sesin (Wolfsonian PHL).' },
+    { id: 17526, t: '"SOS Cuba" Trash-to-Art Piece', type: 'Image', rights: 'InC-EDU', file: true,
+      a: 'Trash-to-art piece made of wood. Found and loaned for the exhibition by Terrance Cribbs-Lárront.' },
+    { id: 17527, t: '"Geographies of Trash: Art Cycling with Ahol Sniffs Glue" Exhibition Flyer', type: 'Image', rights: 'InC-EDU', file: true,
+      a: 'Flyer for the exhibition at Paramount Miami Worldcenter, December 2, 2021.' }
+  ]},
+  { group: 'Death of San Gomma', items: [
+    { id: 20740, t: 'Death of San Gomma', type: 'Text', rights: 'InC', file: false,
+      a: 'Trailer for the documentary. Arcos, Michael; Del Rio, José (2021).' },
+    { id: 20741, t: '"Death of San Gomma" Production Team', type: 'Text', rights: 'InC-EDU', file: true,
+      a: 'Photo of the production team behind the film.' },
+    { id: 20742, t: 'En Memoria Amorosa', type: 'Text', rights: 'InC-EDU', file: true,
+      a: 'Memorial card given out to fans, promoting the film.' }
+  ]},
+  { group: 'Hungry Ants Media Videos', items: [
+    { id: 18562, t: 'Ahol Sniffs Glue at the FIU Ratcliffe Art + Design Incubator', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 18563, t: 'Art Cycling with Ahol — 5 Minutes', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 18564, t: 'Art Cycling with Ahol — 2 Minutes', type: 'Text', rights: 'InC-EDU', file: false, a: '' }
+  ]},
+  { group: 'Interviews with Collectors', items: [
+    { id: 17524, t: 'Interview with Terrance Cribbs-Lárront', type: 'Text', rights: 'InC', file: true, a: '' },
+    { id: 17523, t: 'Interview with Michael de los Santos', type: 'Text', rights: 'InC', file: false, a: '' },
+    { id: 17522, t: 'Interview with Kenny Jones', type: 'Text', rights: 'InC', file: false, a: '' },
+    { id: 17521, t: 'Interview with Anwar Andrés Cedeño (Ize)', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 17520, t: 'Interview with Zachary Rosenthal', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 17519, t: 'Interview with José Monegro', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 17518, t: 'Interview with Allison McComb', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 17517, t: 'Interview with Connor Pohl', type: 'Text', rights: 'InC-EDU', file: false, a: '' },
+    { id: 17516, t: 'Interview with Darwin Figueroa', type: 'Text', rights: 'InC-EDU', file: false, a: '' }
+  ]}
+];
+function renderFiuArchive() {
+  var host = document.getElementById('fiuList');
+  if (!host) return;
+  host.innerHTML = '';
+  FIU_ARCHIVE.forEach(function (g) {
+    var wrap = document.createElement('div');
+    wrap.className = 'fiu-group';
+    var n = g.items.length;
+    var withFile = g.items.filter(function (i) { return i.file; }).length;
+    wrap.innerHTML = '<div class="fiu-group-head">' + g.group +
+      ' <span>— ' + n + ' record' + (n === 1 ? '' : 's') + ', ' + withFile + ' with files</span></div>';
+    g.items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'fiu-item';
+      row.innerHTML =
+        '<div>' +
+          '<div class="fiu-title">' + it.t + '</div>' +
+          (it.a ? '<div class="fiu-abs">' + it.a + '</div>' : '') +
+          '<div class="fiu-tags">' +
+            '<span class="fiu-tag">' + it.type + '</span>' +
+            '<span class="fiu-tag">' + it.rights + '</span>' +
+            '<span class="fiu-tag ' + (it.file ? 'is-file' : 'no-file') + '">' +
+              (it.file ? 'File available' : 'Metadata only') + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<a class="fiu-link" href="' + FIU_BASE + it.id + '?ln=en" target="_blank" rel="noopener">FIU record ' + it.id + ' →</a>';
+      wrap.appendChild(row);
+    });
+    host.appendChild(wrap);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', renderFiuArchive);
+</script>
+</body>
+</html>
