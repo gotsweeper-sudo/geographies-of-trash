@@ -64,6 +64,16 @@ a.reellink{color:var(--gold);font-size:11px;letter-spacing:.1em;text-decoration:
   <div class="tabs">
     <div class="tab on" id="tabS" onclick="setMode('sugg')">Suggestions</div>
     <div class="tab" id="tabM" onclick="setMode('media')">Field Notes</div>
+    <div class="tab" id="tabN" onclick="setMode('nft')">NFTs</div>
+  </div>
+  <div id="nftFilter" class="hidden" style="display:flex;gap:6px;padding:0 16px 10px;font-size:11px;">
+    <select id="nftStatus" onchange="if(token)load()" style="background:var(--gray1);color:#fff;border:1px solid var(--gray3);font-family:inherit;font-size:11px;padding:6px 8px;">
+      <option value="">All pending</option>
+      <option value="MINTED_VISUAL">Image match (strong)</option>
+      <option value="LIKELY_MINTED">Likely</option>
+      <option value="POSSIBLE">Possible</option>
+    </select>
+    <span id="nftPending" style="opacity:.7;align-self:center;"></span>
   </div>
 </header>
 
@@ -87,9 +97,11 @@ function setMode(m){
   mode=m; idx=0; picked='';
   document.getElementById('tabS').classList.toggle('on', m==='sugg');
   document.getElementById('tabM').classList.toggle('on', m==='media');
-  document.getElementById('title').textContent = m==='sugg' ? 'Suggestions' : 'Field Notes';
-  document.getElementById('btnNo').textContent = m==='sugg' ? '✕ Dismiss' : '✕ Skip';
-  document.getElementById('btnYes').textContent = m==='sugg' ? '✓ Apply' : '✓ Link';
+  document.getElementById('tabN').classList.toggle('on', m==='nft');
+  document.getElementById('nftFilter').classList.toggle('hidden', m!=='nft');
+  document.getElementById('title').textContent = m==='sugg' ? 'Suggestions' : (m==='media' ? 'Field Notes' : 'NFT matches');
+  document.getElementById('btnNo').textContent = m==='sugg' ? '✕ Dismiss' : (m==='media' ? '✕ Skip' : '✕ Not a match');
+  document.getElementById('btnYes').textContent = m==='sugg' ? '✓ Apply' : (m==='media' ? '✓ Link' : '✓ Same piece — link');
   if(token) load();
 }
 function saveToken(){
@@ -108,12 +120,15 @@ function driveImg(u,sz){
 function load(){
   document.getElementById('deck').innerHTML='<div class="empty">Loading…</div>';
   document.getElementById('actions').classList.add('hidden');
-  var action = mode==='sugg' ? 'getSuggestionQueue' : 'getMediaQueue';
-  fetch(API+'?action='+action+'&limit=40&token='+encodeURIComponent(token))
+  var action = mode==='sugg' ? 'getSuggestionQueue' : (mode==='media' ? 'getMediaQueue' : 'getNftQueue');
+  var extra = mode==='nft' ? '&status='+encodeURIComponent(document.getElementById('nftStatus').value) : '';
+  fetch(API+'?action='+action+'&limit=40'+extra+'&token='+encodeURIComponent(token))
     .then(function(r){return r.json();})
     .then(function(res){
       if(res && res.error){ document.getElementById('deck').innerHTML='<div class="empty"><b>Unauthorized</b>Check your token.</div>'; return; }
-      queue=(res&&res.items)||[]; idx=0; render();
+      queue=(res&&res.items)||[]; idx=0;
+      if(mode==='nft'){ var pc=(res&&res.pending)||{}; document.getElementById('nftPending').textContent = Object.keys(pc).map(function(k){return k.replace('MINTED_VISUAL','strong').replace('LIKELY_MINTED','likely').toLowerCase()+' '+pc[k];}).join(' · '); }
+      render();
     })
     .catch(function(){ document.getElementById('deck').innerHTML='<div class="empty">Failed to load.</div>'; });
 }
@@ -126,7 +141,32 @@ function render(){
     actions.classList.add('hidden'); return;
   }
   actions.classList.remove('hidden');
-  mode==='sugg' ? renderSugg() : renderMedia();
+  mode==='sugg' ? renderSugg() : (mode==='media' ? renderMedia() : renderNft());
+}
+
+function renderNft(){
+  var it=queue[idx];
+  var badge = it.status==='MINTED_VISUAL' ? 'v-legit' : (it.status==='LIKELY_MINTED' ? 'v-unsure' : 'v-junk');
+  var label = it.status==='MINTED_VISUAL' ? 'IMAGE MATCH' : (it.status==='LIKELY_MINTED' ? 'LIKELY' : 'POSSIBLE');
+  var score = (it.visualScore!==''&&it.visualScore!=null) ? ' · CLIP '+Number(it.visualScore).toFixed(3) : '';
+  document.getElementById('btnYes').disabled=false;
+  document.getElementById('deck').innerHTML=
+    '<div class="card" id="card">'+
+      '<div class="meta"><span>'+esc(it.pieceID)+'</span><span>'+esc(it.postDate||'')+'</span></div>'+
+      '<span class="verdict '+badge+'">'+label+score+'</span>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">'+
+        '<div><div class="lbl">Archive photo</div><img src="'+driveImg(it.pieceImage,'w600')+'" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--gray1);" onerror="this.style.opacity=.15">'+
+          '<div class="body" style="font-size:11px;margin-top:6px;">'+esc(it.pieceObject||'')+'</div></div>'+
+        '<div><div class="lbl">NFT image</div><img src="'+esc(it.nftImage)+'" style="width:100%;aspect-ratio:1;object-fit:contain;background:var(--gray1);" onerror="this.style.opacity=.15">'+
+          '<div class="body" style="font-size:11px;margin-top:6px;">'+esc(it.nftName)+(it.nftFound?' · found '+esc(it.nftFound):'')+(it.nftLocation?' · '+esc(it.nftLocation):'')+'</div></div>'+
+      '</div>'+
+      '<div class="lbl">Why</div><div class="body" style="font-size:11px;">'+esc(it.reason)+'</div>'+
+      '<div style="margin-top:8px;display:flex;gap:14px;">'+
+        (it.postURL?'<a class="reellink" href="'+esc(it.postURL)+'" target="_blank" rel="noopener">▶ Instagram post</a>':'')+
+        '<a class="reellink" href="'+esc(it.nftURL)+'" target="_blank" rel="noopener">▶ OpenSea</a>'+
+      '</div>'+
+    '</div><div class="hint">swipe → same piece · swipe ← not a match</div>';
+  wireSwipe();
 }
 
 function renderSugg(){
@@ -208,6 +248,8 @@ function decide(ans){
     var txt = ans==='yes' ? ((document.getElementById('finalText')||{}).value||'') : '';
     url = API+'?action=reviewSuggestion&token='+encodeURIComponent(token)+'&row='+it.row+
           '&decision='+(ans==='yes'?'apply':'dismiss')+'&text='+encodeURIComponent(txt.slice(0,4000));
+  } else if(mode==='nft'){
+    url = API+'?action=reviewNft&token='+encodeURIComponent(token)+'&row='+it.row+'&decision='+(ans==='yes'?'yes':'no');
   } else {
     if(ans==='yes' && !/^GOT_\d{6}$/.test(picked)){ toast('Pick a piece first'); return; }
     url = API+'?action=assignMedia&token='+encodeURIComponent(token)+'&row='+it.row+

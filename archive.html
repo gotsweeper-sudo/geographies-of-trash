@@ -368,6 +368,23 @@ function openModal(piece) {
   if (postUrl) links.innerHTML += mediaLinkBtn(postUrl, true, SVG_IG, 'Instagram');
   if (stravaUrl) links.innerHTML += mediaLinkBtn(stravaUrl, false, SVG_STRAVA, 'Strava');
   if (nftUrl) links.innerHTML += mediaLinkBtn(nftUrl, false, SVG_NFT, 'NFT');
+  // Mint check — verifies against live OpenSea data via the backend (read-only)
+  links.innerHTML += '<button type="button" class="btn" id="nftCheckBtn" style="display:inline-flex;align-items:center;padding:10px 13px;cursor:pointer;font-size:12px" title="Verify mint status on OpenSea">' +
+                     (nftUrl ? 'Verify mint' : 'Minted?') + '</button><span id="nftCheckOut" style="font-size:12px;opacity:.85;margin-left:6px"></span>';
+  document.getElementById('nftCheckBtn').onclick = function () {
+    var out = document.getElementById('nftCheckOut'); out.textContent = 'checking…';
+    fetch(APPS_SCRIPT_URL + '?action=nftCheck&id=' + encodeURIComponent(id))
+      .then(function (r) { return r.json(); })
+      .then(function (v) {
+        if (currentPieceId !== id) return;
+        if (v.error) { out.textContent = v.error; return; }
+        var label = { MINTED: '✔ Minted', MINTED_VISUAL: '✔ Minted (image match)', LIKELY_MINTED: '≈ Likely minted', POSSIBLE: '? Possible match', LINK_BROKEN: '✖ NFT link broken', NOT_MINTED: '— No NFT found' }[v.status] || v.status;
+        var u = safeUrl(v.nftUrl || (v.candidates && v.candidates[0] && v.candidates[0].url) || '');
+        out.innerHTML = esc(label) + (v.nftName ? ' · ' + esc(v.nftName) : '') +
+          (u && v.status !== 'MINTED' ? ' · <a href="' + u + '" target="_blank" rel="noopener">view candidate</a>' : '');
+      })
+      .catch(function () { if (currentPieceId === id) out.textContent = 'check failed'; });
+  };
 
   const cf = document.getElementById('correctForm'); if (cf) cf.style.display = 'none';
   const cm = document.getElementById('correctMsg'); if (cm) cm.textContent = '';
